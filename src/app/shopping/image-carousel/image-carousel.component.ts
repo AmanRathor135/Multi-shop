@@ -12,13 +12,6 @@ export class ImageCarouselComponent implements OnInit {
 
   singleProduct:any;
   id:any;
-  // images: any[] = [
-  //   'assets/img/product-1.jpg',
-  //   'assets/img/product-2.jpg',
-  //   'assets/img/product-3.jpg',
-  //   'assets/img/product-4.jpg',
-  //   'assets/img/product-5.jpg',
-  // ];
 
   customOptions: OwlOptions = {
     loop: true,

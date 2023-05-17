@@ -24,32 +24,40 @@
      <div class="row px-xl-5">
          <div class="col">
           <owl-carousel-o [options]="customOptions">
-               <ng-template carouselSlide *ngFor="let item of ProductList" > 
-                    <div class="product-item bg-light mb-4">
-                         <div class="product-img position-relative overflow-hidden">
-                             <img class="img-fluid w-100" src="{{item.src}}" alt="">
-                             <div class="product-action">
-                                 <a class="btn btn-outline-dark btn-square" *ngFor="let icon of item.icons">
-                                      <i class="{{icon}}"></i>
-                                 </a>
-                             </div>
-                         </div>
-                         <div class="text-center py-4">
-                             <a class="h6 text-decoration-none text-truncate">{{item.ProductName}}</a>
-                             <div class="d-flex align-items-center justify-content-center mt-2">
-                                 <h5>{{item.price | currency}}</h5>
-                                 <h6 class="text-muted ml-2">
-                                      <del>{{item.price | currency}}</del>
-                                 </h6>
-                             </div>
-                             <div class="d-flex align-items-center justify-content-center mb-1">
-                                 <span *ngFor="let rate of item.rating">
-                                      <small class="text-primary mr-1 {{rate}}"></small>
-                                 </span>
-                                 <small>({{item.reviews}})</small>
-                             </div>
-                         </div>
-                     </div>
+               <ng-template carouselSlide *ngFor="let product of carouselList" > 
+                <div class="product-item bg-light mb-4">
+                    <div class="product-img position-relative overflow-hidden" [routerLink]="['/Shop/Shop-details', product.id]">
+                       <div style="width: 100%; ">
+                        <img class="img-fluid w-100 p-3" src="{{product.image}}" alt=""  style="width: 100% !important; height: 300px;">
+                       </div>
+                        <div class="product-action">
+                            <a class="btn btn-outline-dark btn-square"  *ngFor="let icon of icons"><i class={{icon}}></i></a>
+                        </div>
+                    </div>
+                    <div class="text-center py-4">
+                        <div  style="min-height: 60px;">
+                            <a class="h6 text-decoration-none" [routerLink]="['/Shop/Shop-details', product.id]">{{product.title}}</a>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center mt-2">
+                            <h5>{{product.price | currency}}</h5>
+                            <h6 class="text-muted ml-2"><del>{{product.price | currency}}</del></h6>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center mb-1">
+                            <ng-container *ngFor="let rate of totalRate; let i=index">
+                                <ng-container *ngIf="i<math.floor(product.rating.rate)">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                </ng-container>
+                                <ng-container *ngIf="(i==math.floor(product.rating.rate))">
+                                    <small class="fa fa-star-half-alt text-primary mr-1"></small>
+                                </ng-container>
+                                <ng-container *ngIf="i>product.rating.rate">
+                                    <small class="far fa-star text-primary mr-1"></small>
+                                </ng-container>
+                            </ng-container>
+                            <small>(The Rating is {{product.rating.rate}} Out of {{product.rating.count}} Reviews)</small>
+                        </div>
+                    </div>
+                </div>
                </ng-template>
           </owl-carousel-o>
          </div>
