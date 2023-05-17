@@ -1,0 +1,59 @@
+<!-- Shop Detail Start -->
+<div class="container-fluid pb-5">
+     <div class="row px-xl-5">
+         <div class="col-lg-5 mb-30">
+            <app-image-carousel></app-image-carousel>
+         </div>
+
+         <div class="col-lg-7 h-auto mb-30">
+             <app-product-detail></app-product-detail>
+         </div>
+     </div>
+     <div class="row px-xl-5">
+         <div class="col">
+             <app-product-description></app-product-description>
+         </div>
+     </div>
+ </div>
+ <!-- Shop Detail End -->
+
+
+ <!-- Products Start -->
+ <div class="container-fluid py-5">
+     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">You May Also Like</span></h2>
+     <div class="row px-xl-5">
+         <div class="col">
+          <owl-carousel-o [options]="customOptions">
+               <ng-template carouselSlide *ngFor="let item of ProductList" > 
+                    <div class="product-item bg-light mb-4">
+                         <div class="product-img position-relative overflow-hidden">
+                             <img class="img-fluid w-100" src="{{item.src}}" alt="">
+                             <div class="product-action">
+                                 <a class="btn btn-outline-dark btn-square" *ngFor="let icon of item.icons">
+                                      <i class="{{icon}}"></i>
+                                 </a>
+                             </div>
+                         </div>
+                         <div class="text-center py-4">
+                             <a class="h6 text-decoration-none text-truncate">{{item.ProductName}}</a>
+                             <div class="d-flex align-items-center justify-content-center mt-2">
+                                 <h5>{{item.price | currency}}</h5>
+                                 <h6 class="text-muted ml-2">
+                                      <del>{{item.price | currency}}</del>
+                                 </h6>
+                             </div>
+                             <div class="d-flex align-items-center justify-content-center mb-1">
+                                 <span *ngFor="let rate of item.rating">
+                                      <small class="text-primary mr-1 {{rate}}"></small>
+                                 </span>
+                                 <small>({{item.reviews}})</small>
+                             </div>
+                         </div>
+                     </div>
+               </ng-template>
+          </owl-carousel-o>
+         </div>
+     </div>
+ </div>
+ <!-- Products End -->
+

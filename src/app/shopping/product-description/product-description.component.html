@@ -1,0 +1,99 @@
+<div class="bg-light p-30">
+  <div class="nav nav-tabs mb-4">
+     <div>
+      <tabset>
+        <tab heading="{{ item }}" id="tab1" *ngFor="let item of Tabs">
+          <ng-container *ngFor="let list of tabList; let i = index">
+
+            <div *ngIf="list.tab == item">
+              <div class="mt-3" *ngIf="i !== tabList.length - 1">
+                <h4 >{{ list.title }}</h4>
+                <p *ngFor="let item of list.desc">{{ item }}</p>
+                <div class="row">
+                  <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item px-0" *ngFor="let list of list.lists"> {{ list }}</li>
+                    </ul>
+                  </div>
+                  <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item px-0" *ngFor="let list of list.lists">{{ list }}</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-3" *ngIf="i == tabList.length - 1">
+                <div class="col-md-6">
+                  <h4 class="mb-4">{{ list.title }}</h4>
+                  <div class="media mb-4">
+                    <img
+                      src="{{ list.imgSrc }}"
+                      alt="Image"
+                      class="img-fluid mr-3 mt-1"
+                      style="width: 45px"
+                    />
+                    <div class="media-body">
+                      <h6> {{ list.name }}<small> - <i>{{ list.date }}</i></small>
+                      </h6>
+                      <div class="text-primary mb-2">
+                        <ng-container *ngFor="let icon of list.icons">
+                          <i class="{{ icon }}"></i>
+                        </ng-container>
+                      </div>
+                      <p>{{ list.desc }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <h4 class="mb-4">Leave a review</h4>
+                  <small
+                    >Your email address will not be published. Required fields are
+                    marked *</small
+                  >
+                  <div class="d-flex my-3">
+                    <p class="mb-0 mr-2">Your Rating * :</p>
+                    <div class="text-primary">
+                      <i class="far fa-star"></i>
+                      <i class="far fa-star"></i>
+                      <i class="far fa-star"></i>
+                      <i class="far fa-star"></i>
+                      <i class="far fa-star"></i>
+                    </div>
+                  </div>
+                  <form>
+                    <div class="form-group">
+                      <label for="message">Your Review *</label>
+                      <textarea
+                        id="message"
+                        cols="30"
+                        rows="5"
+                        class="form-control"
+                      ></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="name">Your Name *</label>
+                      <input type="text" class="form-control" id="name" />
+                    </div>
+                    <div class="form-group">
+                      <label for="email">Your Email *</label>
+                      <input type="email" class="form-control" id="email" />
+                    </div>
+                    <div class="form-group mb-0">
+                      <input
+                        type="submit"
+                        value="Leave Your Review"
+                        class="btn btn-primary px-3 mb-3"
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+              </div>  
+          </ng-container>
+        </tab>
+      </tabset>
+    </div>
+  </div>
+ 
+</div>

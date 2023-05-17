@@ -1,0 +1,40 @@
+<!-- Products Start -->
+     <div class="row px-xl-5">
+         <div class="col-lg-3 col-md-4 col-sm-6 pb-1" *ngFor="let product of productList">
+            <div class="product-item bg-light mb-4">
+                <div class="product-img position-relative overflow-hidden"  >
+                   <div style="width: 100%; ">
+                    <img class="img-fluid w-100 p-3" src="{{product.image}}" alt=""  style="width: 100% !important; height: 300px;">
+                   </div>
+                    <div class="product-action">
+                        <a class="btn btn-outline-dark btn-square"  *ngFor="let icon of icons"><i class={{icon}}></i></a>
+                    </div>
+                </div>
+                <div class="text-center py-4">
+                    <div>
+                        <a class="h6 text-decoration-none">{{product.title}}</a>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center mt-2">
+                        <h5>{{product.price | currency}}</h5>
+                        <h6 class="text-muted ml-2"><del>{{product.price | currency}}</del></h6>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center mb-1">
+                        <ng-container *ngFor="let rate of totalRate; let i=index">
+                            <ng-container *ngIf="i<math.floor(product.rating.rate)">
+                                <small class="fa fa-star text-primary mr-1"></small>
+                            </ng-container>
+                            <ng-container *ngIf="(i==math.floor(product.rating.rate))">
+                                <small class="fa fa-star-half-alt text-primary mr-1"></small>
+                            </ng-container>
+                            <ng-container *ngIf="i>product.rating.rate">
+                                <small class="far fa-star text-primary mr-1"></small>
+                            </ng-container>
+                        </ng-container>
+                        <small>(The Rating is {{product.rating.rate}} Out of {{product.rating.count}} Reviews)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+ <!-- Products End -->
+

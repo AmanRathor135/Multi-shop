@@ -1,0 +1,65 @@
+<!-- Shop Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <!-- Shop Sidebar Start -->
+    <div class="col-lg-3 col-md-4">
+      <!-- Price Start -->
+      <app-filter-by-price></app-filter-by-price>
+      <!-- Price End -->
+
+      <!-- Color Start -->
+      <app-filter-by-color></app-filter-by-color>
+      <!-- Color End -->
+
+      <!-- Size Start -->
+      <app-filter-by-size></app-filter-by-size>
+      <!-- Size End -->
+    </div>
+    <!-- Shop Sidebar End -->
+
+    <!-- Shop Product Start -->
+    <div class="col-lg-9 col-md-8">
+      <div class="row pb-3">
+        <div class="col-12 pb-1">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+              <button class="btn btn-sm btn-light">
+                <i class="fa fa-th-large"></i>
+              </button>
+              <button class="btn btn-sm btn-light ml-2">
+                <i class="fa fa-bars"></i>
+              </button>
+            </div>
+            <div class="ml-2">
+              <div class="btn-group ml-2" *ngFor="let item of Dropdown">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-light dropdown-toggle"
+                  data-toggle="dropdown"
+                >
+                  {{ item.title }}
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    *ngFor="let category of item.category"
+                    >{{ category }}</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <app-product-list class="row"></app-product-list>
+
+        <div class="col-12">
+          <app-pagination></app-pagination>
+        </div>
+      </div>
+    </div>
+    <!-- Shop Product End -->
+  </div>
+</div>
+<!-- Shop End -->

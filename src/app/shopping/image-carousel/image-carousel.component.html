@@ -1,0 +1,16 @@
+<owl-carousel-o [options]="customOptions">
+  <ng-template carouselSlide> 
+       <div class="carousel-inner bg-light" style="padding: 50px;">
+            <div class="carousel-item active d-flex justify-content-center">
+                <img class="img-fluid w-75" src="{{singleProduct?.image}}" style="height: 450px" alt="...">
+            </div>
+        </div>
+  </ng-template>
+  <ng-template carouselSlide> 
+    <div class="carousel-inner bg-light" style="padding: 50px;">
+         <div class="carousel-item active d-flex justify-content-center">
+             <img class="img-fluid w-75" src="{{singleProduct?.image}}" style="height: 450px" alt="...">
+         </div>
+     </div>
+</ng-template>
+</owl-carousel-o>
