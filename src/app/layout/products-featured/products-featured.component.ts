@@ -7,10 +7,11 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./products-featured.component.scss'],
 })
 export class ProductsFeaturedComponent implements OnInit {
+  searchText:string = '';
   productList:any[] = [];
   math= Math;
   totalRate:any;
-  icons:any[]= ['fa fa-shopping-cart', 'far fa-heart', 'fa fa-sync-alt', 'fa fa-search']
+  icons:any[]= ['fa fa-shopping-cart', 'fa fa-sync-alt', 'fa fa-search']  //'far fa-heart',
  
   constructor(private service:ProductService) {}
 
@@ -29,8 +30,9 @@ export class ProductsFeaturedComponent implements OnInit {
       },
       complete: () => { }
     })
-  }
+  };
+  
   rating(value:any){
     this.totalRate = Array(value)
-  }
+  };
 }

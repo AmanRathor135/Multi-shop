@@ -9,101 +9,50 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class ProductListComponent implements OnInit {
 
+  searchText:string = '';
+  total:any = 0;
   category:any;
   math= Math;
   totalRate:any;
   icons:any[]= ['fa fa-shopping-cart', 'far fa-heart', 'fa fa-sync-alt', 'fa fa-search']
-  // Lists:any[] = [
-  //   {
-  //     ProductName: 'Product Name Goes Here',
-  //     price: '123',
-  //     src: 'assets/img/product-1.jpg',
-  //     icons: ['fa fa-shopping-cart', 'far fa-heart', 'fa fa-sync-alt', 'fa fa-search'],
-  //     rating: ['fa fa-star', 'fa fa-star', 'fa fa-star', 'fa fa-star', 'fa fa-star'],
-  //     reviews: '99',
-  //   },
-  //   {
-  //     ProductName: 'Product Name Goes Here',
-  //     price: '123',
-  //     src: 'assets/img/product-2.jpg',
-  //     icons: ['fa fa-shopping-cart', 'far fa-heart', 'fa fa-sync-alt', 'fa fa-search'],
-  //     rating: ['fa fa-star', 'fa fa-star', 'fa fa-star', 'fa fa-star', 'fa fa-star-half-alt',],
-  //     reviews: '99',
-  //   },
-  //   {
-  //     ProductName: 'Product Name Goes Here',
-  //     price: '123',
-  //     src: 'assets/img/product-3.jpg',
-  //     icons: ['fa fa-shopping-cart', 'far fa-heart', 'fa fa-sync-alt', 'fa fa-search'],
-  //     rating: ['fa fa-star', 'fa fa-star', 'fa fa-star', 'fa fa-star-half-alt', 'far fa-star'],
-  //     reviews: '99',
-  //   },
-  //   {
-  //     ProductName: 'Product Name Goes Here',
-  //     price: '123',
-  //     src: 'assets/img/product-4.jpg',
-  //     icons: ['fa fa-shopping-cart', 'far fa-heart', 'fa fa-sync-alt', 'fa fa-search'],
-  //     rating: ['fa fa-star', 'fa fa-star', 'fa fa-star', 'far fa-star', 'far fa-star'],
-  //     reviews: '99',
-  //   },
-  //   {
-  //     ProductName: 'Product Name Goes Here',
-  //     price: '123',
-  //     src: 'assets/img/product-5.jpg',
-  //     icons: ['fa fa-shopping-cart', 'far fa-heart', 'fa fa-sync-alt', 'fa fa-search'],
-  //     rating: ['fa fa-star', 'fa fa-star', 'fa fa-star', 'fa fa-star', 'fa fa-star'],
-  //     reviews: '99',
-  //   },
-  //   {
-  //     ProductName: 'Product Name Goes Here',
-  //     price: '123',
-  //     src: 'assets/img/product-6.jpg',
-  //     icons: ['fa fa-shopping-cart', 'far fa-heart', 'fa fa-sync-alt', 'fa fa-search'],
-  //     rating: ['fa fa-star', 'fa fa-star', 'fa fa-star', 'fa fa-star', 'fa fa-star-half-alt'],
-  //     reviews: '99',
-  //   },
-  //   {
-  //     ProductName: 'Product Name Goes Here',
-  //     price: '123',
-  //     src: 'assets/img/product-7.jpg',
-  //     icons: ['fa fa-shopping-cart', 'far fa-heart', 'fa fa-sync-alt', 'fa fa-search'],
-  //     rating: ['fa fa-star', 'fa fa-star', 'fa fa-star', 'fa fa-star-half-alt', 'far fa-star'],
-  //     reviews: '99',
-  //   },
-  //   {
-  //     ProductName: 'Product Name Goes Here',
-  //     price: '123',
-  //     src: 'assets/img/product-8.jpg',
-  //     icons: ['fa fa-shopping-cart', 'far fa-heart', 'fa fa-sync-alt', 'fa fa-search'],
-  //     rating: ['fa fa-star', 'fa fa-star', 'fa fa-star', 'far fa-star', 'far fa-star'],
-  //     reviews: '99',
-  //   },
-  //   {
-  //     ProductName: 'Product Name Goes Here',
-  //     price: '123',
-  //     src: 'assets/img/product-9.jpg',
-  //     icons: ['fa fa-shopping-cart', 'far fa-heart', 'fa fa-sync-alt', 'fa fa-search'],
-  //     rating: ['fa fa-star', 'fa fa-star', 'fa fa-star', 'far fa-star', 'far fa-star'],
-  //     reviews: '99',
-  //   },
-  // ];
+
+  Dropdown1:any[] = [
+    {
+      title:'Sorting',
+      category:['Ascending', 'Descending']
+    },
+    
+  ];
+
+  Dropdown2:any[] = [
+    {
+      title:'Showing',
+      category:['10', '20', '30']
+    },
+  ]
 
   productList:any[] = [];
   constructor(private service:ProductService, private route:ActivatedRoute){}
 
   ngOnInit(): void {
+    this.service.totalCartItems.next(true);
+
     this.route.paramMap.subscribe((res:any) => {
       this.category = res.params.id;
       if(this.category){
         this.getProducts();
       }
       else{
-
         this.getAllProducts();
       }  
     })
     this.rating(5);
     
+  }
+  doFavorites(){
+    this.total = this.total + 1;
+    localStorage.setItem('total',this.total)
+    this.service.totalFavoriteItems.next(this.total)
   }
 
   getProducts(){
@@ -114,7 +63,7 @@ export class ProductListComponent implements OnInit {
       error: (err:any) => {
         console.log('err', err)
       },
-      complete: () => { console.log("completed!")}
+      complete: () => {}
     })
   }
 
@@ -126,7 +75,19 @@ export class ProductListComponent implements OnInit {
       error: (err:any) => {
         console.log('err', err)
       },
-      complete: () => { console.log("completed!")}
+      complete: () => {}
+    })
+  };
+
+  productInDesc(){  
+    this.service.getAllProductInDesc().subscribe({
+      next: (res:any) => {
+        this.productList = res;
+      },
+      error: (err:any) => {
+        console.log('err', err)
+      },
+      complete: () => {}
     })
   }
 

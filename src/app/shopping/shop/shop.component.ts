@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-shop',
@@ -17,4 +18,9 @@ export class ShopComponent {
       category:['10', '20', '30']
     },
   ];
+  constructor(private service:ProductService){}
+
+  productInDesc(){
+    this.service.getAllProductInDesc()
+  }
 }

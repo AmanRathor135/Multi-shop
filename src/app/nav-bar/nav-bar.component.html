@@ -8,33 +8,22 @@
         href="#navbar-vertical"
         style="height: 65px; padding: 0 30px"
       >
-        <h6 class="text-dark m-0">
+      <div dropdown>
+        <!-- <h6 class="text-dark m-0">
           <i class="{{ navBarDropdown.icon }}"></i>{{ navBarDropdown.title }}
+        </h6> -->
+        <h6  dropdownToggle class="text-dark m-0 fs-5">
+          <i class="{{ navBarDropdown.icon }}"></i>{{ navBarDropdown.title }}
+          <i class="fa fa-angle-down text-dark" style="margin-left: 200px;"></i>
         </h6>
-        <i class="fa fa-angle-down text-dark"></i>
-      </a>
-      <nav
-        class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light"
-        id="navbar-vertical"
-        style="width: calc(100% - 30px); z-index: 999"
-      >
-        <div class="navbar-nav w-100">
-          <div
-            class="nav-item dropdown"
-            *ngFor="let item of categoryList; let first = first"
-            [ngClass]="{ dropright: first }"
-          >
-            <a class="nav-link dropdown-toggle" [routerLink]="['/Shop/shop', item]" data-toggle="dropdown">{{ item }}
-              <!-- <i [ngClass]="{ 'fa fa-angle-right float-right mt-1': first }"></i> -->
-            </a>
-            <div class="dropdown-menu position-absolute rounded-0 border-0 m-0">
-              <a class="dropdown-item" *ngFor="let list of item.lists">
-                {{ list }}
-            </a>
-            </div>
-          </div>
+          <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu bg-light" style="width: 93%; margin: 0px 0px 0px 15px; border-radius: 0px;" aria-labelledby="button-animated">
+            <li *ngFor="let item of categoryList;">
+              <a class="nav-link" [routerLink]="['/Shop/shop', item]" data-toggle="dropdown">{{ item }}
+              </a> 
+            </li>
+          </ul>
         </div>
-      </nav>
+      </a>
     </div>
 
     <div class="col-lg-9">
@@ -82,9 +71,13 @@
             </div>
           </div>
           <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-            <a class="btn px-0 ml-3" *ngFor="let item of navbarIcon">
-              <i class="text-primary {{item.icon}}"></i>&nbsp;
-              <span class="badge text-secondary border border-secondary rounded-circle">{{item.value}}</span>
+            <a class="btn px-0 ml-3">
+              <i class="text-primary fas fa-heart"></i>&nbsp;
+              <span class="badge text-secondary border border-secondary rounded-circle">{{totalFavoriteProduct}}</span>
+            </a>
+            <a class="btn px-0 ml-3" [routerLink]="['/cart-detail/my-cart']">
+              <i class="text-primary fas fa-shopping-cart"></i>&nbsp;
+              <span class="badge text-secondary border border-secondary rounded-circle">{{totalCartProduct}}</span>
             </a>
           </div>
         </div>

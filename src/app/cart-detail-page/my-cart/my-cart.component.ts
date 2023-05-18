@@ -1,67 +1,48 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-my-cart',
   templateUrl: './my-cart.component.html',
-  styleUrls: ['./my-cart.component.scss']
+  styleUrls: ['./my-cart.component.scss'],
 })
-export class MyCartComponent {
+export class MyCartComponent implements OnInit {
+  selectedIndex: any;
+  totalAmount: any = 0;
+  taxAmount: any = 10;
+  cartProduct: any[] = [];
 
-  value:any = 1;
-  selectedIndex:any;
-  myCart:any[] = [
-    {
-      imgSrc:'assets/img/product-1.jpg',
-      name:'Product Name',
-      price:'150'
-    },
-    {
-      imgSrc:'assets/img/product-2.jpg',
-      name:'Product Name',
-      price:'150'
-    },
-    {
-      imgSrc:'assets/img/product-3.jpg',
-      name:'Product Name',
-      price:'150'
-    },
-    {
-      imgSrc:'assets/img/product-4.jpg',
-      name:'Product Name',
-      price:'150'
-    },
-    {
-      imgSrc:'assets/img/product-5.jpg',
-      name:'Product Name',
-      price:'150'
-    }
-  ];
-  
+  constructor(private service: ProductService, private router: Router) {}
 
-
-  constructor() {
-    // this.myCart = [{...this.myCart, 'quantity':this.value}]
-    // console.log(this.myCart);
+  ngOnInit(): void {
+    this.service.totalCartItems.next(true);
+    const getSelectedItem: any = localStorage.getItem('addCartItem');
+    this.cartProduct = JSON.parse(getSelectedItem);
+    this.service.totalCartItems.next(true);
     
+    this.totalPrice();
   }
 
-  add(val:any, index:any){ 
-    this.selectedIndex = index
-    this.value = parseInt(val[this.selectedIndex]) + 1
-
-  }
-  remove(val:any){
-    if(this.value > 1){
-      this.value = this.value - 1;
-    }
-    else if (this.value <= 1){
-      this.value = 1
+  totalPrice() {
+    for (let i = 0; i < this.cartProduct.length; i++) {
+      this.totalAmount += this.cartProduct[i].price * this.cartProduct[i].quantity;
     }
   }
 
-  removeRow(index:any){
-    if(this.myCart.length){
-      this.myCart.splice(index,1)
-    } 
-  }
+  removeRow(index: any) {
+    const result = confirm('Do You Want to Remove this Item?');
+    if (result) {
+      if (this.cartProduct.length) {
+        this.cartProduct.splice(index, 1);
+        localStorage.setItem('addCartItem', JSON.stringify(this.cartProduct));
+        this.service.totalCartItems.next(true);
+
+        this.router.navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this.router.navigate(['cart-detail/my-cart']); // navigate to same route
+          });
+      }
+    }
+  };
 }

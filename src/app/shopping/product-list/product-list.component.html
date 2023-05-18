@@ -1,11 +1,70 @@
-<div class="col-lg-4 col-md-6 col-sm-6 pb-1" *ngFor="let product of productList">
+<div class="col-12 pb-1">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <div>
+        <button class="btn btn-sm btn-light">
+          <i class="fa fa-th-large"></i>
+        </button>
+        <button class="btn btn-sm btn-light ml-2">
+          <i class="fa fa-bars"></i>
+        </button>
+      </div>
+      <div class="ml-2">
+        <div class="btn-group ml-2" *ngFor="let item of Dropdown1">
+          <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
+            {{ item.title }}
+          </button>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" [routerLink]="['/Shop/shop']"
+              *ngFor="let category of item.category; let first = first; let i = index">
+              <span *ngIf="first" (click)="getAllProducts()">
+                  {{ category }}
+              </span>
+              <span *ngIf="!first" (click)="productInDesc()">
+                {{ category }}
+                </span>
+              </a>
+          </div>
+        </div>
+        <div class="btn-group ml-2" *ngFor="let item of Dropdown2">
+            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
+              {{ item.title }}
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" [routerLink]="['/Shop/shop']"
+                *ngFor="let category of item.category; let first = first; let i = index">
+                <span *ngIf="first" (click)="getAllProducts()">
+                    {{ category }}
+                </span>
+                <span *ngIf="!first" (click)="productInDesc()">
+                  {{ category }}
+                  </span>
+                </a>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<div class="col-lg-4 col-md-6 col-sm-6 pb-1" *ngFor="let product of productList ">
     <div class="product-item bg-light mb-4" >
-        <div class="product-img position-relative overflow-hidden"  [routerLink]="['/Shop/Shop-details', product.id]">
+        <div class="product-img position-relative overflow-hidden" style="cursor: pointer;">
            <div style="width: 100%;">
-            <img class="img-fluid w-100 p-3"  src="{{product.image}}" alt=""  style="width: 100% !important; height: 400px;">
+            <img class="img-fluid w-100 p-3"  src="{{product.image}}" alt="..."  style="width: 100% !important; height: 400px;">
            </div>
             <div class="product-action">
-                <a class="btn btn-outline-dark btn-square"  *ngFor="let icon of icons"><i class={{icon}}></i></a>
+                <a class="btn btn-outline-dark btn-square"  *ngFor="let icon of icons; let last=last; let i = index;">
+                    <span *ngIf="!last && i != 1">
+                        <i class={{icon}}></i>
+                    </span>
+                    <span *ngIf="i === 1" (click)="doFavorites()">
+                      <i class={{icon}}></i>
+                   </span>
+                    <span *ngIf="last">
+                        <i class={{icon}}  [routerLink]="['/Shop/Shop-details', product.id]"></i>
+                    </span>
+                </a>
             </div>
         </div>
         <div class="text-center py-4">

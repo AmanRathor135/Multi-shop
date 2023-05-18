@@ -6,7 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./top-bar.component.scss']
 })
 export class TopBarComponent {
-
+  
+searchText:any;
 topBarList1:any[] = ["About","Contact","Help","FAQs"]
 
 DropDownMenu:any[] = [

@@ -14,6 +14,7 @@ import { ImageCarouselComponent } from './image-carousel/image-carousel.componen
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductDescriptionComponent } from './product-description/product-description.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { FilterPipe } from '../pipes/filter.pipe';
 
 
 @NgModule({
@@ -27,14 +28,14 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     PaginationComponent,
     ImageCarouselComponent,
     ProductDetailComponent,
-    ProductDescriptionComponent
+    ProductDescriptionComponent,
+    FilterPipe
   ],
   imports: [
     CommonModule,
     ShoppingRoutingModule,
     CarouselModule,
     TabsModule.forRoot()
-    // IvyCarouselModule
   ]
 })
 export class ShoppingModule { }

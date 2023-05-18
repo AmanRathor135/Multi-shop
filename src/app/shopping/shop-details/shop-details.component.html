@@ -31,7 +31,14 @@
                         <img class="img-fluid w-100 p-3" src="{{product.image}}" alt=""  style="width: 100% !important; height: 300px;">
                        </div>
                         <div class="product-action">
-                            <a class="btn btn-outline-dark btn-square"  *ngFor="let icon of icons"><i class={{icon}}></i></a>
+                            <a class="btn btn-outline-dark btn-square"  *ngFor="let icon of icons; let last=last">
+                                <span *ngIf="!last">
+                                    <i class={{icon}}></i>
+                                </span>
+                                <span *ngIf="last">
+                                    <i class={{icon}}  [routerLink]="['/Shop/Shop-details', product.id]"></i>
+                                </span>
+                            </a>
                         </div>
                     </div>
                     <div class="text-center py-4">

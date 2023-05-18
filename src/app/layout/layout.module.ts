@@ -11,6 +11,7 @@ import { OfferComponent } from './offer/offer.component';
 import { ProductsRecentComponent } from './products-recent/products-recent.component';
 import { VendorComponent } from './vendor/vendor.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
+import { FilterPipe } from '../pipes/filter.pipe';
 
 
 @NgModule({

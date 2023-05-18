@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -10,6 +10,7 @@ import { ProductService } from 'src/app/services/product.service';
 export class ProductDetailComponent implements OnInit {
 
   singleProduct:any;
+  selectedItem: any;
   id:any;
   math= Math;
   totalRate:any;
@@ -45,9 +46,12 @@ export class ProductDetailComponent implements OnInit {
 
   socialLinks:any[] = ['fab fa-facebook-f', 'fab fa-twitter', 'fab fa-linkedin-in', 'fab fa-pinterest']
   
-  constructor(private route:ActivatedRoute, private service:ProductService) {}
+  constructor(private route:ActivatedRoute, private service:ProductService, private router:Router){}
 
   ngOnInit(): void {
+
+    this.service.totalCartItems.next(true);
+    
     this.route.paramMap.subscribe((res:any) => {
       this.id = res.params.id;
       this.getSingleProduct();
@@ -67,6 +71,26 @@ export class ProductDetailComponent implements OnInit {
       complete: () => {}
     })
   };
+
+  addToCart(item:any){
+    this.selectedItem = item;
+    this.selectedItem['quantity'] = this.value;
+    let cartItems:any[] = [];
+
+    const getCartItem = JSON.parse(localStorage.getItem("addCartItem") || "{}");
+    if (getCartItem && getCartItem.length) {
+      cartItems = getCartItem;
+      cartItems.push(this.selectedItem);
+    } else {
+      cartItems.push(this.selectedItem);
+    }
+
+    localStorage.setItem("addCartItem", JSON.stringify(cartItems));
+    this.service.totalCartItems.next(true);
+
+    console.log(item);
+    
+  }
 
   rating(value:any){
     this.totalRate = Array(value)

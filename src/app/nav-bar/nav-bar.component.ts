@@ -8,6 +8,8 @@ import { ProductService } from '../services/product.service';
 })
 export class NavBarComponent implements OnInit {
   category: any;
+  totalCartProduct:any = 0;
+  totalFavoriteProduct:any = 0;
   categoryList:any[] = []
   navBarDropdown: any = {
     icon: 'fa fa-bars mr-2',
@@ -69,42 +71,42 @@ export class NavBarComponent implements OnInit {
     //   category: 'Shop Detail',
     //   route: 'Shop/Shop-details',
     // },
-    {
-      category: 'Pages',
-      data: [
-        {
-          type: 'Shopping Cart',
-          route: 'cart-detail/my-cart',
-        },
-        {
-          type: 'Checkout',
-          route: 'cart-detail/checkout',
-        },
-      ],
-    },
+    // {
+    //   category: 'Pages',
+    //   data: [
+    //     {
+    //       type: 'Shopping Cart',
+    //       route: 'cart-detail/my-cart',
+    //     },
+    //     {
+    //       type: 'Checkout',
+    //       route: 'cart-detail/checkout',
+    //     },
+    //   ],
+    // },
     {
       category: 'Contact',
       route: 'contact',
     },
   ];
 
-  navbarIcon:any[] = [
-    {
-      icon:'fas fa-heart',
-      value:'0'
-    },
-    {
-      icon:'fas fa-shopping-cart',
-      value:'0'
-    }
-  ] 
 
   constructor(private service:ProductService) {
     this.filter('Home');
   }
   
   ngOnInit(): void {
-    this.getCategories()
+    this.getCategories();
+
+    this.service.totalCartItems.subscribe((res:any) => {
+      if(res){
+        this.getTotalCartProduct();
+      }
+    });
+
+    this.service.totalFavoriteItems.subscribe((res:any) => { 
+        this.getTotalFavoriteProduct();
+    });
   }
 
   getCategories(){
@@ -117,7 +119,20 @@ export class NavBarComponent implements OnInit {
       },
       complete: () => { console.log("completed!")}
     })
-  }
+  };
+
+  getTotalCartProduct(){
+    if(localStorage.getItem('addCartItem')){
+      let total:any = localStorage.getItem('addCartItem');
+      this.totalCartProduct = JSON.parse(total).length;
+    }
+  };
+
+  getTotalFavoriteProduct(){
+    if(localStorage.getItem('total')){
+      this.totalFavoriteProduct = localStorage.getItem('total')
+    }
+  };
 
   filter(name: any) {
     this.category = name;
