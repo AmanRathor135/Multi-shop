@@ -68,10 +68,6 @@ export class NavBarComponent implements OnInit {
       route: 'Shop/shop',
     },
     // {
-    //   category: 'Shop Detail',
-    //   route: 'Shop/Shop-details',
-    // },
-    // {
     //   category: 'Pages',
     //   data: [
     //     {
@@ -90,7 +86,6 @@ export class NavBarComponent implements OnInit {
     },
   ];
 
-
   constructor(private service:ProductService) {
     this.filter('Home');
   }
@@ -105,7 +100,7 @@ export class NavBarComponent implements OnInit {
     });
 
     this.service.totalFavoriteItems.subscribe((res:any) => { 
-        this.getTotalFavoriteProduct();
+        this.totalFavoriteProduct=res;
     });
   }
 
@@ -125,12 +120,6 @@ export class NavBarComponent implements OnInit {
     if(localStorage.getItem('addCartItem')){
       let total:any = localStorage.getItem('addCartItem');
       this.totalCartProduct = JSON.parse(total).length;
-    }
-  };
-
-  getTotalFavoriteProduct(){
-    if(localStorage.getItem('total')){
-      this.totalFavoriteProduct = localStorage.getItem('total')
     }
   };
 

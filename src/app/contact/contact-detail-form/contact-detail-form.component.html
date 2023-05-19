@@ -1,51 +1,143 @@
-    <!-- Contact Start -->
-    <div class="container-fluid">
-     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Contact Us</span></h2>
-     <div class="row px-xl-5">
-         <div class="col-lg-7 mb-5">
-             <div class="contact-form bg-light p-30">
-                 <div id="success"></div>
-                 <form name="sentMessage" id="contactForm" novalidate="novalidate">
-                     <div class="control-group">
-                         <input type="text" class="form-control" id="name" placeholder="Your Name"
-                             required="required" data-validation-required-message="Please enter your name" />
-                         <p class="help-block text-danger"></p>
-                     </div>
-                     <div class="control-group">
-                         <input type="email" class="form-control" id="email" placeholder="Your Email"
-                             required="required" data-validation-required-message="Please enter your email" />
-                         <p class="help-block text-danger"></p>
-                     </div>
-                     <div class="control-group">
-                         <input type="text" class="form-control" id="subject" placeholder="Subject"
-                             required="required" data-validation-required-message="Please enter a subject" />
-                         <p class="help-block text-danger"></p>
-                     </div>
-                     <div class="control-group">
-                         <textarea class="form-control" rows="8" id="message" placeholder="Message"
-                             required="required"
-                             data-validation-required-message="Please enter your message"></textarea>
-                         <p class="help-block text-danger"></p>
-                     </div>
-                     <div>
-                         <button class="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Send
-                             Message</button>
-                     </div>
-                 </form>
-             </div>
-         </div>
-         <div class="col-lg-5 mb-5">
-            <div class="bg-light p-30 mb-30">
-                <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3001156.4288297426!2d-78.01371936852176!3d42.72876761954724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4ccc4bf0f123a5a9%3A0xddcfc6c1de189567!2sNew%20York%2C%20USA!5e0!3m2!1sen!2sbd!4v1603794290143!5m2!1sen!2sbd"
-                frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0" style="width: 100%; height: 250px;"></iframe>
+<!-- Contact Start -->
+<div class="container-fluid">
+  <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
+    <span class="bg-secondary pr-3">Contact Us</span>
+  </h2>
+  <div class="row px-xl-5">
+    <div class="col-lg-7 mb-5">
+      <div class="contact-form bg-light p-30">
+        <div id="success"></div>
+        <form
+          name="form"
+          #form="ngForm"
+          autocomplete="off"
+          novalidate
+        >
+          <div class="form-group mt-3">
+            <input
+              type="text"
+              name="name"
+              class="form-control"
+              id="name"
+              #name="ngModel"
+              [(ngModel)]="contactForm.name"
+              placeholder="Your Name"
+              required
+            />
+            <div
+              *ngIf="!name?.valid && (form?.submitted || name?.touched)"
+              class="error"
+            >
+              <ul>
+                <li *ngIf="name.hasError('required')" style="color: red">
+                  Last Name is required
+                </li>
+              </ul>
             </div>
-            <div class="bg-light p-30 mb-3">
-                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
-                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
-                <p class="mb-2"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
+          </div>
+
+          <div class="form-group mt-3">
+            <input
+              type="text"
+              class="form-control"
+              name="email"
+              id="email"
+              #email="ngModel"
+              [(ngModel)]="contactForm.email"
+              placeholder="Your Email"
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+              required
+            />
+            <div
+              *ngIf="!email?.valid && (form?.submitted || email?.touched)"
+              class="error"
+            >
+              <ul>
+                <li *ngIf="email.hasError('required')" style="color: red">
+                  E-mail is required
+                </li>
+                <li *ngIf="email.hasError('pattern')" style="color: red">
+                  Invalid E-mail Address
+                </li>
+              </ul>
             </div>
-        </div>
-     </div>
- </div>
- <!-- Contact End -->
+          </div>
+
+          <div class="form-group mt-3">
+            <input
+              type="text"
+              class="form-control"
+              name="subject"
+              id="subject"
+              #subject="ngModel"
+              [(ngModel)]="contactForm.subject"
+              placeholder="Subject"
+              required
+            />
+            <div
+              *ngIf="!subject?.valid && (form?.submitted || subject?.touched)"
+              class="error"
+            >
+              <ul>
+                <li *ngIf="subject.hasError('required')" style="color: red">
+                  Subject is required
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="form-group mt-3">
+            <textarea
+              class="form-control"
+              name="message"
+              #address="ngModel"
+              [(ngModel)]="contactForm.address"
+              rows="8"
+              placeholder="Message"
+              required
+            >
+            </textarea>
+            <div
+              *ngIf="!address?.valid && (form?.submitted || address?.touched)"
+              class="error"
+            >
+              <ul>
+                <li *ngIf="address.hasError('required')" style="color: red">
+                  Address is required
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <button
+              type="submit"
+              class="btn btn-warning"
+              (click)="sendMessage()"
+            >
+              Send Message
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-5 mb-5">
+      <div class="bg-light p-30 mb-30">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3001156.4288297426!2d-78.01371936852176!3d42.72876761954724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4ccc4bf0f123a5a9%3A0xddcfc6c1de189567!2sNew%20York%2C%20USA!5e0!3m2!1sen!2sbd!4v1603794290143!5m2!1sen!2sbd"
+          frameborder="0"
+          style="border: 0"
+          allowfullscreen=""
+          aria-hidden="false"
+          tabindex="0"
+          style="width: 100%; height: 250px"
+        ></iframe>
+      </div>
+      <div class="bg-light p-30 mb-3">
+        <p class="mb-2" *ngFor="let data of contactDetails">
+          <i class="{{ data.icon }} text-primary mr-3"></i>{{ data.detail }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Contact End -->

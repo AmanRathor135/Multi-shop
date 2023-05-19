@@ -11,10 +11,11 @@ export class ProductListComponent implements OnInit {
 
   searchText:string = '';
   total:any = 0;
+  isShow:any = true;
+  selectedIndex:any;
   category:any;
   math= Math;
   totalRate:any;
-  icons:any[]= ['fa fa-shopping-cart', 'far fa-heart', 'fa fa-sync-alt', 'fa fa-search']
 
   Dropdown1:any[] = [
     {
@@ -32,7 +33,9 @@ export class ProductListComponent implements OnInit {
   ]
 
   productList:any[] = [];
-  constructor(private service:ProductService, private route:ActivatedRoute){}
+  constructor(private service:ProductService, private route:ActivatedRoute){
+    this.service.totalFavoriteItems.next(this.total);
+  }
 
   ngOnInit(): void {
     this.service.totalCartItems.next(true);
@@ -46,13 +49,19 @@ export class ProductListComponent implements OnInit {
         this.getAllProducts();
       }  
     })
-    this.rating(5);
-    
+    this.rating(5); 
   }
-  doFavorites(){
-    this.total = this.total + 1;
-    localStorage.setItem('total',this.total)
-    this.service.totalFavoriteItems.next(this.total)
+
+  doFavorites(product:any){
+    product.isShow =  !product.isShow;       
+    this.total=product.isShow?this.total + 1:this.total - 1;
+    this.service.totalFavoriteItems.next(this.total);
+
+    // if(product.isShow){
+    // this.total = this.total + 1;
+    // }else{
+    //   this.total = this.total - 1;
+    // }
   }
 
   getProducts(){
@@ -71,6 +80,7 @@ export class ProductListComponent implements OnInit {
     this.service.getAllProducts().subscribe({
       next: (res:any) => {
         this.productList = res;
+        this.productList.map((product)=>product['isShow']=false);        
       },
       error: (err:any) => {
         console.log('err', err)
@@ -78,6 +88,9 @@ export class ProductListComponent implements OnInit {
       complete: () => {}
     })
   };
+  show(){
+    this.isShow = !this.isShow
+  }
 
   productInDesc(){  
     this.service.getAllProductInDesc().subscribe({
