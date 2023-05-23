@@ -7,12 +7,7 @@
     <div class="col-lg-7 mb-5">
       <div class="contact-form bg-light p-30">
         <div id="success"></div>
-        <form
-          name="form"
-          #form="ngForm"
-          autocomplete="off"
-          novalidate
-        >
+        <form name="form" #form="ngForm" autocomplete="off" novalidate>
           <div class="form-group mt-3">
             <input
               type="text"
@@ -24,10 +19,7 @@
               placeholder="Your Name"
               required
             />
-            <div
-              *ngIf="!name?.valid && (form?.submitted || name?.touched)"
-              class="error"
-            >
+            <div *ngIf="!name?.valid && (form?.submitted || name?.touched)" class="error">
               <ul>
                 <li *ngIf="name.hasError('required')" style="color: red">
                   Last Name is required
@@ -48,10 +40,7 @@
               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
               required
             />
-            <div
-              *ngIf="!email?.valid && (form?.submitted || email?.touched)"
-              class="error"
-            >
+            <div *ngIf="!email?.valid && (form?.submitted || email?.touched)" class="error">
               <ul>
                 <li *ngIf="email.hasError('required')" style="color: red">
                   E-mail is required
@@ -74,10 +63,7 @@
               placeholder="Subject"
               required
             />
-            <div
-              *ngIf="!subject?.valid && (form?.submitted || subject?.touched)"
-              class="error"
-            >
+            <div *ngIf="!subject?.valid && (form?.submitted || subject?.touched)" class="error">
               <ul>
                 <li *ngIf="subject.hasError('required')" style="color: red">
                   Subject is required
@@ -96,10 +82,7 @@
               required
             >
             </textarea>
-            <div
-              *ngIf="!address?.valid && (form?.submitted || address?.touched)"
-              class="error"
-            >
+            <div *ngIf="!address?.valid && (form?.submitted || address?.touched)" class="error">
               <ul>
                 <li *ngIf="address.hasError('required')" style="color: red">
                   Address is required
@@ -109,17 +92,12 @@
           </div>
 
           <div class="mt-4">
-            <button
-              type="submit"
-              class="btn btn-warning"
-              (click)="sendMessage()"
-            >
-              Send Message
-            </button>
+            <button type="submit" class="btn btn-warning" (click)="sendMessage()"> Send Message </button>
           </div>
         </form>
       </div>
     </div>
+    
     <div class="col-lg-5 mb-5">
       <div class="bg-light p-30 mb-30">
         <iframe

@@ -2,35 +2,28 @@
   <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
       <button class="btn btn-sm btn-light ml-2" (click)="show()">
-        <i class="fa" [ngClass]="{'fa-bars': isShow, 'fa-th-large':!isShow}"></i>
+        <i class="fa" [ngClass]="{ 'fa-bars': isShow, 'fa-th-large': !isShow }"></i>
       </button>
     </div>
     <div class="ml-2">
-      <div class="btn-group ml-2" *ngFor="let item of Dropdown1">
-        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
+      <div class="btn-group ml-2" ngbDropdown *ngFor="let item of Dropdown1">
+        <button type="button" class="btn btn-sm btn-light dropdown-toggle" ngbDropdownToggle>
           {{ item.title }}
         </button>
-        <div class="dropdown-menu dropdown-menu-right">
-          <a class="dropdown-item" [routerLink]="['/Shop/shop']"
-            *ngFor=" let category of item.category; let first = first;">
-            <span *ngIf="first" (click)="getAllProducts()">
-              {{ category }}
-            </span>
-            <span *ngIf="!first" (click)="productInDesc()">
-              {{ category }}
-            </span>
+        <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+          <a class="dropdown-item" ngbDropdownItem [routerLink]="['/Shop/shop']" *ngFor="let category of item.category; let first = first">
+            <span *ngIf="first" (click)="getAllProducts()">{{ category }}</span>
+            <span *ngIf="!first" (click)="productInDesc()">{{ category }}</span>
           </a>
         </div>
       </div>
-      <div class="btn-group ml-2" *ngFor="let item of Dropdown2">
-        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
+      <div class="btn-group ml-2"  ngbDropdown *ngFor="let item of Dropdown2">
+        <button type="button" class="btn btn-sm btn-light dropdown-toggle" ngbDropdownToggle>
           {{ item.title }}
         </button>
-        <div class="dropdown-menu dropdown-menu-right">
-          <a class="dropdown-item" [routerLink]="['/Shop/shop']" *ngFor=" let category of item.category;">
-            <span>
-              {{ category }}
-            </span>
+        <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+          <a class="dropdown-item" ngbDropdownItem [routerLink]="['/Shop/shop']" *ngFor="let category of item.category">
+            <span> {{ category }} </span>
           </a>
         </div>
       </div>
@@ -38,39 +31,37 @@
   </div>
 </div>
 
-<div class="col-lg-4 col-md-6 col-sm-6 pb-1" *ngFor="let product of productList; let i = index" >
+<div class="col-lg-4 col-md-6 col-sm-6 pb-1" *ngFor="let product of productList | filter : category 
+     | paginate : { itemsPerPage: 6, currentPage: page, totalItems: totalItem }; let i = index"
+>
   <div class="product-item bg-light mb-4" *ngIf="isShow">
-    <div
-      class="product-img position-relative overflow-hidden"
-      style="cursor: pointer"
-    >
+    <div class="product-img position-relative overflow-hidden" style="cursor: pointer">
       <div style="width: 100%">
-        <img
-          class="img-fluid w-100 p-3"
-          src="{{ product.image }}"
-          alt="..."
-          style="width: 100% !important; height: 400px"
-        />
+        <img class="img-fluid w-100 p-3" src="{{ product.image }}" alt="..." style="width: 100% !important; height: 400px"/>
       </div>
       <div class="product-action">
-          <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]"><i class="fa fa-shopping-cart"></i></a>
-          <a class="btn btn-outline-dark btn-square"  (click)="doFavorites(product)"><i [ngClass]="{far: !product.isShow,fa:product.isShow}" class="fa-heart"></i></a>
-          <a class="btn btn-outline-dark btn-square"><i class="fa fa-sync-alt"></i></a>
-          <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]"><i class="fa fa-search"></i></a>         
+        <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]" >
+          <i class="fa fa-shopping-cart"></i>
+        </a>
+        <a class="btn btn-outline-dark btn-square" (click)="doFavorites(product,i)">
+          <i [ngClass]="{ far: !product.isShow, fa: product.isShow }" class="fa-heart"></i>
+        </a>
+        <a class="btn btn-outline-dark btn-square">
+          <i class="fa fa-sync-alt"></i>
+        </a>
+        <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]" >
+          <i class="fa fa-search"></i>
+        </a>
       </div>
     </div>
     <div class="text-center py-4">
       <div style="min-height: 60px">
-        <a
-          class="h6 text-decoration-none"
-          [routerLink]="['/Shop/Shop-details', product.id]"
-          >{{ product.title }}</a
-        >
+        <a class="h6 text-decoration-none" [routerLink]="['/Shop/Shop-details', product.id]" >{{ product.title }}</a>
       </div>
       <div class="d-flex align-items-center justify-content-center mt-2">
-        <h5>{{ product.price | currency }}</h5>
+        <h5>{{ product.price | currency : currency }}</h5>
         <h6 class="text-muted ml-2">
-          <del>{{ product.price | currency }}</del>
+          <del>{{ product.price | currency : currency }}</del>
         </h6>
       </div>
       <div class="d-flex align-items-center justify-content-center mb-1">
@@ -85,10 +76,7 @@
             <small class="far fa-star text-primary mr-1"></small>
           </ng-container>
         </ng-container>
-        <small
-          >(The Rating is {{ product.rating.rate }} Out of
-          {{ product.rating.count }} Reviews)</small
-        >
+        <small>(The Rating is {{ product.rating.rate }} Out of {{ product.rating.count }} Reviews)</small>
       </div>
     </div>
   </div>
@@ -97,35 +85,44 @@
 <div class="row" *ngIf="!isShow">
   <table class="table table-light table-borderless table-hover text-center text-dark mb-0">
     <tbody class="align-middle">
-        <tr *ngFor="let product of productList; let i = index">
-            <td class="align-middle fs-5">{{product.id}}</td>
-            <td class="align-middle"><img src="{{product.image}}" alt="" style="width: 70px;"></td>
-            <td class="align-middle">{{product.title}}</td>
-            <td class="align-middle">{{product.price | currency}}</td>
-            <td class="align-middle">
-              <div class="d-flex align-items-center justify-content-center mb-1">
-              <ng-container *ngFor="let rate of totalRate; let i = index">
-                <ng-container *ngIf="i < math.floor(product.rating.rate)">
-                  <small class="fa fa-star text-primary mr-1"></small>
-                </ng-container>
-                <ng-container *ngIf="i == math.floor(product.rating.rate)">
-                  <small class="fa fa-star-half-alt text-primary mr-1"></small>
-                </ng-container>
-                <ng-container *ngIf="i > product.rating.rate">
-                  <small class="far fa-star text-primary mr-1"></small>
-                </ng-container>
-              </ng-container>  <br>
-            </div>
-            <div>
-              <small>(The Rating is {{ product.rating.rate }} Out of {{ product.rating.count }} Reviews)</small>
-            </div>
-            </td> 
-            <td class="align-middle">
-              <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]">
-                <i class="fa fa-shopping-cart"></i>
-              </a>
-            </td>
-        </tr>
+      <tr *ngFor="let product of productList | filter : category
+          | paginate : { itemsPerPage: 6, currentPage: page, totalItems: totalItem };"
+      >
+        <td class="align-middle fs-5">{{ product.id }}</td>
+        <td class="align-middle">
+          <img src="{{ product.image }}" alt="" style="width: 70px" />
+        </td>
+        <td class="align-middle">{{ product.title }}</td>
+        <td class="align-middle">{{ product.price | currency : currency }}</td>
+        <td class="align-middle">
+          <div class="d-flex align-items-center justify-content-center mb-1">
+            <ng-container *ngFor="let rate of totalRate; let i = index">
+              <ng-container *ngIf="i < math.floor(product.rating.rate)">
+                <small class="fa fa-star text-primary mr-1"></small>
+              </ng-container>
+              <ng-container *ngIf="i == math.floor(product.rating.rate)">
+                <small class="fa fa-star-half-alt text-primary mr-1"></small>
+              </ng-container>
+              <ng-container *ngIf="i > product.rating.rate">
+                <small class="far fa-star text-primary mr-1"></small>
+              </ng-container>
+            </ng-container>
+            <br />
+          </div>
+          <div>
+            <small>(The Rating is {{ product.rating.rate }} Out of {{ product.rating.count }} Reviews)</small>
+          </div>
+        </td>
+        <td class="align-middle">
+          <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]">
+            <i class="fa fa-shopping-cart"></i>
+          </a>
+        </td>
+      </tr>
     </tbody>
-</table>
+  </table>
+</div>
+
+<div class="d-flex justify-content-center mt-5">
+  <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
 </div>

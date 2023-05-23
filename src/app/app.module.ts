@@ -11,8 +11,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from "@angular/common/http";
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { FilterPipe } from './pipes/filter.pipe';
-
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -20,6 +20,7 @@ import { FilterPipe } from './pipes/filter.pipe';
     TopBarComponent,
     NavBarComponent,
     FooterComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +30,7 @@ import { FilterPipe } from './pipes/filter.pipe';
     BrowserAnimationsModule,
     HttpClientModule,
     BsDropdownModule.forRoot(),
+    NgbDropdownModule
   ],
   providers: [{ provide: BsDropdownConfig, useValue: { isAnimated:true, autoClose: true,} }],
   bootstrap: [AppComponent]

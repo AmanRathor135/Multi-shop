@@ -12,32 +12,17 @@
         <small class="far fa-star text-primary mr-1"></small>
       </ng-container>
     </ng-container>
-    <small
-      >(The Rating is {{ singleProduct?.rating?.rate }} Out of
-      {{ singleProduct?.rating?.count }} Reviews)</small
-    >
+    <small>(The Rating is {{ singleProduct?.rating?.rate }} Out of {{ singleProduct?.rating?.count }} Reviews)</small>
   </div>
-  <h3 class="font-weight-semi-bold mb-4">
-    {{ singleProduct?.price | currency }}
-  </h3>
+  <h3 class="font-weight-semi-bold mb-4"> {{ singleProduct?.price | currency:currency }}</h3>
   <p class="mb-4">{{ singleProduct?.description }}</p>
 
   <div class="d-flex mb-3">
     <strong class="text-dark mr-3">{{ sizes.category }}:</strong>
     <form>
-      <div
-        class="custom-control custom-radio custom-control-inline"
-        *ngFor="let item of sizes.data"
-      >
-        <input
-          type="radio"
-          class="custom-control-input"
-          id="{{ item.label }}"
-          name="size"
-        />
-        <label class="custom-control-label" for="{{ item.label }}">{{
-          item.name
-        }}</label>
+      <div class="custom-control custom-radio custom-control-inline" *ngFor="let item of sizes.data">
+        <input type="radio" class="custom-control-input" id="{{ item.label }}" name="size"/>
+        <label class="custom-control-label" for="{{ item.label }}">{{ item.name }}</label>
       </div>
     </form>
   </div>
@@ -45,19 +30,9 @@
   <div class="d-flex mb-4">
     <strong class="text-dark mr-3">{{ colors.category }}:</strong>
     <form>
-      <div
-        class="custom-control custom-radio custom-control-inline"
-        *ngFor="let item of colors.data"
-      >
-        <input
-          type="radio"
-          class="custom-control-input"
-          id="{{ item.label }}"
-          name="size"
-        />
-        <label class="custom-control-label" for="{{ item.label }}">{{
-          item.name
-        }}</label>
+      <div class="custom-control custom-radio custom-control-inline" *ngFor="let item of colors.data">
+        <input type="radio" class="custom-control-input" id="{{ item.label }}" name="size"/>
+        <label class="custom-control-label" for="{{ item.label }}">{{ item.name }}</label>
       </div>
     </form>
   </div>
@@ -69,11 +44,7 @@
           <i class="fa fa-minus"></i>
         </button>
       </div>
-      <input
-        type="text"
-        class="form-control bg-secondary border-0 text-center"
-        [value]="value"
-      />
+      <input type="text" class="form-control bg-secondary border-0 text-center" [value]="value"/>
       <div class="input-group-btn">
         <button class="btn btn-primary btn-plus" (click)="add()">
           <i class="fa fa-plus"></i>
@@ -82,8 +53,8 @@
     </div>
     <button class="btn btn-primary px-3" (click)="addToCart(singleProduct)">
       <i class="fa fa-shopping-cart mr-1"></i>
-      Add To Cart</button
-    >&nbsp;&nbsp;&nbsp;&nbsp;
+      Add To Cart
+    </button>&nbsp;&nbsp;&nbsp;&nbsp;
     <button class="btn btn-success px-3" [routerLink]="['/Shop/shop']">
       <i class="fas fa-cart-plus mr-1"></i>
       Add More Products
@@ -92,7 +63,7 @@
   <div class="d-flex pt-2">
     <strong class="text-dark mr-2">Share on:</strong>
     <div class="d-inline-flex">
-      <a class="text-dark px-2" href="" *ngFor="let links of socialLinks">
+      <a class="text-dark px-2" *ngFor="let links of socialLinks">
         <i class="{{ links }}"></i>
       </a>
     </div>

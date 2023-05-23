@@ -22,8 +22,8 @@
                         <a class="h6 text-decoration-none" [routerLink]="['/Shop/Shop-details', product.id]">{{product.title}}</a>
                     </div>
                     <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>{{product.price | currency}}</h5>
-                        <h6 class="text-muted ml-2"><del>{{product.price | currency}}</del></h6>
+                        <h5>{{product.price | currency:currency}}</h5>
+                        <h6 class="text-muted ml-2"><del>{{product.price | currency:currency}}</del></h6>
                     </div>
                     <div class="d-flex align-items-center justify-content-center mb-1">
                         <ng-container *ngFor="let rate of totalRate; let i=index">

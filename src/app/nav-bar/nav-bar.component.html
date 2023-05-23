@@ -1,28 +1,23 @@
 <!-- Navbar Start -->
-<div class="container-fluid bg-dark mb-30">
+<div class="container-fluid bg-dark mb-4">
   <div class="row px-xl-5">
     <div class="col-lg-3 d-none d-lg-block">
       <a
         class="btn d-flex align-items-center justify-content-between bg-primary w-100"
         data-toggle="collapse"
-        href="#navbar-vertical"
-        style="height: 65px; padding: 0 30px"
+        style="height: 65px; padding: 0px 15px;"
       >
-      <div dropdown>
-        <!-- <h6 class="text-dark m-0">
+      <div ngbDropdown>
+        <h6  ngbDropdownToggle class="text-dark mt-2 fs-5">
           <i class="{{ navBarDropdown.icon }}"></i>{{ navBarDropdown.title }}
-        </h6> -->
-        <h6  dropdownToggle class="text-dark m-0 fs-5">
-          <i class="{{ navBarDropdown.icon }}"></i>{{ navBarDropdown.title }}
-          <i class="fa fa-angle-down text-dark" style="margin-left: 200px;"></i>
+          <i class="text-dark" style="margin-left: 220px;"></i>
+          <div ngbDropdownMenu  class="dropdown-menu mt-3" style="width: 100%; border-radius: 0px;">
+              <div class="nav-link" ngbDropdownItem (click)="categories(item)" *ngFor="let item of categoryList;">
+                <span style="font-weight: 400; font-size: medium;" class="bg-light">{{ item | titlecase}}</span>
+              </div>    
+          </div>
         </h6>
-          <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu bg-light" style="width: 93%; margin: 0px 0px 0px 15px; border-radius: 0px;" aria-labelledby="button-animated">
-            <li *ngFor="let item of categoryList;">
-              <a class="nav-link" [routerLink]="['/Shop/shop', item]" data-toggle="dropdown">{{ item }}
-              </a> 
-            </li>
-          </ul>
-        </div>
+      </div>
       </a>
     </div>
 
@@ -46,32 +41,12 @@
             class="navbar-nav py-0"
             *ngFor="let item of navbarList; let first = first"
           >
-            <div *ngIf="!item.data">
-              <a
-                routerLink="{{ item.route }}"
-                class="nav-item nav-link"
-                (click)="filter(item.category)"
-                >{{ item.category }}
-                </a>
-            </div>
-            <div class="nav-item dropdown" *ngIf="item.data">
-              <a
-                href="#"
-                class="nav-link dropdown-toggle"
-                [ngClass]="{ active: item.category == category}"
-                (click)="filter(item.category)"
-                data-toggle="dropdown"
-                >{{ item.category }} <i class="fa fa-angle-down mt-1"></i>
-                <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                  <div *ngFor="let data of item.data">
-                    <a routerLink="{{ data.route }}" class="dropdown-item">{{ data.type }}</a>
-                  </div>
-                </div>
-              </a>
+            <div>
+              <a routerLink="{{ item.route }}" class="nav-item nav-link" (click)="filter(item.category)">{{ item.category }}</a>
             </div>
           </div>
           <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-            <a class="btn px-0 ml-3">
+            <a class="btn px-0 ml-3" [routerLink]="['wishlist']">
               <i class="text-primary fas fa-heart"></i>&nbsp;
               <span class="badge text-secondary border border-secondary rounded-circle">{{totalFavoriteProduct}}</span>
             </a>

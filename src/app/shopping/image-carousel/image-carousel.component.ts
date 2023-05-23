@@ -33,7 +33,7 @@ export class ImageCarouselComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((res:any) => {
-      this.id = res.params.id;
+      this.id = res.params.id ;
       this.getSingleProduct();
     })
   }

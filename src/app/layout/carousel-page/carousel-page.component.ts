@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { OwlOptions } from 'ngx-owl-carousel-o';
 
 @Component({
   selector: 'app-carousel-page',
@@ -34,5 +35,17 @@ export class CarouselPageComponent {
     btnName:'Shop Now',
     imgSrc:['assets/img/offer-1.jpg', 'assets/img/offer-2.jpg']
   }
+  customOptions: OwlOptions = {
+    loop: true,
+    autoplay: true,
+    center: false,
+    dots: false,
+    autoHeight: true,
+    autoWidth: true,
+    margin: 20,
+    responsive: {
+      0: { items: 1 },
+    },
+  };
 
 }

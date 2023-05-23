@@ -11,6 +11,8 @@ export class ProductService {
 
   totalCartItems= new BehaviorSubject<any>(false);
   totalFavoriteItems = new BehaviorSubject<number>(0);
+  currency = new BehaviorSubject<any>(localStorage.getItem('currency'))
+  
 
   fetchLimitedProducts(){
     return this.service.getReq('https://fakestoreapi.com/products?limit=8');

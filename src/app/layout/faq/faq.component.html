@@ -1,0 +1,19 @@
+<!-- ======= Frequently Asked Questions Section ======= -->
+<div class="container-fluid p-30">
+  <div class="text-center px-xl-5">
+    <h2 class="mb-30">Frequently Asked Questions</h2>
+    <p class="mb-30">{{ description }}</p>
+  </div>
+
+  <div class="row px-xl-5 d-flex justify-content-center align-items-center">
+    <ng-container *ngFor="let item of faq">
+      <div class="col-lg-6 col-md-12">
+        <h5>{{ item.question }}</h5>
+      </div>
+      <div class="col-lg-6 col-md-12 mb-3">
+        <p>{{ item.answer }}</p>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<!-- End Frequently Asked Questions Section -->

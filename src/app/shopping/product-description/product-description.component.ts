@@ -8,6 +8,11 @@ import { Component } from '@angular/core';
 export class ProductDescriptionComponent {
   category: any;
   Tabs: any[] = ['Description', 'Information', 'Reviews (0)'];
+  feedbackForm:any = {
+    review:'',
+    name:'',
+    email:''
+  }
 
   tabList: any[] = [
     {
@@ -46,4 +51,8 @@ export class ProductDescriptionComponent {
   ];
     
   constructor() {}
+
+  sendMessage(){
+    
+  }
 }

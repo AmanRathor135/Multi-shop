@@ -15,7 +15,7 @@ const routes: Routes = [
   },
   {
     path:'Shop-details/:id', component:ShopDetailsComponent
-  }
+  },
 ];
 
 @NgModule({

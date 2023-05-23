@@ -11,7 +11,9 @@ import { OfferComponent } from './offer/offer.component';
 import { ProductsRecentComponent } from './products-recent/products-recent.component';
 import { VendorComponent } from './vendor/vendor.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
-import { FilterPipe } from '../pipes/filter.pipe';
+import { FilterPipe } from '../shopping/product-list/filter.pipe';
+import { FaqComponent } from './faq/faq.component';
+import { WishlistComponent } from './wishlist/wishlist.component';
 
 
 @NgModule({
@@ -23,7 +25,9 @@ import { FilterPipe } from '../pipes/filter.pipe';
     ProductsFeaturedComponent,
     OfferComponent,
     ProductsRecentComponent,
-    VendorComponent
+    VendorComponent,
+    FaqComponent,
+    WishlistComponent,
   ],
   imports: [
     CommonModule,

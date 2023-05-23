@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-checkout',
@@ -13,6 +14,10 @@ import {
 })
 export class CheckoutComponent {
 
+  cartProductList:any;
+  totalAmount:number = 0;
+  currency: any;
+  shippingAmount:number = 10;
   isChecked:boolean = false;
   submitted:boolean = false;
 
@@ -59,13 +64,32 @@ export class CheckoutComponent {
     zipCode: new FormControl('', [Validators.required]),
   });
 
-  constructor() {}
+  constructor(private service:ProductService) {
+    this.service.currency.subscribe((res: any) => {
+      if (res) {
+        this.currency = res;
+      }
+    });
+
+    this.cartProductList = localStorage.getItem('addCartItem');
+    this.cartProductList = JSON.parse(this.cartProductList);
+
+
+    this.totalPrice();
+    
+  }
 
   get billingForm(): { [key: string]: AbstractControl } {
     return this.billingAddressForm.controls;
   }
   get shippingForm(): { [key: string]: AbstractControl } {
     return this.shippingAddressForm.controls;
+  }
+
+  totalPrice() {
+    for (let i = 0; i < this.cartProductList.length; i++) {
+      this.totalAmount += this.cartProductList[i].price * this.cartProductList[i].quantity;
+    }
   }
 
   check(){

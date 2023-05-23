@@ -3,28 +3,48 @@
   <div class="row bg-secondary py-1 px-xl-5">
     <div class="col-lg-6 d-none d-lg-block">
       <div class="d-inline-flex align-items-center h-100">
-        <ng-container *ngFor="let item of topBarList1">
-          <a class="text-body mr-3 p-1" href="">{{ item }}</a>
+        <ng-container *ngFor="let item of topBarList">
+          <a class="text-body mr-3 p-1" routerLink="{{ item.route }}">{{ item.name }}</a>
         </ng-container>
       </div>
     </div>
 
     <div class="col-lg-6 text-center text-lg-right">
       <div class="d-inline-flex justify-content-around align-items-center mx-2">
-        <div class="btn-group" *ngFor="let item of DropDownMenu">
-          <button
-            type="button"
-            class="btn btn-sm btn-light dropdown-toggle mr-3"
-            data-toggle="dropdown"
-          >
-            {{ item.menu }}
+
+        <div ngbDropdown>
+          <button type="button" class="btn btn-sm btn-light dropdown-toggle mr-3" ngbDropdownToggle>
+            My Account
+            <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+              <ng-container *ngFor="let list of DropDownMenu1">
+                <button class="dropdown-item" ngbDropdownItem type="button">{{ list }}</button>
+              </ng-container>
+            </div>
           </button>
-          <div class="dropdown-menu dropdown-menu-right">
-            <ng-container *ngFor="let list of item.data">
-              <button class="dropdown-item" type="button">{{ list }}</button>
+        </div> 
+
+        <div ngbDropdown>
+          <button type="button" class="btn btn-sm btn-light dropdown-toggle mr-3" ngbDropdownToggle>
+          USD
+          <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+            <ng-container *ngFor="let list of DropDownMenu2">
+              <button class="dropdown-item" ngbDropdownItem type="button" (click)="currency(list)">{{ list }}</button>
             </ng-container>
           </div>
+          </button> 
+        </div>       
+
+        <div ngbDropdown>
+          <button type="button" class="btn btn-sm btn-light dropdown-toggle mr-3" ngbDropdownToggle>
+            En
+            <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+              <ng-container *ngFor="let list of DropDownMenu3">
+                <button class="dropdown-item" ngbDropdownItem type="button">{{ list }}</button>
+              </ng-container>
+            </div>
+          </button> 
         </div>
+
       </div>
     </div>
   </div>
@@ -32,26 +52,22 @@
   <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
     <div class="col-lg-4">
       <a href="" class="text-decoration-none">
-        <span class="h1 text-uppercase text-primary bg-dark px-2">{{
-          details.first
-        }}</span>
-        <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">{{
-          details.last
-        }}</span>
+        <span class="h1 text-uppercase text-primary bg-dark px-2">{{ details.first }}</span>
+        <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">{{ details.last }}</span>
       </a>
     </div>
     <div class="col-lg-4 col-6 text-left">
-      <form>
+      <form #search="ngForm">
         <div class="input-group">
           <input
             type="text"
-            name="searchText"
+            name="data"
             class="form-control"
             placeholder="Search for products"
-            [(ngModel)]="searchText"
+            [(ngModel)]="value"
           />
           <div class="input-group-append">
-            <span class="input-group-text bg-transparent text-primary">
+            <span class="input-group-text bg-transparent text-primary" (click)="Search(search)">
               <i class="fa fa-search"></i>
             </span>
           </div>

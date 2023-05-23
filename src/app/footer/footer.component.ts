@@ -67,4 +67,8 @@ export class FooterComponent {
   newsletterForm: any = {
     email: '',
   };
+
+  signUp(){
+    
+  }
 }

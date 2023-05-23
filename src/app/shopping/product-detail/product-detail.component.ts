@@ -13,15 +13,9 @@ export class ProductDetailComponent implements OnInit {
   selectedItem: any;
   id:any;
   math= Math;
+  currency:any;
   totalRate:any;
   value:any = 1;
-  // productDetail: any = {
-  //   productName: 'Product Name Goes Here',
-  //   icons: ['fas fa-star','fas fa-star','fas fa-star','fas fa-star-half-alt','far fa-star'],
-  //   reviews: '99',
-  //   price: '150',
-  //   detail: 'Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat diam stet sit clita ea. Sanc ipsum et, labore clita lorem magna duo dolor no sea Nonumy'
-  // };
 
   sizes: any ={ 
     category:'Sizes',
@@ -49,6 +43,10 @@ export class ProductDetailComponent implements OnInit {
   constructor(private route:ActivatedRoute, private service:ProductService, private router:Router){}
 
   ngOnInit(): void {
+    this.service.currency.next(this.currency);
+    this.service.currency.subscribe((res:any) => {
+      this.currency = res;      
+    });
 
     this.service.totalCartItems.next(true);
     
@@ -78,22 +76,20 @@ export class ProductDetailComponent implements OnInit {
     let cartItems:any[] = [];
 
     const getCartItem = JSON.parse(localStorage.getItem("addCartItem") || "{}");
-    if (getCartItem && getCartItem.length) {
+    if (getCartItem && getCartItem.length ) {
       cartItems = getCartItem;
       cartItems.push(this.selectedItem);
     } else {
       cartItems.push(this.selectedItem);
     }
-
-    localStorage.setItem("addCartItem", JSON.stringify(cartItems));
-    this.service.totalCartItems.next(true);
-
-    console.log(item);
     
+    cartItems = [ ...new Map(cartItems.map((item:any) => [item['id'], item])).values()]
+    localStorage.setItem("addCartItem", JSON.stringify(cartItems));
+    this.service.totalCartItems.next(true);    
   }
 
   rating(value:any){
-    this.totalRate = Array(value)
+    this.totalRate = Array(value);
   };
 
   add(){

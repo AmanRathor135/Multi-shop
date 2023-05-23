@@ -14,7 +14,10 @@ import { ImageCarouselComponent } from './image-carousel/image-carousel.componen
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductDescriptionComponent } from './product-description/product-description.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { FilterPipe } from '../pipes/filter.pipe';
+import { FilterPipe } from './product-list/filter.pipe';
+import { FormsModule } from '@angular/forms';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -35,7 +38,11 @@ import { FilterPipe } from '../pipes/filter.pipe';
     CommonModule,
     ShoppingRoutingModule,
     CarouselModule,
-    TabsModule.forRoot()
-  ]
+    TabsModule.forRoot(),
+    FormsModule,
+    NgxPaginationModule,
+    NgbDropdownModule
+  ],
+  exports:[]
 })
 export class ShoppingModule { }
