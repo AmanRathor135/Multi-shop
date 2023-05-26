@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ProductService } from '../services/product.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-footer',
@@ -65,10 +67,20 @@ export class FooterComponent {
   };
 
   newsletterForm: any = {
-    email: '',
+    userEmail: '',
   };
+  constructor(private service:ProductService, private toastr:ToastrService) {}
 
-  signUp(){
+  signUp(form:any){
+    if(form.valid){
+      this.service.signUpEmail(this.newsletterForm).subscribe({
+        next: (res:any) => {
+          console.log(res);
+          res.type == 'success'?this.toastr.success(res.message):this.toastr.warning(res.message)
+        }
+      });
+    }
+    
     
   }
 }

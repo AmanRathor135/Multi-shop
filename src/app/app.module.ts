@@ -13,6 +13,8 @@ import { HttpClientModule } from "@angular/common/http";
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
     NavBarComponent,
     FooterComponent,
     PageNotFoundComponent,
+    BreadcrumbComponent,
   ],
   imports: [
     CommonModule,
@@ -30,7 +33,12 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
     BrowserAnimationsModule,
     HttpClientModule,
     BsDropdownModule.forRoot(),
-    NgbDropdownModule
+    NgbDropdownModule,
+    ToastrModule.forRoot({
+      timeOut: 700, 
+      closeButton: true,
+      progressBar: true,
+    }),
   ],
   providers: [{ provide: BsDropdownConfig, useValue: { isAnimated:true, autoClose: true,} }],
   bootstrap: [AppComponent]

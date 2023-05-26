@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -14,6 +15,7 @@ export class ProductDetailComponent implements OnInit {
   id:any;
   math= Math;
   currency:any;
+  currencyPrice:any;
   totalRate:any;
   value:any = 1;
 
@@ -40,14 +42,17 @@ export class ProductDetailComponent implements OnInit {
 
   socialLinks:any[] = ['fab fa-facebook-f', 'fab fa-twitter', 'fab fa-linkedin-in', 'fab fa-pinterest']
   
-  constructor(private route:ActivatedRoute, private service:ProductService, private router:Router){}
+  constructor(private route:ActivatedRoute, private service:ProductService, private toastr:ToastrService){}
 
   ngOnInit(): void {
-    this.service.currency.next(this.currency);
     this.service.currency.subscribe((res:any) => {
-      this.currency = res;      
+      if(res){
+        this.currency = res;
+        this.getPrice();      
+      }
     });
-
+    
+    this.service.currency.next(this.currency);
     this.service.totalCartItems.next(true);
     
     this.route.paramMap.subscribe((res:any) => {
@@ -58,10 +63,16 @@ export class ProductDetailComponent implements OnInit {
     this.rating(5)
   }
 
+  getPrice(){
+    let value:any = localStorage.getItem('currencyPrice');
+    value = JSON.parse(value);
+    this.currencyPrice = value[this.currency];
+  }
+
   getSingleProduct(){
     this.service.getSingleProduct(this.id).subscribe({
       next: (res:any) => {
-        this.singleProduct = res;        
+        this.singleProduct = res.data;        
       },
       error: (err:any) => {
         console.log('err', err)
@@ -85,7 +96,8 @@ export class ProductDetailComponent implements OnInit {
     
     cartItems = [ ...new Map(cartItems.map((item:any) => [item['id'], item])).values()]
     localStorage.setItem("addCartItem", JSON.stringify(cartItems));
-    this.service.totalCartItems.next(true);    
+    this.service.totalCartItems.next(true);  
+    this.toastr.success("Item Added Successfully!");  
   }
 
   rating(value:any){

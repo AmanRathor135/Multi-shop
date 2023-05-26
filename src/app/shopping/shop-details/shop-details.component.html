@@ -1,74 +1,78 @@
 <!-- Shop Detail Start -->
 <div class="container-fluid pb-5">
-     <div class="row px-xl-5">
-         <div class="col-lg-5 mb-30">
-            <app-image-carousel></app-image-carousel>
-         </div>
+  <div class="row px-xl-5">
+    <div class="col-lg-5 mb-30">
+      <app-image-carousel></app-image-carousel>
+    </div>
 
-         <div class="col-lg-7 h-auto mb-30">
-             <app-product-detail></app-product-detail>
-         </div>
-     </div>
-     <div class="row px-xl-5">
-         <div class="col">
-             <app-product-description></app-product-description>
-         </div>
-     </div>
- </div>
- <!-- Shop Detail End -->
+    <div class="col-lg-7 h-auto mb-30">
+      <app-product-detail></app-product-detail>
+    </div>
+  </div>
+  <div class="row px-xl-5">
+    <div class="col">
+      <app-product-description></app-product-description>
+    </div>
+  </div>
+</div>
+<!-- Shop Detail End -->
 
-
- <!-- Products Start -->
- <div class="container-fluid py-5">
-     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">You May Also Like</span></h2>
-     <div class="row px-xl-5">
-         <div class="col">
-          <owl-carousel-o [options]="customOptions">
-               <ng-template carouselSlide *ngFor="let product of carouselList" > 
-                <div class="product-item bg-light mb-4">
-                    <div class="product-img position-relative overflow-hidden" [routerLink]="['/Shop/Shop-details', product.id]">
-                       <div style="width: 100%; ">
-                        <img class="img-fluid w-100 p-3" src="{{product.image}}" alt=""  style="width: 100% !important; height: 300px;">
-                       </div>
-                        <div class="product-action">
-                            <a class="btn btn-outline-dark btn-square"  *ngFor="let icon of icons; let last=last">
-                                <span *ngIf="!last">
-                                    <i class={{icon}}></i>
-                                </span>
-                                <span *ngIf="last">
-                                    <i class={{icon}}  [routerLink]="['/Shop/Shop-details', product.id]"></i>
-                                </span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="text-center py-4">
-                        <div  style="min-height: 60px;">
-                            <a class="h6 text-decoration-none" [routerLink]="['/Shop/Shop-details', product.id]">{{product.title}}</a>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>{{product.price | currency:currency}}</h5>
-                            <h6 class="text-muted ml-2"><del>{{product.price | currency:currency}}</del></h6>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-center mb-1">
-                            <ng-container *ngFor="let rate of totalRate; let i=index">
-                                <ng-container *ngIf="i<math.floor(product.rating.rate)">
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                </ng-container>
-                                <ng-container *ngIf="(i==math.floor(product.rating.rate))">
-                                    <small class="fa fa-star-half-alt text-primary mr-1"></small>
-                                </ng-container>
-                                <ng-container *ngIf="i>product.rating.rate">
-                                    <small class="far fa-star text-primary mr-1"></small>
-                                </ng-container>
-                            </ng-container>
-                            <small>(The Rating is {{product.rating.rate}} Out of {{product.rating.count}} Reviews)</small>
-                        </div>
-                    </div>
-                </div>
-               </ng-template>
-          </owl-carousel-o>
-         </div>
-     </div>
- </div>
- <!-- Products End -->
-
+<!-- Products Start -->
+<div class="container-fluid py-5">
+  <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
+    <span class="bg-secondary pr-3">You May Also Like</span>
+  </h2>
+  <div class="row px-xl-5">
+    <div class="col">
+      <owl-carousel-o [options]="customOptions">
+        <ng-template carouselSlide *ngFor="let product of carouselList">
+          <div class="product-item bg-light mb-4">
+            <div class="product-img position-relative overflow-hidden">
+              <div style="width: 100%">
+                <img class="img-fluid w-100 p-3" src="http://192.168.1.178:1108{{ product.image }}"
+                  alt="..." style="width: 100% !important; height: 300px"
+                />
+              </div>
+              <div class="product-action">
+                <a class="btn btn-outline-dark btn-square" *ngFor="let icon of icons; let last = last" >
+                  <span *ngIf="!last">
+                    <i class="{{ icon }}"></i>
+                  </span>
+                  <span *ngIf="last">
+                    <i class="{{ icon }}" [routerLink]="['/Shop/Shop-details', product.id]"></i>
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div class="text-center py-4">
+              <div style="min-height: 60px">
+                <a class="h6 text-decoration-none" [routerLink]="['/Shop/Shop-details', product.id]">{{ product.title }}</a>
+              </div>
+              <div class="d-flex align-items-center justify-content-center mt-2">
+                <h5>{{ product.price * currencyPrice | currency : currency }}</h5>
+                <h6 class="text-muted ml-2">
+                  <del>{{ product.price * currencyPrice | currency : currency}}</del>
+                </h6>
+              </div>
+              <div class="d-flex align-items-center justify-content-center mb-1">
+                <ng-container *ngFor="let rate of totalRate; let i = index">
+                  <ng-container *ngIf="i < math.floor(product.rating.rate)">
+                    <small class="fa fa-star text-primary mr-1"></small>
+                  </ng-container>
+                  <ng-container *ngIf="i == math.floor(product.rating.rate)">
+                    <small class="fa fa-star-half-alt text-primary mr-1"></small>
+                  </ng-container>
+                  <ng-container *ngIf="i > product.rating.rate">
+                    <small class="far fa-star text-primary mr-1"></small>
+                  </ng-container>
+                </ng-container>
+                <small>(The Rating is {{ product.rating.rate }} Out of {{ product.rating.count }} Reviews)</small>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </owl-carousel-o>
+    </div>
+  </div>
+</div>
+<!-- Products End -->

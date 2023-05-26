@@ -14,6 +14,7 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
 import { FilterPipe } from '../shopping/product-list/filter.pipe';
 import { FaqComponent } from './faq/faq.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
+import { ProductService } from '../services/product.service';
 
 
 @NgModule({

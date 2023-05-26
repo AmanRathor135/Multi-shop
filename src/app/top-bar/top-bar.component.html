@@ -39,7 +39,7 @@
             En
             <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
               <ng-container *ngFor="let list of DropDownMenu3">
-                <button class="dropdown-item" ngbDropdownItem type="button">{{ list }}</button>
+                <button class="dropdown-item" ngbDropdownItem type="button" (click)="changeLanguage(list)">{{ list }}</button>
               </ng-container>
             </div>
           </button> 

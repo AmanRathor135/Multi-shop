@@ -1,22 +1,17 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { Subscription } from 'rxjs';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-vendor',
   templateUrl: './vendor.component.html',
   styleUrls: ['./vendor.component.scss'],
 })
-export class VendorComponent {
-  vendorList: any[] = [
-    'assets/img/vendor-1.jpg',
-    'assets/img/vendor-2.jpg',
-    'assets/img/vendor-3.jpg',
-    'assets/img/vendor-4.jpg',
-    'assets/img/vendor-5.jpg',
-    'assets/img/vendor-6.jpg',
-    'assets/img/vendor-7.jpg',
-    'assets/img/vendor-8.jpg',
-  ];
+export class VendorComponent implements OnInit, OnDestroy {
+
+  vendorList: any[] = [];
+  subscription:Subscription[] = [];
 
   customOptions: OwlOptions = {
     loop: true,
@@ -44,9 +39,32 @@ export class VendorComponent {
       },
       950: {
         items: 6,
-      },
-      
+      }, 
     },
-
   };
+
+  constructor(private service:ProductService, private cdr:ChangeDetectorRef) {}
+
+  ngOnInit(): void {
+    this.getVendorSliderList();
+  }
+
+  getVendorSliderList(){
+    let sub1 = this.service.vendorSliderList().subscribe({
+      next: (res:any) => {
+        this.vendorList = res.data;
+      },
+      error: (err:any) => {
+        console.log("Vendor Error",err);
+      },
+      complete: () => {this.cdr.markForCheck();}
+    });
+    this.subscription.push(sub1);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.forEach((subscriptionRow:any) => {
+      subscriptionRow.unsubscribe();
+    });
+  }
 }

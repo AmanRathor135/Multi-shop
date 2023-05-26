@@ -22,13 +22,13 @@
                  </thead>
                  <tbody class="align-middle" *ngIf="cartProduct.length">
                      <tr *ngFor="let item of cartProduct; let i = index">
-                         <td class="align-middle"><img src="{{item.image}}" alt="" style="width: 70px;"> {{item.name}}</td>
+                         <td class="align-middle"><img src="http://192.168.1.178:1108{{item.image}}" alt="" style="width: 70px;"> {{item.name}}</td>
                          <td class="align-middle">{{item.title}}</td>
-                         <td class="align-middle">{{item.price | currency:currency}}</td>
+                         <td class="align-middle">{{(item.price *currencyPrice) | currency:currency}}</td>
                          <td class="align-middle">
                              <div class="align-middle">{{item.quantity}}</div>
                          </td>
-                         <td class="align-middle">{{(item.price * item.quantity) | currency:currency}}</td>
+                         <td class="align-middle">{{((item.price * item.quantity)*currencyPrice) | currency:currency}}</td>
                          <td class="align-middle"><button class="btn btn-sm btn-danger" (click)="removeRow(i)"><i class="fa fa-times"></i></button></td>
                      </tr>
                  </tbody>
@@ -54,17 +54,17 @@
                  <div class="border-bottom pb-2">
                      <div class="d-flex justify-content-between mb-3">
                          <h6>Subtotal</h6>
-                         <h6>{{totalAmount | currency:currency}}</h6>
+                         <h6>{{totalAmount*currencyPrice | currency:currency}}</h6>
                      </div>
                      <div class="d-flex justify-content-between">
                          <h6 class="font-weight-medium">Shipping</h6>
-                         <h6 class="font-weight-medium">{{taxAmount | currency:currency}}</h6>
+                         <h6 class="font-weight-medium">{{taxAmount*currencyPrice | currency:currency}}</h6>
                      </div>
                  </div>
                  <div class="pt-2">
                      <div class="d-flex justify-content-between mt-2">
                          <h5>Total</h5>
-                         <h5>{{(totalAmount + taxAmount) | currency :currency}}</h5>
+                         <h5>{{((totalAmount + taxAmount)*currencyPrice) | currency :currency}}</h5>
 
                         <!-- if we don't have any cart then it should not show the sum of totalAmount and taxAmount and
                              if we have any cart then it should show the sum of totalAmount and taxAmount -->

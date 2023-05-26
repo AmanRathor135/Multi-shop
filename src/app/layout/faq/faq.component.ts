@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-faq',
@@ -42,5 +43,16 @@ export class FaqComponent {
     },
   ]
 
-  constructor() { }
+  constructor(private service:ProductService) {
+    service.Breadcrumb.next([
+      {
+        pageTitle: 'Home',
+        url: '',
+      },
+      {
+        pageTitle: 'FAQ',
+        url: 'faq',
+      }
+    ]);
+   }
 }

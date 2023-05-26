@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-nav-bar',
@@ -8,11 +9,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./nav-bar.component.scss'],
   changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent implements OnInit, OnDestroy {
   category: any;
   totalCartProduct: any = 0;
   totalFavoriteProduct: any = 0;
   categoryList: any[] = [];
+  subscription:Subscription[] = [];
+
   navBarDropdown: any = {
     icon: 'fa fa-bars mr-2',
     title: 'Categories',
@@ -69,10 +72,10 @@ export class NavBarComponent implements OnInit {
       category: 'Shop',
       route: 'Shop/shop',
     },
-    {
-      category: 'Contact',
-      route: 'contact',
-    },
+    // {
+    //   category: 'Contact',
+    //   route: 'contact',
+    // },
   ];
 
   constructor(private service: ProductService, private router: Router, private cdr:ChangeDetectorRef) {
@@ -83,12 +86,13 @@ export class NavBarComponent implements OnInit {
     this.getCategories();
     this.service.totalCartItems.next(true);
 
-    this.service.totalCartItems.subscribe((res: any) => {
+   let sub1 = this.service.totalCartItems.subscribe((res: any) => {
       if (res) {
         this.getTotalCartProduct();
         this.cdr.markForCheck();
       }
     });
+    this.subscription.push(sub1);
 
     this.service.totalFavoriteItems.subscribe((res: any) => {
       this.totalFavoriteProduct = res;
@@ -104,16 +108,18 @@ export class NavBarComponent implements OnInit {
       }, 1);
     });
   }
+
   getCategories() {
-    this.service.getAllCategories().subscribe({
+   let sub2 = this.service.getAllCategories().subscribe({
       next: (res: any) => {
-        this.categoryList = res;
+        this.categoryList = res.data;        
       },
       error: (err: any) => {
         console.log('err', err);
       },
       complete: () => { this.cdr.markForCheck(); },
     });
+    this.subscription.push(sub2);
   }
 
   getTotalCartProduct() {
@@ -126,5 +132,11 @@ export class NavBarComponent implements OnInit {
 
   filter(name: any) {
     this.category = name;
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.forEach((subscriptionRow:any) => {
+      subscriptionRow.unsubscribe();
+    });
   }
 }

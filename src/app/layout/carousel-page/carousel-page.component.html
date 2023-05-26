@@ -3,11 +3,11 @@
   <div class="row px-xl-5">
     <div class="col-lg-8 mb-4">
       <owl-carousel-o [options]="customOptions">
-        <ng-template carouselSlide *ngFor="let item of carousel">
+        <ng-template carouselSlide *ngFor="let item of carousels">
           <div class="position-relative" style="height: 430px">
             <img
               class="position-absolute w-100 h-100"
-              src="{{ item.imgSrc }}"
+              src="http://192.168.1.178:1108{{ item.image }}"
               style="object-fit: cover"
             />
             <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
@@ -16,7 +16,7 @@
                   {{ item.title }}
                 </h1>
                 <p class="mx-md-5 px-5 animate__animated animate__bounceIn">
-                  {{ item.desc }}
+                  {{ item.description }}
                 </p>
                 <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp">{{ item.btnName }}</a>
               </div>
@@ -27,13 +27,13 @@
     </div>
 
     <div class="col-lg-4">
-      <ng-container *ngFor="let src of offerZone.imgSrc">
+      <ng-container *ngFor="let offer of offers">
         <div class="product-offer mb-30" style="height: 200px">
-          <img class="img-fluid" src="{{ src }}" alt="" />
+          <img class="img-fluid" src="http://192.168.1.178:1108{{ offer.image }}" alt="" />
           <div class="offer-text">
-            <h6 class="text-white text-uppercase">{{ offerZone.savings }}</h6>
-            <h3 class="text-white mb-3">{{ offerZone.type }}</h3>
-            <a href="" class="btn btn-primary">{{ offerZone.btnName }}</a>
+            <h6 class="text-white text-uppercase">{{ offer.offerTitle }}</h6>
+            <h3 class="text-white mb-3">{{ offer.offerType }}</h3>
+            <a href="" class="btn btn-primary">{{ offer.btnName }}</a>
           </div>
         </div>
       </ng-container>

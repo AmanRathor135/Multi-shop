@@ -10,9 +10,12 @@ import { Router } from '@angular/router';
 export class TopBarComponent {
   searchText!: string;
   value:any = '';
+  currentLanguage:any;
+  currencyValue:any[] = [];
   DropDownMenu1: any[] = ['My Account', 'Sign in', 'Sign up'];
-  DropDownMenu2: any[] = ['USD', 'EUR', 'GBP', 'CAD'];
-  DropDownMenu3: any[] = ['En', 'FR', 'AR', 'RU'];
+  DropDownMenu2: any[] = ['USD', 'EUR', 'GBP', 'CAD', 'INR'];
+  DropDownMenu3: any[] = ['EN', 'HI', 'GU', 'FR', 'AR', 'RU'];
+  
   topBarList: any[] = [
     {
       name:'About',
@@ -46,6 +49,12 @@ export class TopBarComponent {
   currency(event: any) {
     localStorage.setItem('currency', event);
     this.service.currency.next(localStorage.getItem('currency'));
+  }
+
+  changeLanguage(lang:any){
+    this.currentLanguage = lang;
+    document.cookie = 'googtrans='+`/en/${lang.toLowerCase()}`;
+    location.reload();
   }
 
   Search(data:any){

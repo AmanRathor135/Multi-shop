@@ -27,7 +27,7 @@
             {{ footerNewsletter.title }}
           </h5>
           <p>{{ footerNewsletter.desc }}</p>
-          <form name="form" #form="ngForm" autocomplete="off" novalidate>
+          <form name="form" #form="ngForm" autocomplete="on" novalidate>
             <div class="form-group mt-3 mt-md-0">
               <span class="d-flex">
                 <input
@@ -36,13 +36,13 @@
                   name="email"
                   id="email"
                   #email="ngModel"
-                  [(ngModel)]="newsletterForm.email"
+                  [(ngModel)]="newsletterForm.userEmail"
                   placeholder="Your Email"
                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                   required
                   style="width: 80%; border: 2px solid rgb(237, 193, 50);"
                 />
-                <button type="submit" class="btn btn-warning btn-square" (click)="signUp()" style="width: 20%; height: 38px;">
+                <button type="submit" class="btn btn-warning btn-square" (click)="signUp(form)" style="width: 20%; height: 38px;">
                   SignUp
                 </button>
             </span>

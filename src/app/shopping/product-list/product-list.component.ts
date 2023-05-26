@@ -11,7 +11,8 @@ import { ProductService } from 'src/app/services/product.service';
 export class ProductListComponent implements OnInit {
   total: number = 0;
   currency: any;
-  totalItem: number = 0;
+  currencyPrice:any;
+  totalItem:any;
   favoriteItemList:any[] = [];
   page: number = 1;
   isShow: boolean = true;
@@ -46,15 +47,20 @@ export class ProductListComponent implements OnInit {
     this.getAllProducts();
     this.service.totalCartItems.next(true);
 
+    let list:any = localStorage.getItem('favoriteItemList');
+    list = JSON.parse(list).length;
+    this.service.totalFavoriteItems.next(list); 
+
     this.service.currency.subscribe((res: any) => {
       if (res) { 
         this.currency = res; 
+        this.getPrice();
         this.cdr.markForCheck();
       }
     });
 
     this.activateRoute.paramMap.subscribe((res: any) => {
-      setTimeout(() => { this.category = res.params.id; }, 1);
+      setTimeout(() => { this.category = res.params.id;}, 1);
       if (this.category) {
         this.getProducts();
         this.cdr.markForCheck();
@@ -64,21 +70,28 @@ export class ProductListComponent implements OnInit {
     this.rating(5);
   }
 
+  getPrice(){
+    let value:any = localStorage.getItem('currencyPrice');
+    value = JSON.parse(value);
+    this.currencyPrice = value[this.currency];
+  }
+
   doFavorites(product: any, index:any) {
     product.isShow = !product.isShow;
     this.total = product.isShow ? this.total + 1 : this.total - 1;
     this.service.totalFavoriteItems.next(this.total);    
-
-    // if(product.isShow === true){
-    //   this.favoriteItemList.push(product);
-    //   localStorage.setItem('favoriteItemList', JSON.stringify(this.favoriteItemList))
-    // }
-    // else{
-    //   this.favoriteItemList.splice(index);
-    //   localStorage.setItem('favoriteItemList', JSON.stringify(this.favoriteItemList))
-    // }
+  
+    if(product.isShow === true){
+      this.favoriteItemList.push(product);
+      localStorage.setItem('favoriteItemList', JSON.stringify(this.favoriteItemList))
+    }
+    else {
+      this.favoriteItemList.pop();
+      localStorage.setItem('favoriteItemList', JSON.stringify(this.favoriteItemList))
+    }
     this.cdr.markForCheck();
   }
+
 
   pageChangeEvent(event: number) {
     this.page = event++;
@@ -88,7 +101,6 @@ export class ProductListComponent implements OnInit {
     this.service.getSpecificCategory(this.category).subscribe({
       next: (res: any) => {
         this.productList = res;
-        console.log('this.productList', this.productList);
       },
       error: (err: any) => {
         console.log('err', err);
@@ -100,7 +112,7 @@ export class ProductListComponent implements OnInit {
   getAllProducts() {
     this.service.getAllProducts().subscribe({
       next: (res: any) => {
-        this.productList = res;
+        this.productList = res.data;
         this.productList.map((product) => (product['isShow'] = false));
       },
       error: (err: any) => {
@@ -117,7 +129,7 @@ export class ProductListComponent implements OnInit {
   productInDesc() {
     this.service.getAllProductInDesc().subscribe({
       next: (res: any) => {
-        this.productList = res;
+        this.productList = res.data;
       },
       error: (err: any) => {
         console.log('err', err);

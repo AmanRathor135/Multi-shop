@@ -9,8 +9,10 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class ShopDetailsComponent implements OnInit {
   carouselList: any[] = [];
+  favItemLength:any;
   math = Math;
   currency: any;
+  currencyPrice:any;
   totalRate: any;
   icons: any[] = [
     'fa fa-shopping-cart',
@@ -35,12 +37,32 @@ export class ShopDetailsComponent implements OnInit {
     },
   };
 
-  constructor(private service: ProductService) {}
+  constructor(private service: ProductService) {
+    let list:any = localStorage.getItem('favoriteItemList');
+    this.favItemLength = JSON.parse(list);
+    this.service.totalFavoriteItems.next(this.favItemLength.length); 
+    
+    service.Breadcrumb.next([
+      {
+        pageTitle: 'Home',
+        url: '',
+      },
+      {
+        pageTitle: 'Shop',
+        url: 'Shop/shop',
+      },
+      {
+        pageTitle: 'Shop Details',
+        url: 'Shop/Shop-details',
+      }
+    ]);
+  }
 
   ngOnInit(): void {
     this.service.currency.subscribe((res: any) => {
       if (res) {
         this.currency = res;
+        this.getPrice();
       }
     });
 
@@ -48,10 +70,16 @@ export class ShopDetailsComponent implements OnInit {
     this.rating(5);
   }
 
+  getPrice(){
+    let value:any = localStorage.getItem('currencyPrice');
+    value = JSON.parse(value);
+    this.currencyPrice = value[this.currency];
+  }
+
   getProductsForCarousel() {
     this.service.fetchLimitedProducts().subscribe({
       next: (res: any) => {
-        this.carouselList = res;
+        this.carouselList = res.data;
       },
       error: (err: any) => {
         console.log('err', err);

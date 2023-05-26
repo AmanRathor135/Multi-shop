@@ -41,7 +41,7 @@ export class ImageCarouselComponent implements OnInit {
   getSingleProduct(){
     this.service.getSingleProduct(this.id).subscribe({
       next: (res:any) => {
-        this.singleProduct = res;        
+        this.singleProduct = res.data;        
       },
       error: (err:any) => {
         console.log('err', err)

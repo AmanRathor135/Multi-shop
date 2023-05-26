@@ -17,6 +17,8 @@ export class CheckoutComponent {
   cartProductList:any;
   totalAmount:number = 0;
   currency: any;
+  currencyPrice:any;
+  favItemLength:any;
   shippingAmount:number = 10;
   isChecked:boolean = false;
   submitted:boolean = false;
@@ -65,9 +67,29 @@ export class CheckoutComponent {
   });
 
   constructor(private service:ProductService) {
+
+    let list:any = localStorage.getItem('favoriteItemList');
+    this.favItemLength = JSON.parse(list);
+    this.service.totalFavoriteItems.next(this.favItemLength.length); 
+    service.Breadcrumb.next([
+      {
+        pageTitle: 'Home',
+        url: '',
+      },
+      {
+        pageTitle: 'Shop',
+        url: 'Shop/shop',
+      },
+      {
+        pageTitle: 'Checkout',
+        url: 'cart-detail/checkout',
+      }
+    ]);
+
     this.service.currency.subscribe((res: any) => {
       if (res) {
         this.currency = res;
+        this.getPrice();
       }
     });
 
@@ -84,6 +106,12 @@ export class CheckoutComponent {
   }
   get shippingForm(): { [key: string]: AbstractControl } {
     return this.shippingAddressForm.controls;
+  }
+
+  getPrice(){
+    let value:any = localStorage.getItem('currencyPrice');
+    value = JSON.parse(value);
+    this.currencyPrice = value[this.currency];
   }
 
   totalPrice() {

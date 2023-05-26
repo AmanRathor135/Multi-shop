@@ -1,13 +1,13 @@
 <!-- Offer Start -->
 <div class="container-fluid pt-5 pb-3">
      <div class="row px-xl-5">
-         <div class="col-md-6" *ngFor="let src of offerZone.imgSrc">
+         <div class="col-md-6" *ngFor="let offer of offers">
              <div class="product-offer mb-30" style="height: 300px;">
-                 <img class="img-fluid" src="{{src}}" alt="">
+                 <img class="img-fluid" src="http://192.168.1.178:1108{{offer.image}}" alt="">
                  <div class="offer-text">
-                     <h6 class="text-white text-uppercase">{{offerZone.savings}}</h6>
-                     <h3 class="text-white mb-3">{{offerZone.type}}</h3>
-                     <a href="" class="btn btn-primary">{{offerZone.btnName}}</a>
+                     <h6 class="text-white text-uppercase">{{offer.offerTitle}}</h6>
+                     <h3 class="text-white mb-3">{{offer.offerType}}</h3>
+                     <a href="" class="btn btn-primary">{{offer.btnName}}</a>
                  </div>
              </div>
          </div>

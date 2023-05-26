@@ -18,7 +18,22 @@ export class ShopComponent {
       category:['10', '20', '30']
     },
   ];
-  constructor(private service:ProductService){}
+  constructor(private service:ProductService){
+    service.Breadcrumb.next([
+      {
+        pageTitle: 'Home',
+        url: '',
+      },
+      {
+        pageTitle: 'Shop',
+        url: 'Shop/shop',
+      },
+      {
+        pageTitle: 'Shop List',
+        url: 'Shop/shop',
+      }
+    ]);
+  }
 
   productInDesc(){
     this.service.getAllProductInDesc()

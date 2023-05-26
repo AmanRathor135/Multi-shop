@@ -1,28 +1,59 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class CategoriesComponent {
-  categoryList: any = {
-    title: 'Categories',
-    category: 'Category Name',
-    totalProducts: '100 Products',
-    imgSrc: [
-      'assets/img/cat-1.jpg',
-      'assets/img/cat-2.jpg',
-      'assets/img/cat-3.jpg',
-      'assets/img/cat-4.jpg',
-      'assets/img/cat-4.jpg',
-      'assets/img/cat-3.jpg',
-      'assets/img/cat-2.jpg',
-      'assets/img/cat-1.jpg',
-      'assets/img/cat-2.jpg',
-      'assets/img/cat-1.jpg',
-      'assets/img/cat-4.jpg',
-      'assets/img/cat-3.jpg',
-    ],
-  };
+export class CategoriesComponent implements OnInit, OnDestroy {
+  title: string ='Categories';
+  categoryListPage:any[] = [];
+  subscription:Subscription[] = [];
+
+  // categoryList: any = {
+  //   category: 'Category Name',
+  //   totalProducts: '100 Products',
+  //   imgSrc: [
+  //     'assets/img/cat-1.jpg',
+  //     'assets/img/cat-2.jpg',
+  //     'assets/img/cat-3.jpg',
+  //     'assets/img/cat-4.jpg',
+  //     'assets/img/cat-4.jpg',
+  //     'assets/img/cat-3.jpg',
+  //     'assets/img/cat-2.jpg',
+  //     'assets/img/cat-1.jpg',
+  //     'assets/img/cat-2.jpg',
+  //     'assets/img/cat-1.jpg',
+  //     'assets/img/cat-4.jpg',
+  //     'assets/img/cat-3.jpg',
+  //   ],
+  // };
+
+  constructor(private service:ProductService, private cdr:ChangeDetectorRef){}
+
+  ngOnInit(): void {
+    this.getCategories();
+  }
+
+  getCategories(){
+    let sub1 = this.service.getAllCategories().subscribe({
+      next: (res:any) => {
+        this.categoryListPage = res.data;
+      },
+      error: (err:any) => {
+        console.log("Categories error", err)
+      },
+        complete: () => {this.cdr.markForCheck();}
+    });
+    this.subscription.push(sub1);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.forEach((subscriptionRow:any) => {
+      subscriptionRow.unsubscribe();
+    });
+  }
 }

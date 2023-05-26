@@ -37,17 +37,17 @@
   <div class="product-item bg-light mb-4" *ngIf="isShow">
     <div class="product-img position-relative overflow-hidden" style="cursor: pointer">
       <div style="width: 100%">
-        <img class="img-fluid w-100 p-3" src="{{ product.image }}" alt="..." style="width: 100% !important; height: 400px"/>
+        <img class="img-fluid w-100 p-5" src="http://192.168.1.178:1108{{ product.image }}" alt="..." style="width: 100% !important; height: 400px"/>
       </div>
       <div class="product-action">
         <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]" >
-          <i class="fa fa-shopping-cart"></i>
+          <i class="fa fa-shopping-cart" style="color: rgb(64, 241, 64);"></i>
         </a>
         <a class="btn btn-outline-dark btn-square" (click)="doFavorites(product,i)">
           <i [ngClass]="{ far: !product.isShow, fa: product.isShow }" class="fa-heart"></i>
         </a>
         <a class="btn btn-outline-dark btn-square">
-          <i class="fa fa-sync-alt"></i>
+          <i class="fa fa-sync-alt" style="color: orangered"></i>
         </a>
         <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]" >
           <i class="fa fa-search"></i>
@@ -59,9 +59,9 @@
         <a class="h6 text-decoration-none" [routerLink]="['/Shop/Shop-details', product.id]" >{{ product.title }}</a>
       </div>
       <div class="d-flex align-items-center justify-content-center mt-2">
-        <h5>{{ product.price | currency : currency }}</h5>
+        <h5>{{ product.price*currencyPrice | currency : currency }}</h5>
         <h6 class="text-muted ml-2">
-          <del>{{ product.price | currency : currency }}</del>
+          <del>{{ product.price*currencyPrice | currency : currency }}</del>
         </h6>
       </div>
       <div class="d-flex align-items-center justify-content-center mb-1">
@@ -90,10 +90,10 @@
       >
         <td class="align-middle fs-5">{{ product.id }}</td>
         <td class="align-middle">
-          <img src="{{ product.image }}" alt="" style="width: 70px" />
+          <img src="http://192.168.1.178:1108{{ product.image }}" alt="" style="width: 70px" />
         </td>
         <td class="align-middle">{{ product.title }}</td>
-        <td class="align-middle">{{ product.price | currency : currency }}</td>
+        <td class="align-middle">{{ product.price*currencyPrice | currency : currency }}</td>
         <td class="align-middle">
           <div class="d-flex align-items-center justify-content-center mb-1">
             <ng-container *ngFor="let rate of totalRate; let i = index">
@@ -115,7 +115,7 @@
         </td>
         <td class="align-middle">
           <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]">
-            <i class="fa fa-shopping-cart"></i>
+            <i class="fa fa-shopping-cart" style="color: rgb(64, 241, 64);"></i>
           </a>
         </td>
       </tr>
@@ -124,5 +124,5 @@
 </div>
 
 <div class="d-flex justify-content-center mt-5">
-  <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
+  <pagination-controls class="text-decoration-none" (pageChange)="pageChangeEvent($event)"></pagination-controls>
 </div>

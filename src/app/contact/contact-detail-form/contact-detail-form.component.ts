@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-contact-detail-form',
@@ -7,6 +8,8 @@ import { FormControl, FormControlName, FormGroup, Validators } from '@angular/fo
   styleUrls: ['./contact-detail-form.component.scss'],
 })
 export class ContactDetailFormComponent {
+
+  favItemLength:any;
   contactDetails: any[] = [
     {
       icon: 'fa fa-map-marker-alt',
@@ -30,7 +33,21 @@ export class ContactDetailFormComponent {
   }
 
   
-  constructor(){}
+  constructor(private service:ProductService){
+    let list:any = localStorage.getItem('favoriteItemList');
+    this.favItemLength = JSON.parse(list);
+    this.service.totalFavoriteItems.next(this.favItemLength.length);
+    service.Breadcrumb.next([
+      {
+        pageTitle: 'Home',
+        url: '',
+      },
+      {
+        pageTitle: 'Contact',
+        url: 'contact',
+      },
+    ]);
+  }
 
   sendMessage(){
 

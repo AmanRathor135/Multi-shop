@@ -14,7 +14,7 @@
     </ng-container>
     <small>(The Rating is {{ singleProduct?.rating?.rate }} Out of {{ singleProduct?.rating?.count }} Reviews)</small>
   </div>
-  <h3 class="font-weight-semi-bold mb-4"> {{ singleProduct?.price | currency:currency }}</h3>
+  <h3 class="font-weight-semi-bold mb-4"> {{ (singleProduct?.price *currencyPrice) | currency:currency }}</h3>
   <p class="mb-4">{{ singleProduct?.description }}</p>
 
   <div class="d-flex mb-3">
