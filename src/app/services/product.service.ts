@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -21,45 +21,45 @@ export class ProductService {
   currency = new BehaviorSubject<any>(localStorage.getItem('currency'));
   currencyValue = new BehaviorSubject<any>({'USD':1})
   
-  getBannerPoster(){
+  getBannerPoster():Observable<any> {
     return this.service.getReq('http://192.168.1.178:1108/poster');
   };
 
-  fetchLimitedProducts(){
-    return this.service.getReq('http://192.168.1.178:1108/products?limit=8');
+  fetchLimitedProducts(data?:any):Observable<any> {
+    return this.service.postReq('http://192.168.1.178:1108/products',data);
   };
 
-  getAllProducts(){
-    return this.service.getReq('http://192.168.1.178:1108/products');
+  getAllProducts():Observable<any> {
+    return this.service.postReq('http://192.168.1.178:1108/products', {});
   };
 
-  getAllCategories() {
+  getAllCategories():Observable<any> {
     return this.service.getReq('http://192.168.1.178:1108/products/categories');
   };
 
-  getSpecificCategory(params?: any) {
+  getSpecificCategory(params?: any):Observable<any>  {
     return this.service.getReq(
       `http://192.168.1.178:1108/products/categories/${params}`
     );
   };
 
-  getSingleProduct(params?:any){
+  getSingleProduct(params?:any):Observable<any> {
     return this.service.getReq(`http://192.168.1.178:1108/products/${params}`);
   }
 
-  getAllProductInDesc(){
-    return this.service.getReq('http://192.168.1.178:1108/products?sort=desc');
+  getAllProductInDesc(data?:any):Observable<any> {
+    return this.service.postReq('http://192.168.1.178:1108/products',data);
   };
 
-  getCurrencyPrice(){
+  getCurrencyPrice():Observable<any> {
     return this.service.getReq(`https://api.freecurrencyapi.com/v1/latest?apikey=sgiPfh4j3aXFR3l2CnjWqdKQzxpqGn9pX5b3CUsz&base_currency=USD`);
   };
 
-  vendorSliderList(){
+  vendorSliderList():Observable<any> {
     return this.service.getReq('http://192.168.1.178:1108/vendors');
   }
 
-  signUpEmail(data:any){
+  signUpEmail(data:any):Observable<any> {
     return this.service.postReq('http://192.168.1.178:1108/signup',data)
   }
 }

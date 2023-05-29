@@ -25,7 +25,7 @@
 
         <div ngbDropdown>
           <button type="button" class="btn btn-sm btn-light dropdown-toggle mr-3" ngbDropdownToggle>
-          USD
+          {{currencyName}}
           <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
             <ng-container *ngFor="let list of DropDownMenu2">
               <button class="dropdown-item" ngbDropdownItem type="button" (click)="currency(list)">{{ list }}</button>
@@ -36,7 +36,7 @@
 
         <div ngbDropdown>
           <button type="button" class="btn btn-sm btn-light dropdown-toggle mr-3" ngbDropdownToggle>
-            En
+            EN
             <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
               <ng-container *ngFor="let list of DropDownMenu3">
                 <button class="dropdown-item" ngbDropdownItem type="button" (click)="changeLanguage(list)">{{ list }}</button>
@@ -46,14 +46,24 @@
         </div>
 
       </div>
+      <div class="d-inline-flex align-items-center d-block d-lg-none">
+        <a class="btn px-0 ml-2" [routerLink]="['wishlist']">
+            <i class="fas fa-heart text-dark"></i>&nbsp;
+            <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">{{totalFavoriteProduct}}</span>
+        </a>
+        <a class="btn px-0 ml-2" [routerLink]="['/cart-detail/my-cart']">
+            <i class="fas fa-shopping-cart text-dark"></i>&nbsp;
+            <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">{{totalCartProduct}}</span>
+        </a>
+    </div>
     </div>
   </div>
 
   <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
     <div class="col-lg-4">
       <a href="" class="text-decoration-none">
-        <span class="h1 text-uppercase text-primary bg-dark px-2">{{ details.first }}</span>
-        <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">{{ details.last }}</span>
+        <span class="h1 text-uppercase text-primary bg-dark px-2">{{ shopDetails.first }}</span>
+        <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">{{ shopDetails.last }}</span>
       </a>
     </div>
     <div class="col-lg-4 col-6 text-left">
@@ -75,8 +85,8 @@
       </form>
     </div>
     <div class="col-lg-4 col-6 text-right">
-      <p class="m-0">{{ details.service }}</p>
-      <h5 class="m-0">{{ details.phone }}</h5>
+      <p class="m-0">{{ shopDetails.service }}</p>
+      <h5 class="m-0">{{ shopDetails.phone }}</h5>
     </div>
   </div>
 </div>

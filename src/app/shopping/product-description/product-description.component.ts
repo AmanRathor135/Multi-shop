@@ -11,7 +11,7 @@ export class ProductDescriptionComponent {
   feedbackForm:any = {
     review:'',
     name:'',
-    email:''
+    email:'',
   }
 
   tabList: any[] = [

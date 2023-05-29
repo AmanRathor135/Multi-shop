@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -8,7 +9,8 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./product-list.component.scss'],
   changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
+  subscription:Subscription[] = [];
   total: number = 0;
   currency: any;
   currencyPrice:any;
@@ -51,32 +53,43 @@ export class ProductListComponent implements OnInit {
     list = JSON.parse(list).length;
     this.service.totalFavoriteItems.next(list); 
 
-    this.service.currency.subscribe((res: any) => {
+    let sub1 = this.service.currency.subscribe((res: any) => {
       if (res) { 
         this.currency = res; 
         this.getPrice();
         this.cdr.markForCheck();
       }
     });
+    this.subscription.push(sub1);
 
-    this.activateRoute.paramMap.subscribe((res: any) => {
+    let sub2 = this.activateRoute.paramMap.subscribe((res: any) => {
       setTimeout(() => { this.category = res.params.id;}, 1);
       if (this.category) {
         this.getProducts();
         this.cdr.markForCheck();
       } 
     });
+    this.subscription.push(sub2);
 
     this.rating(5);
   }
 
+  /**
+   * get Price of Selected Currency from Local Storage
+   */
   getPrice(){
     let value:any = localStorage.getItem('currencyPrice');
     value = JSON.parse(value);
     this.currencyPrice = value[this.currency];
-  }
+  };
 
-  doFavorites(product: any, index:any) {
+  /**
+   * Adding a product in a Wishlist component
+   * @param product to add product as a favorite
+   * if product.isShow true then it is added in favoriteItemList Array and set in Local Storage
+   * else remove from favoriteItemList Array and update and set the Local Storage
+   */
+  doFavorites(product: any) {
     product.isShow = !product.isShow;
     this.total = product.isShow ? this.total + 1 : this.total - 1;
     this.service.totalFavoriteItems.next(this.total);    
@@ -90,55 +103,86 @@ export class ProductListComponent implements OnInit {
       localStorage.setItem('favoriteItemList', JSON.stringify(this.favoriteItemList))
     }
     this.cdr.markForCheck();
-  }
+  };
 
-
+  /** 
+  * Pagination of product using ngx-pagination
+  * @param event for pagination
+  */
   pageChangeEvent(event: number) {
     this.page = event++;
-  }
+  };
 
+
+  /**
+   * get Products based on their Category using their product id and passed in url as a Params in Product Service
+   * If it give success then we get the products as a Response which we store in productList and go to complete 
+   * If it gives error then it will show error
+   */
   getProducts() {
-    this.service.getSpecificCategory(this.category).subscribe({
-      next: (res: any) => {
-        this.productList = res;
-      },
-      error: (err: any) => {
-        console.log('err', err);
-      },
+    let sub3 = this.service.getSpecificCategory(this.category).subscribe({
+      next: (res: any) => { this.productList = res; },
+      error: (err: any) => { console.log('err', err); },
       complete: () => {this.cdr.markForCheck();},
     });
-  }
+    this.subscription.push(sub3);
+  };
 
+  /**
+   * get All Products using Product Service
+   * If it give success then we get the products as a Response which we store in productList and go to complete 
+   * If it gives error then it will show error
+   */
   getAllProducts() {
-    this.service.getAllProducts().subscribe({
+    let sub4 = this.service.getAllProducts().subscribe({
       next: (res: any) => {
         this.productList = res.data;
         this.productList.map((product) => (product['isShow'] = false));
       },
-      error: (err: any) => {
-        console.log('err', err);
-      },
+      error: (err: any) => { console.log('err', err); },
       complete: () => {this.cdr.markForCheck();},
     });
-  }
+    this.subscription.push(sub4);
+  };
 
+  /**
+   * get Products in Row or Column using click show function
+   */
   show() {
     this.isShow = !this.isShow;
-  }
+  };
 
+  /**
+   * get All Products in Descending Order using Product Service's POST Method
+   * where we pass sort variable as a data
+   */
   productInDesc() {
-    this.service.getAllProductInDesc().subscribe({
-      next: (res: any) => {
-        this.productList = res.data;
-      },
-      error: (err: any) => {
-        console.log('err', err);
-      },
+    let sort = {
+      sortBy:{
+      field:"price",
+      order:"desc"
+    }}
+
+    let sub5 = this.service.getAllProductInDesc(sort).subscribe({
+      next: (res: any) => { this.productList = res.data; },
+      error: (err: any) => { console.log('err', err); },
       complete: () => {this.cdr.markForCheck();},
     });
-  }
+    this.subscription.push(sub5);
+  };
 
+  /**
+   * for getting star value using product.rating.rate out of @param value
+   * @param value is 5 given in ngOnInit 
+   */
   rating(value: any) {
     this.totalRate = Array(value);
+  };
+
+  ngOnDestroy(): void {
+    // Removes all the subscriptions to avoid memory leak issue
+    this.subscription.forEach((subscriptionRow: any) => {
+      subscriptionRow.unsubscribe();
+    });
   }
 }

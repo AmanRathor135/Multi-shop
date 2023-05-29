@@ -1,19 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-shop-details',
   templateUrl: './shop-details.component.html',
   styleUrls: ['./shop-details.component.scss'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class ShopDetailsComponent implements OnInit {
+export class ShopDetailsComponent implements OnInit, OnDestroy {
   carouselList: any[] = [];
   favItemLength:any;
   math = Math;
   currency: any;
   currencyPrice:any;
   totalRate: any;
+  subscription: Subscription[] = [];
   icons: any[] = [
     'fa fa-shopping-cart',
     'far fa-heart',
@@ -37,10 +40,8 @@ export class ShopDetailsComponent implements OnInit {
     },
   };
 
-  constructor(private service: ProductService) {
-    let list:any = localStorage.getItem('favoriteItemList');
-    this.favItemLength = JSON.parse(list);
-    this.service.totalFavoriteItems.next(this.favItemLength.length); 
+  constructor(private service: ProductService, private cdr:ChangeDetectorRef) {
+    this.getFavoriteItems();
     
     service.Breadcrumb.next([
       {
@@ -59,36 +60,54 @@ export class ShopDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.service.currency.subscribe((res: any) => {
+    let sub1 = this.service.currency.subscribe((res: any) => {
       if (res) {
         this.currency = res;
         this.getPrice();
+        this.cdr.markForCheck();
       }
     });
+    this.subscription.push(sub1);
 
     this.getProductsForCarousel();
     this.rating(5);
   }
 
+  getFavoriteItems(){
+    let list:any = localStorage.getItem('favoriteItemList');
+    this.favItemLength = JSON.parse(list);
+    this.service.totalFavoriteItems.next(this.favItemLength.length);
+  };
+
   getPrice(){
     let value:any = localStorage.getItem('currencyPrice');
     value = JSON.parse(value);
     this.currencyPrice = value[this.currency];
-  }
+  };
 
   getProductsForCarousel() {
-    this.service.fetchLimitedProducts().subscribe({
-      next: (res: any) => {
-        this.carouselList = res.data;
+    let limit = {
+      pagination: {
+        page: 1,
+        productsPerPage: 8,
       },
-      error: (err: any) => {
-        console.log('err', err);
-      },
-      complete: () => {},
+    };
+    let sub2 = this.service.fetchLimitedProducts(limit).subscribe({
+      next: (res: any) => { this.carouselList = res.data; },
+      error: (err: any) => { console.log('err', err); },
+      complete: () => { this.cdr.markForCheck(); },
     });
-  }
-
+    this.subscription.push(sub2);
+  };
+    
   rating(value: any) {
     this.totalRate = Array(value);
+    this.cdr.markForCheck();
+  };
+
+  ngOnDestroy(): void {
+    this.subscription.forEach((subscriptionRow: any) => {
+      subscriptionRow.unsubscribe();
+    });
   }
 }

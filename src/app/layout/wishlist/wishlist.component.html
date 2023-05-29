@@ -24,7 +24,7 @@
             <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]" >
               <i class="fa fa-shopping-cart" style="color: rgb(64, 241, 64);"></i>
             </a>
-            <a class="btn btn-outline-dark btn-square" (click)="remove(i)">
+            <a class="btn btn-outline-dark btn-square" (click)="removeLikedProduct(i)">
               <i [ngClass]="{ far: !product.isShow, fa: product.isShow }" class="fa-heart"></i>
             </a>
             <a class="btn btn-outline-dark btn-square">

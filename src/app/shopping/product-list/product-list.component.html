@@ -43,11 +43,11 @@
         <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]" >
           <i class="fa fa-shopping-cart" style="color: rgb(64, 241, 64);"></i>
         </a>
-        <a class="btn btn-outline-dark btn-square" (click)="doFavorites(product,i)">
+        <a class="btn btn-outline-dark btn-square" (click)="doFavorites(product)">
           <i [ngClass]="{ far: !product.isShow, fa: product.isShow }" class="fa-heart"></i>
         </a>
         <a class="btn btn-outline-dark btn-square">
-          <i class="fa fa-sync-alt" style="color: orangered"></i>
+          <i class="fa fa-sync-alt"></i>
         </a>
         <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]" >
           <i class="fa fa-search"></i>
@@ -84,13 +84,23 @@
 
 <div class="row" *ngIf="!isShow">
   <table class="table table-light table-borderless table-hover text-center text-dark mb-0">
+    <thead class="thead-dark">
+      <tr>
+          <th class="align-middle">ID</th>
+          <th class="align-middle">Product Image</th>
+          <th class="align-middle">Product Name</th>
+          <th class="align-middle">Price</th>
+          <th class="align-middle">Ratings & Reviews</th>
+          <th class="align-middle">Add to Cart</th>
+      </tr>
+  </thead>
     <tbody class="align-middle">
       <tr *ngFor="let product of productList | filter : category
-          | paginate : { itemsPerPage: 6, currentPage: page, totalItems: totalItem };"
+          | paginate : { itemsPerPage: 8, currentPage: page, totalItems: totalItem };"
       >
         <td class="align-middle fs-5">{{ product.id }}</td>
         <td class="align-middle">
-          <img src="http://192.168.1.178:1108{{ product.image }}" alt="" style="width: 70px" />
+          <img src="http://192.168.1.178:1108{{ product.image }}" alt="" style="width: 70px;" />
         </td>
         <td class="align-middle">{{ product.title }}</td>
         <td class="align-middle">{{ product.price*currencyPrice | currency : currency }}</td>
@@ -114,7 +124,7 @@
           </div>
         </td>
         <td class="align-middle">
-          <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]">
+          <a class="btn btn-outline-dark btn-square" style="margin-left: 30px;" [routerLink]="['/Shop/Shop-details', product.id]">
             <i class="fa fa-shopping-cart" style="color: rgb(64, 241, 64);"></i>
           </a>
         </td>

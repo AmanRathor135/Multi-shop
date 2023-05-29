@@ -9,7 +9,6 @@ import { FilterByPriceComponent } from './filter-by-price/filter-by-price.compon
 import { FilterByColorComponent } from './filter-by-color/filter-by-color.component';
 import { FilterBySizeComponent } from './filter-by-size/filter-by-size.component';
 import { ProductListComponent } from './product-list/product-list.component';
-import { PaginationComponent } from './pagination/pagination.component';
 import { ImageCarouselComponent } from './image-carousel/image-carousel.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductDescriptionComponent } from './product-description/product-description.component';
@@ -28,7 +27,6 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
     FilterByColorComponent,
     FilterBySizeComponent,
     ProductListComponent,
-    PaginationComponent,
     ImageCarouselComponent,
     ProductDetailComponent,
     ProductDescriptionComponent,

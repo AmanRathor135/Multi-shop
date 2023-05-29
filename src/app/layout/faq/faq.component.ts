@@ -9,7 +9,6 @@ import { ProductService } from 'src/app/services/product.service';
 export class FaqComponent {
   title:string = 'Frequently Asked Questions';
   description:string = 'Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.';
-
   faq:any[] = [
     {
       icon:'bx bx-help-circle',
@@ -44,15 +43,12 @@ export class FaqComponent {
   ]
 
   constructor(private service:ProductService) {
+    /**
+     * Set Breadcrumb in Product Service
+     */
     service.Breadcrumb.next([
-      {
-        pageTitle: 'Home',
-        url: '',
-      },
-      {
-        pageTitle: 'FAQ',
-        url: 'faq',
-      }
+      { pageTitle: 'Home', url: '' },
+      { pageTitle: 'FAQ', url: 'faq' }
     ]);
    }
 }

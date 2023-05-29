@@ -22,24 +22,12 @@ export class VendorComponent implements OnInit, OnDestroy {
     autoWidth: true,
     margin: 20,
     responsive: {
-      0: {
-        items: 1,
-      },
-      170: {
-        items: 2,
-      },
-      340: {
-        items: 3,
-      },
-      510: {
-        items: 4,
-      },
-      680: {
-        items: 5,
-      },
-      950: {
-        items: 6,
-      }, 
+      0: { items: 1, },
+      170: { items: 2, },
+      340: { items: 3, },
+      510: { items: 4, },
+      680: { items: 5, },
+      950: { items: 6, }, 
     },
   };
 
@@ -51,20 +39,17 @@ export class VendorComponent implements OnInit, OnDestroy {
 
   getVendorSliderList(){
     let sub1 = this.service.vendorSliderList().subscribe({
-      next: (res:any) => {
-        this.vendorList = res.data;
-      },
-      error: (err:any) => {
-        console.log("Vendor Error",err);
-      },
+      next: (res:any) => { this.vendorList = res.data; },
+      error: (err:any) => { console.log("Vendor Error",err); },
       complete: () => {this.cdr.markForCheck();}
     });
     this.subscription.push(sub1);
-  }
+  };
 
   ngOnDestroy(): void {
+    // Removes all the subscriptions to avoid memory leak issue
     this.subscription.forEach((subscriptionRow:any) => {
       subscriptionRow.unsubscribe();
     });
-  }
+  };
 }

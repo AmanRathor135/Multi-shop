@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -6,6 +6,7 @@ import { ProductService } from 'src/app/services/product.service';
   selector: 'app-contact-detail-form',
   templateUrl: './contact-detail-form.component.html',
   styleUrls: ['./contact-detail-form.component.scss'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class ContactDetailFormComponent {
 
@@ -34,22 +35,31 @@ export class ContactDetailFormComponent {
 
   
   constructor(private service:ProductService){
-    let list:any = localStorage.getItem('favoriteItemList');
-    this.favItemLength = JSON.parse(list);
-    this.service.totalFavoriteItems.next(this.favItemLength.length);
+    this.getFavoriteItems();
+    /**
+     * Set Breadcrumb in Product Service
+     */
     service.Breadcrumb.next([
-      {
-        pageTitle: 'Home',
-        url: '',
-      },
-      {
-        pageTitle: 'Contact',
-        url: 'contact',
-      },
+      { pageTitle: 'Home', url: '' },
+      { pageTitle: 'Contact', url: 'contact' },
     ]);
   }
 
-  sendMessage(){
+  /**
+   * get Total Favorite Items from Local Storage
+   */
+  getFavoriteItems(){
+    let list:any = localStorage.getItem('favoriteItemList');
+    this.favItemLength = JSON.parse(list);
+    this.service.totalFavoriteItems.next(this.favItemLength.length);
+  }
+
+  /**
+   * sendMessage form using Product Service POST API
+   * @param form to check whether contactForm is valid or not
+   * To Do List....
+   */
+  sendMessage(form:any){
 
   }
 }
