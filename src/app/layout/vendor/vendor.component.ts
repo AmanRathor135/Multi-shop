@@ -39,7 +39,7 @@ export class VendorComponent implements OnInit, OnDestroy {
 
   getVendorSliderList(){
     let sub1 = this.service.vendorSliderList().subscribe({
-      next: (res:any) => { this.vendorList = res.data; },
+      next: (res:any) => { this.vendorList = res.data.images; },
       error: (err:any) => { console.log("Vendor Error",err); },
       complete: () => {this.cdr.markForCheck();}
     });

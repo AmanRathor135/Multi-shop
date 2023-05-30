@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -8,9 +10,10 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./contact-detail-form.component.scss'],
   changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class ContactDetailFormComponent {
+export class ContactDetailFormComponent implements OnInit, OnDestroy {
 
   favItemLength:any;
+  subscription:Subscription[] = [];
   contactDetails: any[] = [
     {
       icon: 'fa fa-map-marker-alt',
@@ -30,16 +33,18 @@ export class ContactDetailFormComponent {
     name: "",
     email: "",
     subject: "",
-    address: "",
+    message: "",
   }
 
   
-  constructor(private service:ProductService){
+  constructor(private service:ProductService, private toastr:ToastrService, private cdr:ChangeDetectorRef) {}
+
+  ngOnInit(): void {
     this.getFavoriteItems();
     /**
      * Set Breadcrumb in Product Service
      */
-    service.Breadcrumb.next([
+    this.service.Breadcrumb.next([
       { pageTitle: 'Home', url: '' },
       { pageTitle: 'Contact', url: 'contact' },
     ]);
@@ -60,6 +65,20 @@ export class ContactDetailFormComponent {
    * To Do List....
    */
   sendMessage(form:any){
+    if(form.valid){
+      let sub1 = this.service.contactUsForm(this.contactForm).subscribe({
+        next: (res:any) => { res.type == 'success'?this.toastr.success(res.message):this.toastr.warning(res.message); },
+        error: (err:any) => { console.log("Contact Form Error", err); },
+        complete: () => { this.cdr.markForCheck(); }
+      });
+      this.subscription.push(sub1);
+    }
+  }
 
+  ngOnDestroy(): void {
+    // Removes all the subscriptions to avoid memory leak issue
+    this.subscription.forEach((subscriptionRow: any) => {
+      subscriptionRow.unsubscribe();
+    });
   }
 }

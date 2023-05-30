@@ -34,17 +34,21 @@ export class ImageCarouselComponent implements OnInit, OnDestroy {
   constructor(private route:ActivatedRoute, private service:ProductService, private cdr:ChangeDetectorRef){ }
 
   ngOnInit(): void {
+    this.getSingleProductById();
+  }
+  
+  getSingleProductById(){
     let sub1 = this.route.paramMap.subscribe((res:any) => {
       this.id = res.params.id ;
-      this.getSingleProduct();
+      this.getSingleProductData();
       this.cdr.markForCheck();
     });
     this.subscription.push(sub1);
-  }
+  };
 
-  getSingleProduct(){
+  getSingleProductData(){
     let sub2 = this.service.getSingleProduct(this.id).subscribe({
-      next: (res:any) => { this.singleProduct = res.data; },
+      next: (res:any) => { this.singleProduct = res.data.product; },
       error: (err:any) => { console.log('err', err) },
       complete: () => { this.cdr.markForCheck(); }
     });

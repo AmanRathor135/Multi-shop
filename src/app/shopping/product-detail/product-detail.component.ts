@@ -64,6 +64,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.getCurrencyName();
+    this.service.totalCartItems.next(true);
+    this.getSingleProductById();
+    this.rating(5);
+  }
+  
+  getCurrencyName(){
     let sub1 = this.service.currency.subscribe((res: any) => {
       if (res) {
         this.currency = res;
@@ -72,19 +79,17 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       }
     });
     this.subscription.push(sub1);
-
     this.service.currency.next(this.currency);
-    this.service.totalCartItems.next(true);
+  };
 
+  getSingleProductById(){
     let sub2 = this.route.paramMap.subscribe((res: any) => {
       this.id = res.params.id;
-      this.getSingleProduct();
+      this.getSingleProductData();
       this.cdr.markForCheck();
     });
     this.subscription.push(sub2);
-
-    this.rating(5);
-  }
+  };
 
   getPrice() {
     let value: any = localStorage.getItem('currencyPrice');
@@ -92,10 +97,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     this.currencyPrice = value[this.currency];
   };
 
-  getSingleProduct() {
+  getSingleProductData() {
     let sub3 = this.service.getSingleProduct(this.id).subscribe({
       next: (res: any) => {
-        this.singleProduct = res.data;
+        this.singleProduct = res.data.product;
       },
       error: (err: any) => {
         console.log('err', err);

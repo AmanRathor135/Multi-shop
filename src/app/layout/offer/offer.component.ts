@@ -24,7 +24,7 @@ export class OfferComponent implements OnInit, OnDestroy {
    */
   getOfferPage(){
     let sub1 = this.service.getBannerPoster().subscribe({
-      next: (res:any) => { this.offers = res.data.offers; },
+      next: (res:any) => { this.offers = res.data.special_offer; },
       error: (err:any) => { console.log("Carousel error", err) },
       complete: () => {this.cdr.markForCheck();}
      });

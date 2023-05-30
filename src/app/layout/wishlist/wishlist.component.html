@@ -11,8 +11,8 @@
         >
           <div style="width: 100%">
             <img
-              class="img-fluid w-100 p-3"
-              src="http://192.168.1.178:1108{{ product.image }}"
+              class="img-fluid w-100 p-5"
+              src="{{ product.image }}"
               alt="..."
               style="width: 100% !important; height: 400px"
             />
@@ -21,7 +21,7 @@
             <!-- <a class="btn btn-outline-dark btn-square" (click)="remove(i)">
               <i class="fa fa-trash" style="color: red"></i>
             </a> -->
-            <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]" >
+            <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product._id]" >
               <i class="fa fa-shopping-cart" style="color: rgb(64, 241, 64);"></i>
             </a>
             <a class="btn btn-outline-dark btn-square" (click)="removeLikedProduct(i)">
@@ -30,7 +30,7 @@
             <a class="btn btn-outline-dark btn-square">
               <i class="fa fa-sync-alt" style="color: orangered"></i>
             </a>
-            <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product.id]" >
+            <a class="btn btn-outline-dark btn-square" [routerLink]="['/Shop/Shop-details', product._id]" >
               <i class="fa fa-search"></i>
             </a>
           </div>
@@ -39,7 +39,7 @@
           <div style="min-height: 60px">
             <a
               class="h6 text-decoration-none"
-              [routerLink]="['/Shop/Shop-details', product.id]"
+              [routerLink]="['/Shop/Shop-details', product._id]"
               >{{ product.title }}</a
             >
           </div>

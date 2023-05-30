@@ -62,7 +62,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   getCategories() {
     let sub3 = this.service.getAllCategories().subscribe({
-      next: (res: any) => { this.categoryList = res.data; },
+      next: (res: any) => { this.categoryList = res.data.categories; },
       error: (err: any) => { console.log('err', err); },
       complete: () => { this.cdr.markForCheck(); },
     });

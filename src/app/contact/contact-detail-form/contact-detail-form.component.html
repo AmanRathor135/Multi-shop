@@ -75,17 +75,17 @@
             <textarea
               class="form-control"
               name="message"
-              #address="ngModel"
-              [(ngModel)]="contactForm.address"
+              #message="ngModel"
+              [(ngModel)]="contactForm.message"
               rows="8"
               placeholder="Message"
               required
             >
             </textarea>
-            <div *ngIf="!address?.valid && (form?.submitted || address?.touched)" class="error">
+            <div *ngIf="!message?.valid && (form?.submitted || message?.touched)" class="error">
               <ul>
-                <li *ngIf="address.hasError('required')" style="color: red">
-                  Address is required
+                <li *ngIf="message.hasError('required')" style="color: red">
+                  Message is required
                 </li>
               </ul>
             </div>

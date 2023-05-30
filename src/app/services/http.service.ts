@@ -15,7 +15,7 @@ export class HttpService {
    * @param params pass request details
    * @returns response array
    */
-  getReq(url:string){
+  getReq(url:string, params?:any){
     return this.http.get(url);
   }
 

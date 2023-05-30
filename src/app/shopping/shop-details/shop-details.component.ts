@@ -92,8 +92,8 @@ export class ShopDetailsComponent implements OnInit, OnDestroy {
         productsPerPage: 8,
       },
     };
-    let sub2 = this.service.fetchLimitedProducts(limit).subscribe({
-      next: (res: any) => { this.carouselList = res.data; },
+    let sub2 = this.service.fetchLimitedProducts().subscribe({
+      next: (res: any) => { this.carouselList = res.data.products; },
       error: (err: any) => { console.log('err', err); },
       complete: () => { this.cdr.markForCheck(); },
     });

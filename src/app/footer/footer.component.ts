@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-footer',
@@ -8,7 +9,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./footer.component.scss'],
   changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class FooterComponent {
+export class FooterComponent implements OnDestroy {
+
+  subscription:Subscription[] = [];
   footerData: any = {
     title: 'Get In Touch',
     desc: 'No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed dolor. Rebum tempor no vero est magna amet no',
@@ -58,7 +61,7 @@ export class FooterComponent {
     ],
   };
 
-  newsletterForm: any = { userEmail: '', };
+  newsletterForm: any = { email: '', };
 
   constructor(private service:ProductService, private toastr:ToastrService, private cdr:ChangeDetectorRef) {}
 
@@ -70,11 +73,19 @@ export class FooterComponent {
    */
   signUp(form:any){
     if(form.valid){
-      this.service.signUpEmail(this.newsletterForm).subscribe({
-        next: (res:any) => { res.type == 'success'?this.toastr.success(res.message):this.toastr.warning(res.message) },
+      let sub1 = this.service.newsletterSignUpEmail(this.newsletterForm).subscribe({
+        next: (res:any) => { res.type == 'success'?this.toastr.success(res.message):this.toastr.warning(res.message); },
         error: (err:any) => { console.log("Footer Error", err) },
         complete: () => { this.cdr.markForCheck(); }
       });
+      this.subscription.push(sub1);
     }
+  }
+
+  ngOnDestroy(): void {
+    // Removes all the subscriptions to avoid memory leak issue
+    this.subscription.forEach((subscriptionRow: any) => {
+      subscriptionRow.unsubscribe();
+    });
   }
 }

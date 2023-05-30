@@ -24,7 +24,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
    */
   getCategories(){
     let sub1 = this.service.getAllCategories().subscribe({
-      next: (res:any) => { this.categoryListPage = res.data; },
+      next: (res:any) => { this.categoryListPage = res.data.categories; },
       error: (err:any) => { console.log("Categories error", err) },
       complete: () => {this.cdr.markForCheck();}
     });

@@ -26,7 +26,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   Dropdown1: any[] = [
     {
       title: 'Sorting',
-      category: ['Ascending', 'Descending'],
+      category: ['Products', 'rating', 'price'],
     },
   ];
 
@@ -36,6 +36,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       category: ['10', '20', '30'],
     },
   ];
+  filter:any;
 
   constructor(
     private service: ProductService,
@@ -43,10 +44,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
     private cdr:ChangeDetectorRef
   ) {
     this.service.totalFavoriteItems.next(this.total);
+    // let value:any = localStorage.getItem('filter');
+    // this.filter = JSON.parse(value);
+    // console.log("filter",this.filter);
   }
 
   ngOnInit(): void {
     this.getAllProducts();
+    // this.getFilterProduct();
     this.service.totalCartItems.next(true);
 
     let list:any = localStorage.getItem('favoriteItemList');
@@ -62,7 +67,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     });
     this.subscription.push(sub1);
 
-    let sub2 = this.activateRoute.paramMap.subscribe((res: any) => {
+    let sub2 = this.activateRoute.paramMap.subscribe((res: any) => {      
       setTimeout(() => { this.category = res.params.id;}, 1);
       if (this.category) {
         this.getProducts();
@@ -72,6 +77,15 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.subscription.push(sub2);
 
     this.rating(5);
+  }
+
+  getFilterProduct(){
+    this.service.FilterProducts(this.filter).subscribe({
+      next: (res:any) => { 
+        this.productList = res.data.products;
+        // console.log("res",res.data.products);
+      }
+    })
   }
 
   /**
@@ -89,17 +103,17 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * if product.isShow true then it is added in favoriteItemList Array and set in Local Storage
    * else remove from favoriteItemList Array and update and set the Local Storage
    */
-  doFavorites(product: any) {
+  doFavorites(product: any, index:any) {
     product.isShow = !product.isShow;
     this.total = product.isShow ? this.total + 1 : this.total - 1;
     this.service.totalFavoriteItems.next(this.total);    
   
     if(product.isShow === true){
       this.favoriteItemList.push(product);
-      localStorage.setItem('favoriteItemList', JSON.stringify(this.favoriteItemList))
+      localStorage.setItem('favoriteItemList', JSON.stringify(this.favoriteItemList));
     }
     else {
-      this.favoriteItemList.pop();
+      this.favoriteItemList.splice(index,1);
       localStorage.setItem('favoriteItemList', JSON.stringify(this.favoriteItemList))
     }
     this.cdr.markForCheck();
@@ -136,7 +150,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   getAllProducts() {
     let sub4 = this.service.getAllProducts().subscribe({
       next: (res: any) => {
-        this.productList = res.data;
+        this.productList = res.data.products;
         this.productList.map((product) => (product['isShow'] = false));
       },
       error: (err: any) => { console.log('err', err); },
@@ -153,18 +167,19 @@ export class ProductListComponent implements OnInit, OnDestroy {
   };
 
   /**
-   * get All Products in Descending Order using Product Service's POST Method
-   * where we pass sort variable as a data
+   * get Products as per @param value using Product Service's POST Method
+   * @param value as a key of product
+   * where we get data in ascending order
    */
-  productInDesc() {
+  productInDesc(value:any) {
     let sort = {
       sortBy:{
-      field:"price",
-      order:"desc"
+        field: value, // fieldName
+        order: "asc"  // asc or desc
     }}
 
     let sub5 = this.service.getAllProductInDesc(sort).subscribe({
-      next: (res: any) => { this.productList = res.data; },
+      next: (res: any) => { this.productList = res.data.products; },
       error: (err: any) => { console.log('err', err); },
       complete: () => {this.cdr.markForCheck();},
     });

@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
   name: 'filter',
 })
 export class FilterPipe implements PipeTransform {
-  constructor(private route: ActivatedRoute){}
 
   transform(value: any, args?: any): any {
     if (!value) return null;

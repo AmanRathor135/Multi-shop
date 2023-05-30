@@ -12,32 +12,32 @@ export class FilterByColorComponent {
     data: [
       {
         value: 'All color',
-        price: '1000',
+        items: '1000',
         for:'color-all'
       },
       {
         value: 'Black',
-        price: '150',
+        items: '150',
         for:'color-1'
       },
       {
         value: 'White',
-        price: '295',
+        items: '295',
         for:'color-2'
       },
       {
         value: 'Red',
-        price: '246',
+        items: '246',
         for:'color-3'
       },
       {
         value: 'Blue',
-        price: '145',
+        items: '145',
         for:'color-4'
       },
       {
         value: 'Green',
-        price: '168',
+        items: '168',
         for:'color-5'
       },
     ],

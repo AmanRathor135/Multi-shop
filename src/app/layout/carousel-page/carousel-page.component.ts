@@ -42,8 +42,8 @@ export class CarouselPageComponent implements OnInit, OnDestroy {
   getBannerPage(){
    let sub1 = this.service.getBannerPoster().subscribe({
       next: (res:any) => {
-        this.carousels = res.data.carousels;
-        this.offers = res.data.offers;
+        this.carousels = res.data.carousel;
+        this.offers = res.data.special_offer;
       },
       error: (err:any) => { console.log("Carousel error", err) },
         complete: () => {this.cdr.markForCheck();}

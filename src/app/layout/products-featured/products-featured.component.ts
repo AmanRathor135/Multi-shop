@@ -29,10 +29,7 @@ export class ProductsFeaturedComponent implements OnInit, OnDestroy {
     'fa fa-search',
   ];
 
-  constructor(
-    private service: ProductService,
-    private cdr: ChangeDetectorRef
-  ) {}
+  constructor(private service: ProductService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.getCurrency();
@@ -60,14 +57,8 @@ export class ProductsFeaturedComponent implements OnInit, OnDestroy {
    * If it gives error then it will show error
    */
   getProducts() {
-    let limit = {
-      pagination: {
-        page: 1,
-        productsPerPage: 8,
-      },
-    };
-    let sub2 = this.service.fetchLimitedProducts(limit).subscribe({
-      next: (res: any) => { this.productList = res.data;},
+    let sub2 = this.service.getFeaturedProduct().subscribe({
+      next: (res: any) => {this.productList = res.data.products;},
       error: (err: any) => { console.log('err', err);},
       complete: () => { this.cdr.markForCheck();},
     });
