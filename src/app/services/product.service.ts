@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { AsyncSubject, BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +19,7 @@ export class ProductService {
   totalFavoriteItems = new BehaviorSubject<number>(0);
   currency = new BehaviorSubject<any>(localStorage.getItem('currency'));
   currencyValue = new BehaviorSubject<any>({ USD: 1 });
+  filterItem = new BehaviorSubject<any>(localStorage.getItem('filter'));
 
   getBannerPoster(): Observable<any> {
     return this.service.getReq('http://192.168.1.175:5050/posters');
@@ -73,6 +74,10 @@ export class ProductService {
     return this.service.getReq(
       `https://api.freecurrencyapi.com/v1/latest?apikey=sgiPfh4j3aXFR3l2CnjWqdKQzxpqGn9pX5b3CUsz&base_currency=USD`
     );
+  }
+
+  pagination(param?:any): Observable<any> {
+    return this.service.getReq(`http://192.168.1.175:5050/products/`,{params:param})
   }
 
   vendorSliderList(): Observable<any> {

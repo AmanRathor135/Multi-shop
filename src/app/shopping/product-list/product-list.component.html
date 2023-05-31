@@ -32,7 +32,7 @@
 </div>
 
 <div class="col-lg-4 col-md-6 col-sm-6 pb-1" *ngFor="let product of productList | filter : category 
-     | paginate : { itemsPerPage: 6, currentPage: page, totalItems: totalItem }; let i = index"
+     | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItem }; let i = index"
 >
   <div class="product-item bg-light mb-4" *ngIf="isShow">
     <div class="product-img position-relative overflow-hidden" style="cursor: pointer">
@@ -96,7 +96,7 @@
   </thead>
     <tbody class="align-middle">
       <tr *ngFor="let product of productList | filter : category
-          | paginate : { itemsPerPage: 8, currentPage: page, totalItems: totalItem };"
+          | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItem };"
       >
         <td class="align-middle fs-5">{{ product.id }}</td>
         <td class="align-middle">

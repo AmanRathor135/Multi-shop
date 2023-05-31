@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/services/product.service';
@@ -34,7 +34,7 @@ export class ContactDetailFormComponent implements OnInit, OnDestroy {
     email: "",
     subject: "",
     message: "",
-  }
+  };
 
   
   constructor(private service:ProductService, private toastr:ToastrService, private cdr:ChangeDetectorRef) {}
@@ -64,7 +64,7 @@ export class ContactDetailFormComponent implements OnInit, OnDestroy {
    * @param form to check whether contactForm is valid or not
    * To Do List....
    */
-  sendMessage(form:any){
+  sendMessage(form:NgForm){
     if(form.valid){
       let sub1 = this.service.contactUsForm(this.contactForm).subscribe({
         next: (res:any) => { res.type == 'success'?this.toastr.success(res.message):this.toastr.warning(res.message); },
@@ -73,7 +73,7 @@ export class ContactDetailFormComponent implements OnInit, OnDestroy {
       });
       this.subscription.push(sub1);
     }
-  }
+  };
 
   ngOnDestroy(): void {
     // Removes all the subscriptions to avoid memory leak issue

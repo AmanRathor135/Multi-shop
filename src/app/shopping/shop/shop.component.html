@@ -4,25 +4,66 @@
     <!-- Shop Sidebar Start -->
     <div class="col-lg-3 col-md-4">
       <!-- Price Start -->
-      <app-filter-by-price></app-filter-by-price>
-      <!-- Price End -->
+<h5 class="section-title position-relative text-uppercase mb-4">
+  <span class="bg-secondary pr-3">Filter by Price</span>
+</h5>
+<div class="bg-light p-4 mb-5">
+  <form>
+    <div class="custom-control custom-checkbox mb-3"  *ngFor="let item of filterData?.price; let i = index">
+      <div class="d-flex align-items-center justify-content-between">
+        <input type="checkbox" class="custom-control-input" id="price-{{i+1}}" (click)="filterDataValue(item)"/>
+        <label class="custom-control-label" for="price-{{i+1}}"> 
+          {{ item.min*currencyPrice | currency: currency }} - {{ item.max*currencyPrice | currency: currency }} 
+        </label>
+          <span class="border" style="font-size: 12px; padding: 3px">{{ item.count }}</span>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- Price End -->
 
-      <!-- Color Start -->
-      <!-- <app-filter-by-color></app-filter-by-color> -->
-      <!-- Color End -->
+<!-- Color Start -->
+<h5 class="section-title position-relative text-uppercase mb-4">
+  <span class="bg-secondary pr-3">Filter by Color</span>
+</h5>
+<div class="bg-light p-4 mb-5">
+  <form>
+    <div class="custom-control custom-checkbox mb-3" *ngFor="let item of filterData?.color; let i = index">
+      <div class="d-flex align-items-center justify-content-between">
+        <input type="checkbox" class="custom-control-input" id="color-{{i+1}}" (click)="filterDataValue(item)"/>
+        <label class="custom-control-label" for="color-{{i+1}}"> {{ item.color | titlecase }} </label>
+          <span class="border" style="font-size: 12px; padding: 3px">{{ item.count }}</span>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- Color End -->
 
-      <!-- Size Start -->
-      <!-- <app-filter-by-size></app-filter-by-size> -->
-      <!-- Size End -->
+<!-- Size Start -->
+<h5 class="section-title position-relative text-uppercase mb-4">
+  <span class="bg-secondary pr-3">Filter by Size</span>
+</h5>
+<div class="bg-light p-4 mb-5">
+  <form>
+    <div class="custom-control custom-checkbox mb-3" *ngFor="let item of filterData?.size; let i = index">
+      <div class="d-flex align-items-center justify-content-between">
+        <input type="checkbox" class="custom-control-input" id="size-{{i+1}}" (click)="filterDataValue(item)"/>
+        <label class="custom-control-label" for="size-{{i+1}}"> {{ item.size | uppercase}} </label>
+          <span class="border" style="font-size: 12px; padding: 3px">{{ item.count }}</span>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- Size End  -->
     </div>
     <!-- Shop Sidebar End -->
 
     <!-- Shop Product Start -->
     <div class="col-lg-9 col-md-8">
       <div class="row pb-3">
-        <app-product-list class="row"></app-product-list>
+        <app-product-list class="row" [filterProductList]="filterProductList"></app-product-list>
       </div>
-    </div>
+    </div>  
     <!-- Shop Product End -->
   </div>
 </div>

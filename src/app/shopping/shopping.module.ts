@@ -5,9 +5,6 @@ import { ShoppingRoutingModule } from './shopping-routing.module';
 import { ShopComponent } from './shop/shop.component';
 import { ShopDetailsComponent } from './shop-details/shop-details.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
-import { FilterByPriceComponent } from './filter-by-price/filter-by-price.component';
-import { FilterByColorComponent } from './filter-by-color/filter-by-color.component';
-import { FilterBySizeComponent } from './filter-by-size/filter-by-size.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ImageCarouselComponent } from './image-carousel/image-carousel.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
@@ -23,9 +20,6 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
   declarations: [
     ShopComponent,
     ShopDetailsComponent,
-    FilterByPriceComponent,
-    FilterByColorComponent,
-    FilterBySizeComponent,
     ProductListComponent,
     ImageCarouselComponent,
     ProductDetailComponent,

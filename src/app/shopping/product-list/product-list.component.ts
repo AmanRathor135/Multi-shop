@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/services/product.service';
@@ -9,11 +9,14 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./product-list.component.scss'],
   changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class ProductListComponent implements OnInit, OnDestroy {
+export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
+
+  @Input() filterProductList:any;
   subscription:Subscription[] = [];
   total: number = 0;
   currency: any;
   currencyPrice:any;
+  itemsPerPage:number = 6;
   totalItem:any;
   favoriteItemList:any[] = [];
   page: number = 1;
@@ -44,14 +47,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
     private cdr:ChangeDetectorRef
   ) {
     this.service.totalFavoriteItems.next(this.total);
-    // let value:any = localStorage.getItem('filter');
-    // this.filter = JSON.parse(value);
-    // console.log("filter",this.filter);
   }
 
   ngOnInit(): void {
     this.getAllProducts();
-    // this.getFilterProduct();
     this.service.totalCartItems.next(true);
 
     let list:any = localStorage.getItem('favoriteItemList');
@@ -79,14 +78,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.rating(5);
   }
 
-  getFilterProduct(){
-    this.service.FilterProducts(this.filter).subscribe({
-      next: (res:any) => { 
-        this.productList = res.data.products;
-        // console.log("res",res.data.products);
-      }
-    })
+  ngOnChanges() {
+  this.productList = this.filterProductList;    
   }
+
 
   /**
    * get Price of Selected Currency from Local Storage
@@ -124,7 +119,17 @@ export class ProductListComponent implements OnInit, OnDestroy {
   * @param event for pagination
   */
   pageChangeEvent(event: number) {
-    this.page = event++;
+    this.page = event;
+    
+    let sub3 = this.service.pagination({page:this.page,limit:this.itemsPerPage}).subscribe({
+      next: (res:any) => {
+        this.productList = res.data.products;
+        this.totalItem = res.data.totalProducts;
+      },
+      error: (err: any) => { console.log('err', err); },
+      complete: () => {this.cdr.markForCheck();},
+    });
+    this.subscription.push(sub3);
   };
 
 
@@ -134,12 +139,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * If it gives error then it will show error
    */
   getProducts() {
-    let sub3 = this.service.getSpecificCategory(this.category).subscribe({
+    let sub4 = this.service.getSpecificCategory(this.category).subscribe({
       next: (res: any) => { this.productList = res; },
       error: (err: any) => { console.log('err', err); },
       complete: () => {this.cdr.markForCheck();},
     });
-    this.subscription.push(sub3);
+    this.subscription.push(sub4);
   };
 
   /**
@@ -148,7 +153,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * If it gives error then it will show error
    */
   getAllProducts() {
-    let sub4 = this.service.getAllProducts().subscribe({
+    let sub5 = this.service.getAllProducts().subscribe({
       next: (res: any) => {
         this.productList = res.data.products;
         this.productList.map((product) => (product['isShow'] = false));
@@ -156,7 +161,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       error: (err: any) => { console.log('err', err); },
       complete: () => {this.cdr.markForCheck();},
     });
-    this.subscription.push(sub4);
+    this.subscription.push(sub5);
   };
 
   /**
@@ -178,12 +183,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
         order: "asc"  // asc or desc
     }}
 
-    let sub5 = this.service.getAllProductInDesc(sort).subscribe({
+    let sub6 = this.service.getAllProductInDesc(sort).subscribe({
       next: (res: any) => { this.productList = res.data.products; },
       error: (err: any) => { console.log('err', err); },
       complete: () => {this.cdr.markForCheck();},
     });
-    this.subscription.push(sub5);
+    this.subscription.push(sub6);
   };
 
   /**
