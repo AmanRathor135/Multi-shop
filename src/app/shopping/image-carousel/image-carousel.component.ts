@@ -48,7 +48,7 @@ export class ImageCarouselComponent implements OnInit, OnDestroy {
 
   getSingleProductData(){
     let sub2 = this.service.getSingleProduct(this.id).subscribe({
-      next: (res:any) => { this.singleProduct = res.data.product; },
+      next: (res:any) => { this.singleProduct = res.data.productList; },
       error: (err:any) => { console.log('err', err) },
       complete: () => { this.cdr.markForCheck(); }
     });

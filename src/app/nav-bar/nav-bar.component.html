@@ -12,8 +12,8 @@
           <h6  ngbDropdownToggle class="text-dark mt-2 fs-5" style="display: flex;">
             <i class="{{ shopDetail.icon }}"></i>{{ shopDetail.title }}
             <div ngbDropdownMenu class="dropdown-menu item mt-3">
-                <div class="mb-2" (click)="categories(item.name)" *ngFor="let item of categoryList;">
-                  <span style="font-weight: 400; font-size: medium;" ngbDropdownItem class="bg-light">{{ item.name | titlecase}}</span>
+                <div class="mb-2" (click)="categories(item)" *ngFor="let item of categoryList;">
+                  <span style="font-weight: 400; font-size: medium;" ngbDropdownItem class="bg-light">{{ item | titlecase}}</span>
                 </div>    
             </div>
           </h6>

@@ -100,7 +100,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   getSingleProductData() {
     let sub3 = this.service.getSingleProduct(this.id).subscribe({
       next: (res: any) => {
-        this.singleProduct = res.data.product;
+        this.singleProduct = res.data.productList;
       },
       error: (err: any) => {
         console.log('err', err);
@@ -123,9 +123,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       cartItems.push(this.selectedItem);
     }
 
-    cartItems = [
-      ...new Map(cartItems.map((item: any) => [item['id'], item])).values(),
-    ];
+    cartItems = [...new Map(cartItems.map((item: any) => [item['_id'], item])).values()];
+    
     localStorage.setItem('addCartItem', JSON.stringify(cartItems));
     this.service.totalCartItems.next(true);
     this.toastr.success('Item Added Successfully!');

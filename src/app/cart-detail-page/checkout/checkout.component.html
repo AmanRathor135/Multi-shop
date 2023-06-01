@@ -6,31 +6,29 @@
         <span class="bg-secondary pr-3">Billing Address</span>
       </h5>
       <div class="bg-light p-30 mb-5">
-        <form [formGroup]="billingAddressForm" autocomplete="off">
-            <div class="row">
+        <form [formGroup]="billingAddressForm" autocomplete="on">
+          <div class="row" formGroupName="name">
             <div class="col-md-6 form-group">
-            <div class="form-group"><label for="firstName">First Name</label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                formControlName="firstName"
-                placeholder="John"
-                class="form-control"
-              />
-              <div *ngIf="(submitted || billingForm['firstName'].touched) && billingForm['firstName'].invalid" class="error">
-                <ul>
-                  <li *ngIf="billingForm['firstName'].hasError('required')" style="color: red">
-                    First Name is required
-                  </li>
-                </ul>
+              <div class="form-group"><label for="firstName">First Name</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  formControlName="firstName"
+                  placeholder="John"
+                  class="form-control"
+                />
+                <div *ngIf="(submitted || billingAddressForm.get('name.firstName')?.touched) && billingAddressForm.get('name.firstName')?.invalid" class="mt-1 error">
+                    <span style="color: red">
+                      First Name is required
+                    </span>
+                </div>
               </div>
             </div>
-            </div>
 
-        <div class="col-md-6 form-group">
+          <div class="col-md-6 form-group">
             <div class="form-group"><label for="lastName">Last Name </label>
-              <input
+                <input
                 type="text"
                 id="lastName"
                 name="lastName"
@@ -38,15 +36,13 @@
                 class="form-control"
                 placeholder="Doe"
               />
-              <div *ngIf="(submitted || billingForm['lastName'].touched) &&billingForm['lastName'].invalid" class="error">
-                <ul>
-                  <li *ngIf="billingForm['lastName'].hasError('required')" style="color: red">
-                    Last Name is required
-                  </li>
-                </ul>
-              </div>
+              <div *ngIf="(submitted || billingAddressForm.get('name.lastName')?.touched) && billingAddressForm.get('name.lastName')?.invalid" class="mt-1 error">
+                <span style="color: red">
+                  Last Name is required
+                </span>
             </div>
-        </div>
+            </div>  
+          </div>
         </div>
 
         <div class="row">
@@ -60,15 +56,13 @@
                 class="form-control"
                 placeholder="example@gmail.com"
               />
-              <div *ngIf="(submitted || billingForm['email'].touched) && billingForm['email'].invalid"class="error">
-                <ul>
-                  <li *ngIf="billingForm['email'].hasError('required')" style="color: red">
+              <div *ngIf="(submitted || billingForm['email'].touched) && billingForm['email'].invalid"class="mt-1 error">
+                  <span *ngIf="billingForm['email'].hasError('required')" style="color: red">
                     E-mail is required
-                  </li>
-                  <li *ngIf="billingForm['email'].hasError('pattern')" style="color: red">
-                    Enter correct e-mail address
-                  </li>
-                </ul>
+                  </span>
+                  <span *ngIf="billingForm['email'].hasError('pattern')" style="color: red">
+                    Enter correct E-mail address
+                  </span>
               </div>
             </div>
             </div>
@@ -83,64 +77,58 @@
                 class="form-control"
                 placeholder="+123 456 789"
               />
-              <div *ngIf="(submitted || billingForm['phone'].touched) && billingForm['phone'].invalid" class="error">
-                <ul>
-                  <li *ngIf="billingForm['phone'].hasError('required')" style="color: red">
+              <div *ngIf="(submitted || billingForm['phone'].touched) && billingForm['phone'].invalid" class="mt-1 error">
+                  <span *ngIf="billingForm['phone'].hasError('required')" style="color: red">
                     Mobile number is required
-                  </li>
-                  <li *ngIf="billingForm['phone'].hasError('minlength')" style="color: red">
+                  </span>
+                  <span *ngIf="billingForm['phone'].hasError('minlength')" style="color: red">
                     Minimum length should be 9
-                  </li>
-                  <li *ngIf="billingForm['phone'].hasError('maxlength')" style="color: red">
+                  </span>
+                  <span *ngIf="billingForm['phone'].hasError('maxlength')" style="color: red">
                     Maximum length should be 12
-                  </li>
-                  <li *ngIf="billingForm['phone'].hasError('pattern') && !billingForm['phone'].hasError('minlength')" style="color: red">
+                  </span>
+                  <span *ngIf="billingForm['phone'].hasError('pattern') && !billingForm['phone'].hasError('minlength')" style="color: red">
                     Enter Number is only
-                  </li>
-                </ul>
+                  </span>
               </div>
             </div>
             </div>
         </div>
 
-        <div class="row">
+        <div class="row" formGroupName="address">
             <div class="col-md-6 form-group">
-            <div class="form-group"><label for="address1">Address Line 1</label>
+            <div class="form-group"><label for="line1">Address Line 1</label>
               <input
                 type="text"
-                id="address1"
-                name="address1"
-                formControlName="address1"
+                id="line1"
+                name="line1"
+                formControlName="line1"
                 placeholder="123 Street"
                 class="form-control"
               />
-              <div *ngIf="(submitted || billingForm['address1'].touched) && billingForm['address1'].invalid" class="error">
-                <ul>
-                  <li *ngIf="billingForm['address1'].hasError('required')" style="color: red">
-                    Address is required
-                  </li>
-                </ul>
+              <div *ngIf="(submitted || billingAddressForm.get('address.line1')?.touched) && billingAddressForm.get('address.line1')?.invalid" class="mt-1 error">
+                  <span style="color: red">
+                    Address Line 1 is required
+                  </span>
               </div>
             </div>
             </div>
 
         <div class="col-md-6 form-group">
-            <div class="form-group"><label for="address2">Address Line 2</label>
+            <div class="form-group"><label for="line2">Address Line 2</label>
               <input
                 type="text"
-                id="address2"
-                name="address2"
-                formControlName="address2"
+                id="line2"
+                name="line2"
+                formControlName="line2"
                 class="form-control"
                 placeholder="123 Street"
               />
-              <div *ngIf="(submitted || billingForm['address2'].touched) &&billingForm['address2'].invalid" class="error">
-                <ul>
-                  <li *ngIf="billingForm['address2'].hasError('required')" style="color: red">
-                    Address is required
-                  </li>
-                </ul>
-              </div>
+              <div *ngIf="(submitted || billingAddressForm.get('address.line2')?.touched) && billingAddressForm.get('address.line2')?.invalid" class="mt-1 error">
+                <span style="color: red">
+                  Address Line 2 is required
+                </span>
+            </div>
             </div>
         </div>
         </div>
@@ -156,12 +144,10 @@
                 class="form-control"
                 placeholder="United States"
               />
-              <div *ngIf="(submitted || billingForm['country'].touched) && billingForm['country'].invalid"class="error">
-                <ul>
-                  <li *ngIf="billingForm['country'].hasError('required')" style="color: red">
+              <div *ngIf="(submitted || billingForm['country'].touched) && billingForm['country'].invalid" class="mt-1 error">
+                  <span *ngIf="billingForm['country'].hasError('required')" style="color: red">
                     Country is required
-                  </li>
-                </ul>
+                  </span>
               </div>
             </div>
             </div>
@@ -176,11 +162,10 @@
                 class="form-control"
                 placeholder="New York"
               />
-              <div *ngIf="(submitted || billingForm['city'].touched) && billingForm['city'].invalid" class="error">
-                <ul>
-                  <li *ngIf="billingForm['city'].hasError('required')" style="color: red">
-                    City name is required
-                </ul>
+              <div *ngIf="(submitted || billingForm['city'].touched) && billingForm['city'].invalid" class="mt-1 error">
+                <span *ngIf="billingForm['city'].hasError('required')" style="color: red">
+                  City name is required
+                </span>
               </div>
             </div>
             </div>
@@ -197,11 +182,10 @@
                 class="form-control"
                 placeholder="New York"
               />
-              <div *ngIf="(submitted || billingForm['state'].touched) && billingForm['state'].invalid" class="error">
-                <ul>
-                  <li *ngIf="billingForm['state'].hasError('required')" style="color: red">
+              <div *ngIf="(submitted || billingForm['state'].touched) && billingForm['state'].invalid" class="mt-1 error">
+                  <span *ngIf="billingForm['state'].hasError('required')" style="color: red">
                     State name is required
-                </ul>
+                  </span>
               </div>
             </div>
             </div>
@@ -215,12 +199,10 @@
                     class="form-control"
                     placeholder="123"
                   />
-                  <div *ngIf="(submitted || billingForm['zipCode'].touched) && billingForm['zipCode'].invalid"class="error">
-                    <ul>
-                      <li *ngIf="billingForm['zipCode'].hasError('required')" style="color: red">
+                  <div *ngIf="(submitted || billingForm['zipCode'].touched) && billingForm['zipCode'].invalid" class="mt-1 error">
+                      <span *ngIf="billingForm['zipCode'].hasError('required')" style="color: red">
                         ZIP Code is required
-                      </li>
-                    </ul>
+                      </span>
                   </div>
                 </div>
             </div>
@@ -242,8 +224,8 @@
           <span class="bg-secondary pr-3">Shipping Address</span>
         </h5>
         <div class="bg-light p-30">
-            <form [formGroup]="shippingAddressForm" autocomplete="off">
-                <div class="row">
+            <form [formGroup]="shippingAddressForm" autocomplete="on">
+                <div class="row" formGroupName="name">
                 <div class="col-md-6 form-group">
                 <div class="form-group"><label for="firstName">First Name</label>
                   <input
@@ -254,12 +236,10 @@
                     placeholder="Aman"
                     class="form-control"
                   />
-                  <div *ngIf="(submitted || shippingForm['firstName'].touched) && shippingForm['firstName'].invalid" class="error">
-                    <ul>
-                      <li *ngIf="shippingForm['firstName'].hasError('required')" style="color: red">
+                  <div *ngIf="(submitted || shippingAddressForm.get('name.firstName')?.touched) && shippingAddressForm.get('name.firstName')?.invalid" class="mt-1 error">
+                      <span style="color: red">
                         First Name is required
-                      </li>
-                    </ul>
+                      </span>
                   </div>
                 </div>
                 </div>
@@ -274,12 +254,10 @@
                     class="form-control"
                     placeholder="Rathor"
                   />
-                  <div *ngIf="(submitted || shippingForm['lastName'].touched) &&shippingForm['lastName'].invalid" class="error">
-                    <ul>
-                      <li *ngIf="shippingForm['lastName'].hasError('required')" style="color: red">
+                  <div *ngIf="(submitted || shippingAddressForm.get('name.lastName')?.touched) && shippingAddressForm.get('name.lastName')?.invalid" class="mt-1 error">
+                      <span style="color: red">
                         Last Name is required
-                      </li>
-                    </ul>
+                      </span>
                   </div>
                 </div>
             </div>
@@ -296,15 +274,13 @@
                     class="form-control"
                     placeholder="aman2023@gmail.com"
                   />
-                  <div *ngIf="(submitted || shippingForm['email'].touched) && shippingForm['email'].invalid"class="error">
-                    <ul>
-                      <li *ngIf="shippingForm['email'].hasError('required')" style="color: red">
+                  <div *ngIf="(submitted || shippingForm['email'].touched) && shippingForm['email'].invalid" class="mt-1 error">
+                      <span *ngIf="shippingForm['email'].hasError('required')" style="color: red">
                         E-mail is required
-                      </li>
-                      <li *ngIf="shippingForm['email'].hasError('pattern')" style="color: red">
+                      </span>
+                      <span *ngIf="shippingForm['email'].hasError('pattern')" style="color: red">
                         Enter correct e-mail address
-                      </li>
-                    </ul>
+                      </span>
                   </div>
                 </div>
                 </div>
@@ -319,64 +295,58 @@
                     class="form-control"
                     placeholder="+1234 567 890"
                   />
-                  <div *ngIf="(submitted || shippingForm['phone'].touched) && shippingForm['phone'].invalid" class="error">
-                    <ul>
-                      <li *ngIf="shippingForm['phone'].hasError('required')" style="color: red">
+                  <div *ngIf="(submitted || shippingForm['phone'].touched) && shippingForm['phone'].invalid" class="mt-1 error">
+                      <span *ngIf="shippingForm['phone'].hasError('required')" style="color: red">
                         Mobile number is required
-                      </li>
-                      <li *ngIf="shippingForm['phone'].hasError('minlength')" style="color: red">
+                      </span>
+                      <span *ngIf="shippingForm['phone'].hasError('minlength')" style="color: red">
                         Minimum length should be 9
-                      </li>
-                      <li *ngIf="shippingForm['phone'].hasError('maxlength')" style="color: red">
+                      </span>
+                      <span *ngIf="shippingForm['phone'].hasError('maxlength')" style="color: red">
                         Maximum length should be 12
-                      </li>
-                      <li *ngIf="shippingForm['phone'].hasError('pattern') && !shippingForm['phone'].hasError('minlength')" style="color: red">
+                      </span>
+                      <span *ngIf="shippingForm['phone'].hasError('pattern') && !shippingForm['phone'].hasError('minlength')" style="color: red">
                         Enter Number is only
-                      </li>
-                    </ul>
+                      </span>
                   </div>
                 </div>
                 </div>
             </div>
     
-            <div class="row">
+            <div class="row" formGroupName="address">
                 <div class="col-md-6 form-group">
-                <div class="form-group"><label for="address1">Address Line 1</label>
+                <div class="form-group"><label for="line1">Address Line 1</label>
                   <input
                     type="text"
-                    id="address1"
-                    name="address1"
-                    formControlName="address1"
+                    id="line1"
+                    name="line1"
+                    formControlName="line1"
                     placeholder="54 Somnath Park Society"
                     class="form-control"
                   />
-                  <div *ngIf="(submitted || shippingForm['address1'].touched) && shippingForm['address1'].invalid" class="error">
-                    <ul>
-                      <li *ngIf="shippingForm['address1'].hasError('required')" style="color: red">
-                        Address is required
-                      </li>
-                    </ul>
+                  <div *ngIf="(submitted || shippingAddressForm.get('address.line1')?.touched) && shippingAddressForm.get('address.line1')?.invalid" class="mt-1 error">
+                      <span style="color: red">
+                        Address Line 1 is required
+                      </span>
                   </div>
                 </div>
                 </div>
     
             <div class="col-md-6 form-group">
-                <div class="form-group"><label for="address2">Address Line 2</label>
+                <div class="form-group"><label for="line2">Address Line 2</label>
                   <input
                     type="text"
-                    id="address2"
-                    name="address2"
-                    formControlName="address2"
+                    id="line2"
+                    name="line2"
+                    formControlName="line2"
                     class="form-control"
                     placeholder="Taxshila School Road"
                   />
-                  <div *ngIf="(submitted || shippingForm['address2'].touched) &&shippingForm['address2'].invalid" class="error">
-                    <ul>
-                      <li *ngIf="shippingForm['address2'].hasError('required')" style="color: red">
-                        Address is required
-                      </li>
-                    </ul>
-                  </div>
+                  <div *ngIf="(submitted || shippingAddressForm.get('address.line2')?.touched) && shippingAddressForm.get('address.line2')?.invalid" class="mt-1 error">
+                    <span style="color: red">
+                      Address Line 2 is required
+                    </span>
+                </div>
                 </div>
             </div>
             </div>
@@ -392,12 +362,10 @@
                     class="form-control"
                     placeholder="India"
                   />
-                  <div *ngIf="(submitted || shippingForm['country'].touched) && shippingForm['country'].invalid"class="error">
-                    <ul>
-                      <li *ngIf="shippingForm['country'].hasError('required')" style="color: red">
+                  <div *ngIf="(submitted || shippingForm['country'].touched) && shippingForm['country'].invalid" class="mt-1 error">
+                      <span *ngIf="shippingForm['country'].hasError('required')" style="color: red">
                         Country is required
-                      </li>
-                    </ul>
+                      </span>
                   </div>
                 </div>
                 </div>
@@ -412,11 +380,10 @@
                     class="form-control"
                     placeholder="Ahmedabad"
                   />
-                  <div *ngIf="(submitted || shippingForm['city'].touched) && shippingForm['city'].invalid" class="error">
-                    <ul>
-                      <li *ngIf="shippingForm['city'].hasError('required')" style="color: red">
+                  <div *ngIf="(submitted || shippingForm['city'].touched) && shippingForm['city'].invalid" class="mt-1 error">
+                      <span *ngIf="shippingForm['city'].hasError('required')" style="color: red">
                         City name is required
-                    </ul>
+                      </span>
                   </div>
                 </div>
                 </div>
@@ -432,11 +399,10 @@
                     class="form-control"
                     placeholder="Gujarat"
                   />
-                  <div *ngIf="(submitted || shippingForm['state'].touched) && shippingForm['state'].invalid" class="error">
-                    <ul>
-                      <li *ngIf="shippingForm['state'].hasError('required')" style="color: red">
+                  <div *ngIf="(submitted || shippingForm['state'].touched) && shippingForm['state'].invalid" class="mt-1 error">
+                      <span *ngIf="shippingForm['state'].hasError('required')" style="color: red">
                         State name is required
-                    </ul>
+                      </span>
                   </div>
                 </div>
                 </div>
@@ -450,12 +416,10 @@
                         class="form-control"
                         placeholder="382415"
                       />
-                      <div *ngIf="(submitted || shippingForm['zipCode'].touched) && shippingForm['zipCode'].invalid"class="error">
-                        <ul>
-                          <li *ngIf="shippingForm['zipCode'].hasError('required')" style="color: red">
+                      <div *ngIf="(submitted || shippingForm['zipCode'].touched) && shippingForm['zipCode'].invalid" class="mt-1 error">
+                          <span *ngIf="shippingForm['zipCode'].hasError('required')" style="color: red">
                             ZIP Code is required
-                          </li>
-                        </ul>
+                          </span>
                       </div>
                     </div>
                 </div>

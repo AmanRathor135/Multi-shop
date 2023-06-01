@@ -57,8 +57,8 @@ export class ProductsFeaturedComponent implements OnInit, OnDestroy {
    * If it gives error then it will show error
    */
   getProducts() {
-    let sub2 = this.service.getFeaturedProduct().subscribe({
-      next: (res: any) => {this.productList = res.data.products;},
+    let sub2 = this.service.get({'type':'featured'}).subscribe({
+      next: (res: any) => { this.productList = res.data.productList; },
       error: (err: any) => { console.log('err', err);},
       complete: () => { this.cdr.markForCheck();},
     });

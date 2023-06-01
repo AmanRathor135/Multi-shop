@@ -65,7 +65,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
       this.wishlist.splice(index, 1);
       localStorage.setItem('favoriteItemList', JSON.stringify(this.wishlist));
       this.service.totalFavoriteItems.next(this.wishlist.length);
-      this.toastr.info('Item Removed from Wishlist Successfully!');
+      this.toastr.info('Item Removed from Wishlist!');
     }
   }
 

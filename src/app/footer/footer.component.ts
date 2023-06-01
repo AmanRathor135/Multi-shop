@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from
 import { ProductService } from '../services/product.service';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-footer',
@@ -60,8 +61,12 @@ export class FooterComponent implements OnDestroy {
       'fab fa-instagram',
     ],
   };
+  
+  newsletterForm:FormGroup = new FormGroup({
+    email:new FormControl('', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')])
+  })
 
-  newsletterForm: any = { email: '', };
+  newsletter: any = { email: '', };
 
   constructor(private service:ProductService, private toastr:ToastrService, private cdr:ChangeDetectorRef) {}
 
@@ -73,7 +78,7 @@ export class FooterComponent implements OnDestroy {
    */
   signUp(form:any){
     if(form.valid){
-      let sub1 = this.service.newsletterSignUpEmail(this.newsletterForm).subscribe({
+      let sub1 = this.service.newsletterSignUpEmail(this.newsletter).subscribe({
         next: (res:any) => { res.type == 'success'?this.toastr.success(res.message):this.toastr.warning(res.message); },
         error: (err:any) => { console.log("Footer Error", err) },
         complete: () => { this.cdr.markForCheck(); }

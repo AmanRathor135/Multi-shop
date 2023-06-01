@@ -23,7 +23,7 @@
                  </thead>
                  <tbody class="align-middle" *ngIf="cartProduct.length">
                      <tr *ngFor="let item of cartProduct; let i = index">
-                         <td class="align-middle"><img src="{{item.image}}" alt="" style="width: 70px;"> {{item.name}}</td>
+                         <td class="align-middle"><img src="{{item.image}}" alt="" style="width: 70px;"></td>
                          <td class="align-middle">{{item.title}}</td>
                          <td class="align-middle">{{(item.price *currencyPrice) | currency:currency}}</td>
                          <td class="align-middle">

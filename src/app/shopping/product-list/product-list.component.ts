@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -17,7 +17,7 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
   currency: any;
   currencyPrice:any;
   itemsPerPage:number = 6;
-  totalItem:any;
+  totalItem:any=20;
   favoriteItemList:any[] = [];
   page: number = 1;
   isShow: boolean = true;
@@ -44,7 +44,7 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private service: ProductService,
     private activateRoute: ActivatedRoute,
-    private cdr:ChangeDetectorRef
+    private cdr:ChangeDetectorRef,
   ) {
     this.service.totalFavoriteItems.next(this.total);
   }
@@ -79,7 +79,9 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
-  this.productList = this.filterProductList;    
+      this.page = 1
+      this.productList = this.filterProductList; 
+      this.totalItem = this.filterProductList?.length;   
   }
 
 
@@ -119,13 +121,12 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
   * @param event for pagination
   */
   pageChangeEvent(event: number) {
+    this.totalItem = 20;
     this.page = event;
-    
-    let sub3 = this.service.pagination({page:this.page,limit:this.itemsPerPage}).subscribe({
-      next: (res:any) => {
-        this.productList = res.data.products;
-        this.totalItem = res.data.totalProducts;
-      },
+    let sub3 = this.service.get({page:this.page,limit:this.itemsPerPage}).subscribe({
+      next: (res:any) => { 
+        this.productList = res.data.productList;
+       },
       error: (err: any) => { console.log('err', err); },
       complete: () => {this.cdr.markForCheck();},
     });
@@ -153,10 +154,10 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
    * If it gives error then it will show error
    */
   getAllProducts() {
-    let sub5 = this.service.getAllProducts().subscribe({
+    let sub5 = this.service.get({}).subscribe({
       next: (res: any) => {
-        this.productList = res.data.products;
-        this.productList.map((product) => (product['isShow'] = false));
+        this.productList = res.data?.productList;
+        this.productList?.map((product) => (product['isShow'] = false));
       },
       error: (err: any) => { console.log('err', err); },
       complete: () => {this.cdr.markForCheck();},
@@ -176,15 +177,16 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
    * @param value as a key of product
    * where we get data in ascending order
    */
-  productInDesc(value:any) {
+  sorting(value:any) {
+    this.page = 1;
     let sort = {
-      sortBy:{
+      sort:{
         field: value, // fieldName
-        order: "asc"  // asc or desc
+        order: "desc"  // asc or desc
     }}
 
-    let sub6 = this.service.getAllProductInDesc(sort).subscribe({
-      next: (res: any) => { this.productList = res.data.products; },
+    let sub6 = this.service.get(sort).subscribe({
+      next: (res: any) => { this.productList = res.data.productList; },
       error: (err: any) => { console.log('err', err); },
       complete: () => {this.cdr.markForCheck();},
     });

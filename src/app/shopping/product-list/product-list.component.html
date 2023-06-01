@@ -13,7 +13,7 @@
         <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
           <a class="dropdown-item" ngbDropdownItem [routerLink]="['/Shop/shop']" *ngFor="let category of item.category; let first = first">
             <span *ngIf="first" (click)="getAllProducts()">{{ category }}</span>
-            <span *ngIf="!first" (click)="productInDesc(category)">{{ category | titlecase}}</span>
+            <span *ngIf="!first" (click)="sorting(category)">{{ category | titlecase}}</span>
           </a>
         </div>
       </div>
@@ -61,7 +61,7 @@
       <div class="d-flex align-items-center justify-content-center mt-2">
         <h5>{{ product.price*currencyPrice | currency : currency }}</h5>
         <h6 class="text-muted ml-2">
-          <del>{{ product.price*currencyPrice | currency : currency }}</del>
+          <del>{{ product.checkedPrice*currencyPrice | currency : currency }}</del>
         </h6>
       </div>
       <div class="d-flex align-items-center justify-content-center mb-1">
@@ -96,7 +96,7 @@
   </thead>
     <tbody class="align-middle">
       <tr *ngFor="let product of productList | filter : category
-          | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItem };"
+          | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItem};"
       >
         <td class="align-middle fs-5">{{ product.id }}</td>
         <td class="align-middle">

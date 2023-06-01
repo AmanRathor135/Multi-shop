@@ -51,8 +51,9 @@ export class ProductsRecentComponent implements OnInit, OnDestroy {
    * If it gives error then it will show error
    */
   getProducts() {
-    let sub2 = this.service.getRecentProduct().subscribe({
-      next: (res: any) => {this.productList = res.data.products;},
+
+    let sub2 = this.service.get({type:'recent'}).subscribe({
+      next: (res: any) => {this.productList = res.data.productList;},
       error: (err: any) => { console.log('err', err);},
       complete: () => { this.cdr.markForCheck();},
     });

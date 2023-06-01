@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
+  FormArray,
   FormControl,
   FormGroup,
   Validators,
@@ -25,8 +26,10 @@ export class CheckoutComponent implements OnInit {
   submitted: boolean = false;
 
   billingAddressForm: FormGroup = new FormGroup({
-    firstName: new FormControl('', [Validators.required]),
-    lastName: new FormControl('', [Validators.required]),
+    name: new FormGroup({
+      firstName: new FormControl('', [Validators.required]),
+      lastName: new FormControl('', [Validators.required]),
+    }),
     email: new FormControl('', [
       Validators.required,
       Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'),
@@ -37,8 +40,10 @@ export class CheckoutComponent implements OnInit {
       Validators.maxLength(12),
       Validators.pattern('^[0-9]+$'),
     ]),
-    address1: new FormControl('', [Validators.required]),
-    address2: new FormControl('', [Validators.required]),
+    address:new FormGroup({
+      line1: new FormControl('', [Validators.required]),
+      line2: new FormControl('', [Validators.required]),
+    }),
     country: new FormControl('', [Validators.required]),
     city: new FormControl('', [Validators.required]),
     state: new FormControl('', [Validators.required]),
@@ -47,8 +52,10 @@ export class CheckoutComponent implements OnInit {
   });
 
   shippingAddressForm: FormGroup = new FormGroup({
-    firstName: new FormControl('', [Validators.required]),
-    lastName: new FormControl('', [Validators.required]),
+    name: new FormGroup({
+      firstName: new FormControl('', [Validators.required]),
+      lastName: new FormControl('', [Validators.required]),
+    }),
     email: new FormControl('', [
       Validators.required,
       Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'),
@@ -59,15 +66,17 @@ export class CheckoutComponent implements OnInit {
       Validators.maxLength(12),
       Validators.pattern('^[0-9]+$'),
     ]),
-    address1: new FormControl('', [Validators.required]),
-    address2: new FormControl('', [Validators.required]),
+    address: new FormGroup({
+      line1: new FormControl('', [Validators.required]),
+      line2: new FormControl('', [Validators.required]),
+    }),
     country: new FormControl('', [Validators.required]),
     city: new FormControl('', [Validators.required]),
     state: new FormControl('', [Validators.required]),
     zipCode: new FormControl('', [Validators.required]),
   });
 
-  constructor(private service: ProductService, private router: Router) {
+  constructor(private service: ProductService, private router: Router, private cdr:ChangeDetectorRef) {
     /**
      * Set the Breadcrumb using Product Service
      */
@@ -78,7 +87,7 @@ export class CheckoutComponent implements OnInit {
     ]);
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
     this.getFavoriteItems();
 
     /**
@@ -88,6 +97,7 @@ export class CheckoutComponent implements OnInit {
       if (res) {
         this.currency = res;
         this.getPrice();
+        this.cdr.markForCheck();
       }
     });
 
@@ -148,7 +158,10 @@ export class CheckoutComponent implements OnInit {
   placeOrder() {
     this.submitted = true;
     if (this.billingAddressForm.valid) {
-      this.router.navigate(['/page-not-found']);
+      console.log(this.billingAddressForm.value);
+      console.log(this.shippingAddressForm.value);
+      
+      // this.router.navigate(['/page-not-found']);
     }
   }
 

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/services/product.service';
@@ -13,6 +13,7 @@ import { ProductService } from 'src/app/services/product.service';
 export class ContactDetailFormComponent implements OnInit, OnDestroy {
 
   favItemLength:any;
+  submitted:boolean = false;
   subscription:Subscription[] = [];
   contactDetails: any[] = [
     {
@@ -28,6 +29,13 @@ export class ContactDetailFormComponent implements OnInit, OnDestroy {
       detail: '+012 345 67890',
     },
   ];
+
+  contactFormData:FormGroup = new FormGroup({
+    name: new FormControl('',[Validators.required]),
+    email:new FormControl('',[Validators.required,Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')]),
+    subject:new FormControl('',[Validators.required]),
+    message: new FormControl('',[Validators.required])
+  })
 
   contactForm:any = {
     name: "",
@@ -51,6 +59,13 @@ export class ContactDetailFormComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Using billingForm in HTML as a billingAddressForm.controls
+   */
+  get form(): { [key: string]: AbstractControl } {
+    return this.contactFormData.controls;
+  }
+
+  /**
    * get Total Favorite Items from Local Storage
    */
   getFavoriteItems(){
@@ -64,9 +79,10 @@ export class ContactDetailFormComponent implements OnInit, OnDestroy {
    * @param form to check whether contactForm is valid or not
    * To Do List....
    */
-  sendMessage(form:NgForm){
-    if(form.valid){
-      let sub1 = this.service.contactUsForm(this.contactForm).subscribe({
+  sendMessage(){
+    this.submitted = true;
+    if(this.contactFormData.valid){
+      let sub1 = this.service.contactUsForm(this.contactFormData.value).subscribe({
         next: (res:any) => { res.type == 'success'?this.toastr.success(res.message):this.toastr.warning(res.message); },
         error: (err:any) => { console.log("Contact Form Error", err); },
         complete: () => { this.cdr.markForCheck(); }

@@ -79,8 +79,11 @@ export class ShopComponent {
   };
 
   getFilterProduct(){
-    this.service.FilterProducts(this.filterValue).subscribe({
-      next: (res:any) => { this.filterProductList = res.data.products; },
+    this.service.get(this.filterValue).subscribe({
+      next: (res:any) => { 
+        console.log("res",res);
+        
+        this.filterProductList = res.data.productList; },
       error: (err: any) => { console.log('Filter Product Error', err); },
       complete: () => { this.cdr.markForCheck(); },
     })
@@ -120,6 +123,9 @@ export class ShopComponent {
         size.push(filterOption.size);
       }
     }
+
+    console.log("filter", this.filterValue);
+    
     this.getFilterProduct();
   }
 }
