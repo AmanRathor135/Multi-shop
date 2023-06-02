@@ -15,6 +15,8 @@ export class ProductService {
     },
   ]);
 
+  
+
   totalCartItems = new BehaviorSubject<any>(false);
   totalFavoriteItems = new BehaviorSubject<number>(0);
   currency = new BehaviorSubject<any>(localStorage.getItem('currency'));
@@ -25,7 +27,7 @@ export class ProductService {
     return this.service.getReq('http://192.168.1.175:5050/');
   };
 
-  get(data:any): Observable<any> {    
+  getFilteredProducts(data:any): Observable<any> {    
     return this.service.postReq('http://192.168.1.175:5050/products',data);
   };
 
@@ -37,69 +39,37 @@ export class ProductService {
     return this.service.getReq('http://192.168.1.175:5050/categories');
   };
   
-  getSpecificCategory(params?: any): Observable<any> {
-    return this.service.getReq(
-      `http://192.168.1.175:5050/products/categories/${params}`
-      );
-    };
+  // getSpecificCategory(params?: any): Observable<any> {
+  //   return this.service.getReq(
+  //     `http://192.168.1.175:5050/products/categories/${params}`
+  //     );
+  // };
     
   getSingleProduct(params?: any): Observable<any> {
       return this.service.postReq(`http://192.168.1.175:5050/products/${params}`,{});
-    };
+  };
      
   getCurrencyPrice(): Observable<any> {
       return this.service.getReq(
         `https://api.freecurrencyapi.com/v1/latest?apikey=sgiPfh4j3aXFR3l2CnjWqdKQzxpqGn9pX5b3CUsz&base_currency=USD`
         );
-    };
+  };
       
       
   vendorSliderList(): Observable<any> {
-      return this.service.getReq('http://192.168.1.175:5050/company');
-    };
+    return this.service.getReq('http://192.168.1.175:5050/company');
+  };
       
   newsletterSignUpEmail(data: any): Observable<any> {
-      return this.service.postReq('http://192.168.1.175:5050/details/newsletter', data);
-    };
+    return this.service.postReq('http://192.168.1.175:5050/details/newsletter',data);
+  };
     
   contactUsForm(data:any): Observable<any> {
-      return this.service.postReq('http://192.168.1.175:5050/details/contactUs',data);
-    };
+    return this.service.postReq('http://192.168.1.175:5050/details/contactUs',data);
+  };
   
   billingAddressForm(data:any): Observable<any> {
-      return this.service.postReq('http://192.168.1.175:5050/details/billing',data);
-    };
-
-  // FilterProducts(data?:any): Observable<any>{
-  //     return this.service.postReq('http://192.168.1.175:5050/products/filter',data);
-  //   };
-
-  // getAllProducts(): Observable<any> {
-  //   return this.service.getReq('http://192.168.1.175:5050/products');
-  // }
-
-  // getFeaturedProduct(): Observable<any> {
-  //   return this.service.getReq(`http://192.168.1.175:5050/products/type/featured`,{})
-  // }
-
-  // getRecentProduct(): Observable<any> {
-  //   return this.service.getReq(`http://192.168.1.175:5050/products/type/recent`,{})
-  // }
-
-  // fetchLimitedProducts(): Observable<any> {
-  //   return this.service.getReq('http://192.168.1.175:5050/products/?limit=8');
-  // }
-
-  // getAllProducts():Observable<any> {
-  //   return this.service.postReq('http://192.168.1.178:1108/products', {});
-  // };
-
-  // getAllProductInDesc(data?: any): Observable<any> {
-  //   return this.service.postReq('http://192.168.1.175:5050/products/sorting', data);
-  // }
-    
-  // pagination(param?:any): Observable<any> {
-  //   return this.service.getReq(`http://192.168.1.175:5050/products/`,{params:param})
-  // }
+    return this.service.postReq('http://192.168.1.175:5050/details/billing',data);
+  };
 }
 
