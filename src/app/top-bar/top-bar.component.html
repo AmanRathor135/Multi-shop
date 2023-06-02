@@ -14,10 +14,10 @@
 
         <div ngbDropdown>
           <button type="button" class="btn btn-sm btn-light dropdown-toggle mr-3" ngbDropdownToggle>
-            My Account
+            {{user}}
             <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
               <ng-container *ngFor="let list of DropDownMenu1">
-                <button class="dropdown-item" ngbDropdownItem type="button">{{ list }}</button>
+                <button class="dropdown-item" ngbDropdownItem type="button" (click)="accountHandler(list)">{{ list }}</button>
               </ng-container>
             </div>
           </button>

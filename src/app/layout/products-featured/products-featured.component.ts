@@ -19,6 +19,7 @@ export class ProductsFeaturedComponent implements OnInit, OnDestroy {
   productList: any[] = [];
   subscription: Subscription[] = [];
   currency: any;
+  data:any = {};
   currencyPrice: any;
   math = Math;
   totalRate: any;
@@ -57,7 +58,8 @@ export class ProductsFeaturedComponent implements OnInit, OnDestroy {
    * If it gives error then it will show error
    */
   getProducts() {
-    let sub2 = this.service.get({'type':'featured'}).subscribe({
+    this.data = {'type':'featured'};
+    let sub2 = this.service.getFilteredProducts(this.data).subscribe({
       next: (res: any) => { this.productList = res.data.productList; },
       error: (err: any) => { console.log('err', err);},
       complete: () => { this.cdr.markForCheck();},

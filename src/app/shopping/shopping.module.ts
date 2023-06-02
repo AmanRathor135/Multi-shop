@@ -6,7 +6,6 @@ import { ShopComponent } from './shop/shop.component';
 import { ShopDetailsComponent } from './shop-details/shop-details.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { ProductListComponent } from './product-list/product-list.component';
-import { ImageCarouselComponent } from './image-carousel/image-carousel.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductDescriptionComponent } from './product-description/product-description.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -21,7 +20,6 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
     ShopComponent,
     ShopDetailsComponent,
     ProductListComponent,
-    ImageCarouselComponent,
     ProductDetailComponent,
     ProductDescriptionComponent,
     FilterPipe

@@ -55,13 +55,11 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   categories(item: any) {
     let url = `Shop/shop/${item}`;
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      setTimeout(() => { this.router.navigate([url]); }, 1);
-    });
+        this.router.navigate([url], {queryParams: {category:item}}); 
   };
 
   getCategories() {
-    let sub3 = this.service.get({categoryList:true}).subscribe({
+    let sub3 = this.service.getFilteredProducts({categoryList:true}).subscribe({
       next: (res: any) => { this.categoryList = res.data.categoryList; },
       error: (err: any) => { console.log('err', err); },
       complete: () => { this.cdr.markForCheck(); },

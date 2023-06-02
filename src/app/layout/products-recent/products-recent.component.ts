@@ -12,6 +12,7 @@ export class ProductsRecentComponent implements OnInit, OnDestroy {
   searchText: string = '';
   productList: any[] = [];
   subscription: Subscription[] = [];
+  data:any = {};
   currency: any;
   currencyPrice: any;
   math = Math;
@@ -51,8 +52,8 @@ export class ProductsRecentComponent implements OnInit, OnDestroy {
    * If it gives error then it will show error
    */
   getProducts() {
-
-    let sub2 = this.service.get({type:'recent'}).subscribe({
+    this.data = {type:'recent'};
+    let sub2 = this.service.getFilteredProducts(this.data).subscribe({
       next: (res: any) => {this.productList = res.data.productList;},
       error: (err: any) => { console.log('err', err);},
       complete: () => { this.cdr.markForCheck();},

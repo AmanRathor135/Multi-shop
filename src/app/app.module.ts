@@ -7,14 +7,15 @@ import { TopBarComponent } from './top-bar/top-bar.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { FooterComponent } from './footer/footer.component';
 import { FormsModule } from '@angular/forms';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ToastrModule } from 'ngx-toastr';
+import { HeaderInterceptor } from './services/header.interceptor';
 
 @NgModule({
   declarations: [
@@ -35,12 +36,18 @@ import { ToastrModule } from 'ngx-toastr';
     BsDropdownModule.forRoot(),
     NgbDropdownModule,
     ToastrModule.forRoot({
-      timeOut: 1000, 
+      timeOut: 1000,
       closeButton: true,
       progressBar: true,
     }),
   ],
-  providers: [{ provide: BsDropdownConfig, useValue: { isAnimated:true, autoClose: true,} }],
-  bootstrap: [AppComponent]
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true },
+    {
+      provide: BsDropdownConfig,
+      useValue: { isAnimated: true, autoClose: true },
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

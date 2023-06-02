@@ -1,71 +1,80 @@
-<div class="h-100 bg-light p-30">
-  <h3>{{ singleProduct?.title }}</h3>
-  <div class="d-flex align-items-center mb-1">
-    <ng-container *ngFor="let rate of totalRate; let i = index">
-      <ng-container *ngIf="i < math.floor(singleProduct?.rating?.rate)">
-        <small class="fa fa-star text-primary mr-1"></small>
-      </ng-container>
-      <ng-container *ngIf="i == math.floor(singleProduct?.rating?.rate)">
-        <small class="fa fa-star-half-alt text-primary mr-1"></small>
-      </ng-container>
-      <ng-container *ngIf="i > singleProduct?.rating?.rate">
-        <small class="far fa-star text-primary mr-1"></small>
-      </ng-container>
-    </ng-container>
-    <small>(The Rating is {{ singleProduct?.rating?.rate }} Out of {{ singleProduct?.rating?.count }} Reviews)</small>
-  </div>
-  <h3 class="font-weight-semi-bold mb-4"> {{ (singleProduct?.price *currencyPrice) | currency:currency }}</h3>
-  <p class="mb-4">{{ singleProduct?.description }}</p>
-
-  <div class="d-flex mb-3">
-    <strong class="text-dark mr-3">{{ sizes.category }}:</strong>
-    <form>
-      <div class="custom-control custom-radio custom-control-inline" *ngFor="let item of sizes.data">
-        <input type="radio" class="custom-control-input" id="{{ item.label }}" name="size"/>
-        <label class="custom-control-label" for="{{ item.label }}">{{ item.name }}</label>
-      </div>
-    </form>
-  </div>
-
-  <div class="d-flex mb-4">
-    <strong class="text-dark mr-3">{{ colors.category }}:</strong>
-    <form>
-      <div class="custom-control custom-radio custom-control-inline" *ngFor="let item of colors.data">
-        <input type="radio" class="custom-control-input" id="{{ item.label }}" name="size"/>
-        <label class="custom-control-label" for="{{ item.label }}">{{ item.name }}</label>
-      </div>
-    </form>
-  </div>
-
-  <div class="d-flex align-items-center mb-4 pt-2">
-    <div class="input-group quantity mr-3" style="width: 130px">
-      <div class="input-group-btn">
-        <button class="btn btn-primary btn-minus" (click)="remove()">
-          <i class="fa fa-minus"></i>
-        </button>
-      </div>
-      <input type="text" class="form-control bg-secondary border-0 text-center" [value]="value"/>
-      <div class="input-group-btn">
-        <button class="btn btn-primary btn-plus" (click)="add()">
-          <i class="fa fa-plus"></i>
-        </button>
-      </div>
+<div class="col-lg-5 mb-30" style="padding-left: 2px !important;">
+  <div class="carousel-inner bg-light" style="padding: 50px;">
+    <div class="carousel-item active d-flex justify-content-center">
+        <img class="img-fluid w-75 p-3" src="{{singleProduct?.image}}" style="height: 450px" alt="...">
     </div>
-    <button class="btn btn-primary px-3" (click)="addToCart(singleProduct)">
-      <i class="fa fa-shopping-cart mr-1"></i>
-      Add To Cart
-    </button>&nbsp;&nbsp;&nbsp;&nbsp;
-    <button class="btn btn-success px-3" [routerLink]="['/Shop/shop']">
-      <i class="fas fa-cart-plus mr-1"></i>
-      Add More Products
-    </button>
   </div>
-  <div class="d-flex pt-2">
-    <strong class="text-dark mr-2">Share on:</strong>
-    <div class="d-inline-flex">
-      <a class="text-dark px-2" *ngFor="let links of socialLinks">
-        <i class="{{ links }}"></i>
-      </a>
+</div>
+<div class="col-lg-7 h-auto mb-30" style="margin-left: 10px;">
+  <div class="h-100 bg-light p-30">
+    <h3>{{ singleProduct?.title }}</h3>
+    <div class="d-flex align-items-center mb-1">
+      <ng-container *ngFor="let rate of totalRate; let i = index">
+        <ng-container *ngIf="i < math.floor(singleProduct?.rating?.rate)">
+          <small class="fa fa-star text-primary mr-1"></small>
+        </ng-container>
+        <ng-container *ngIf="i == math.floor(singleProduct?.rating?.rate)">
+          <small class="fa fa-star-half-alt text-primary mr-1"></small>
+        </ng-container>
+        <ng-container *ngIf="i > singleProduct?.rating?.rate">
+          <small class="far fa-star text-primary mr-1"></small>
+        </ng-container>
+      </ng-container>
+      <small>(The Rating is {{ singleProduct?.rating?.rate }} Out of {{ singleProduct?.rating?.count }} Reviews)</small>
+    </div>
+    <h3 class="font-weight-semi-bold mb-4"> {{ (singleProduct?.price *currencyPrice) | currency:currency }}</h3>
+    <p class="mb-4">{{ singleProduct?.description }}</p>
+  
+    <div class="d-flex mb-3">
+      <strong class="text-dark mr-3">{{ sizes.category }}:</strong>
+      <form>
+        <div class="custom-control custom-radio custom-control-inline" *ngFor="let item of sizes.data">
+          <input type="radio" class="custom-control-input" id="{{ item.label }}" name="size"/>
+          <label class="custom-control-label" for="{{ item.label }}">{{ item.name }}</label>
+        </div>
+      </form>
+    </div>
+  
+    <div class="d-flex mb-4">
+      <strong class="text-dark mr-3">{{ colors.category }}:</strong>
+      <form>
+        <div class="custom-control custom-radio custom-control-inline" *ngFor="let item of colors.data">
+          <input type="radio" class="custom-control-input" id="{{ item.label }}" name="size"/>
+          <label class="custom-control-label" for="{{ item.label }}">{{ item.name }}</label>
+        </div>
+      </form>
+    </div>
+  
+    <div class="d-flex align-items-center mb-4 pt-2">
+      <div class="input-group quantity mr-3" style="width: 130px">
+        <div class="input-group-btn">
+          <button class="btn btn-primary btn-minus" (click)="remove()">
+            <i class="fa fa-minus"></i>
+          </button>
+        </div>
+        <input type="text" class="form-control bg-secondary border-0 text-center" [value]="value"/>
+        <div class="input-group-btn">
+          <button class="btn btn-primary btn-plus" (click)="add()">
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
+      </div>
+      <button class="btn btn-primary px-3" (click)="addToCart(singleProduct)">
+        <i class="fa fa-shopping-cart mr-1"></i>
+        Add To Cart
+      </button>&nbsp;&nbsp;&nbsp;&nbsp;
+      <button class="btn btn-success px-3" [routerLink]="['/Shop/shop']">
+        <i class="fas fa-cart-plus mr-1"></i>
+        Add More Products
+      </button>
+    </div>
+    <div class="d-flex pt-2">
+      <strong class="text-dark mr-2">Share on:</strong>
+      <div class="d-inline-flex">
+        <a class="text-dark px-2" *ngFor="let links of socialLinks">
+          <i class="{{ links }}"></i>
+        </a>
+      </div>
     </div>
   </div>
 </div>

@@ -31,7 +31,7 @@
   </div>
 </div>
 
-<div class="col-lg-4 col-md-6 col-sm-6 pb-1" *ngFor="let product of productList | filter : category 
+<div class="col-lg-4 col-md-6 col-sm-6 pb-1" *ngFor="let product of productList 
      | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItem }; let i = index"
 >
   <div class="product-item bg-light mb-4" *ngIf="isShow">

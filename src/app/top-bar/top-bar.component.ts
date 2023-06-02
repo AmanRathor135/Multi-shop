@@ -19,14 +19,16 @@ export class TopBarComponent implements OnInit, OnDestroy {
   searchText!: string;
   value: any = '';
   currentLanguage: any;
+  user:string = 'My Account'
   totalCartProduct: any = 0;
   totalFavoriteProduct: any = 0;
   subscription: Subscription[] = [];
   currencyName: any = 'USD';
 
-  DropDownMenu1: any[] = ['My Account', 'Sign in', 'Sign up'];
+  DropDownMenu1: any[] = ['Sign in', 'Sign up', 'Logout'];
   DropDownMenu2: any[] = ['USD', 'EUR', 'GBP', 'CAD', 'INR'];
-  DropDownMenu3: any[] = ['EN', 'HI', 'GU', 'FR', 'AR', 'RU'];
+  DropDownMenu3: any[] = ['EN', 'HI', 'FR', 'AR', 'RU'];
+  
   topBarList: any[] = [
     { name: 'About', route: 'Home' },
     { name: 'Contact', route: 'contact' },
@@ -86,16 +88,24 @@ export class TopBarComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       location.reload();
     });
+  };
+
+  accountHandler(item:any){
+    if(item == 'Sign in'){
+      this.router.navigate(['/auth']);
+    }
+    else if (item == 'Sign up'){
+      this.router.navigate(['/auth/register']);
+    }
+    else{
+      console.log("logout",item);
+    }
   }
 
   Search(data: any) {
     let url = `Shop/shop/${data.value.data}`;
     if (data) {
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        setTimeout(() => {
-          this.router.navigate([url]); // navigate to shop component route
-        }, 1);
-      });
+          this.router.navigate([url], {queryParams: {search:data.value.data}}); // navigate to shop component route
     }
     this.value = '';
   }

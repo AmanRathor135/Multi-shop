@@ -12,19 +12,21 @@ import { ProductService } from 'src/app/services/product.service';
 export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() filterProductList:any;
+
   subscription:Subscription[] = [];
   total: number = 0;
   currency: any;
   currencyPrice:any;
+  category: any;
+  totalRate: any;
+  math = Math;
+  data:any = {};
   itemsPerPage:number = 6;
-  totalItem:any=20;
-  favoriteItemList:any[] = [];
+  totalItem:any = 20;
   page: number = 1;
   isShow: boolean = true;
-  category: any;
-  math = Math;
   productList: any[] = [];
-  totalRate: any;
+  favoriteItemList:any[] = [];
 
   Dropdown1: any[] = [
     {
@@ -66,12 +68,10 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.subscription.push(sub1);
 
-    let sub2 = this.activateRoute.paramMap.subscribe((res: any) => {      
-      setTimeout(() => { this.category = res.params.id;}, 1);
-      if (this.category) {
-        this.getProducts();
-        this.cdr.markForCheck();
-      } 
+    let sub2 = this.activateRoute.queryParamMap.subscribe((res: any) => {      
+      this.data = res.params;
+      this.getProductsByFilter();
+      this.cdr.markForCheck();
     });
     this.subscription.push(sub2);
 
@@ -79,9 +79,23 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
-      this.page = 1
+      this.page = 1;
       this.productList = this.filterProductList; 
-      this.totalItem = this.filterProductList?.length;   
+      this.totalItem = this.filterProductList?.length; 
+  };
+
+  getProductsByFilter(){
+    let data = this.data;    
+    let sub5 = this.service.getFilteredProducts(data).subscribe({
+      next: (res: any) => {
+        this.productList = res.data?.productList;
+        // this.totalItem = this.productList.length;
+        this.productList?.map((product) => (product['isShow'] = false));
+      },
+      error: (err: any) => { console.log('err', err); },
+      complete: () => {this.cdr.markForCheck();},
+    });
+    this.subscription.push(sub5);
   }
 
 
@@ -123,29 +137,8 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
   pageChangeEvent(event: number) {
     this.totalItem = 20;
     this.page = event;
-    let sub3 = this.service.get({page:this.page,limit:this.itemsPerPage}).subscribe({
-      next: (res:any) => { 
-        this.productList = res.data.productList;
-       },
-      error: (err: any) => { console.log('err', err); },
-      complete: () => {this.cdr.markForCheck();},
-    });
-    this.subscription.push(sub3);
-  };
-
-
-  /**
-   * get Products based on their Category using their product id and passed in url as a Params in Product Service
-   * If it give success then we get the products as a Response which we store in productList and go to complete 
-   * If it gives error then it will show error
-   */
-  getProducts() {
-    let sub4 = this.service.getSpecificCategory(this.category).subscribe({
-      next: (res: any) => { this.productList = res; },
-      error: (err: any) => { console.log('err', err); },
-      complete: () => {this.cdr.markForCheck();},
-    });
-    this.subscription.push(sub4);
+    this.data = {page:this.page,limit:this.itemsPerPage};
+    this.getProductsByFilter();
   };
 
   /**
@@ -154,15 +147,9 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
    * If it gives error then it will show error
    */
   getAllProducts() {
-    let sub5 = this.service.get({}).subscribe({
-      next: (res: any) => {
-        this.productList = res.data?.productList;
-        this.productList?.map((product) => (product['isShow'] = false));
-      },
-      error: (err: any) => { console.log('err', err); },
-      complete: () => {this.cdr.markForCheck();},
-    });
-    this.subscription.push(sub5);
+    this.page = 1;
+    this.data = {};
+    this.getProductsByFilter();
   };
 
   /**
@@ -179,18 +166,8 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
    */
   sorting(value:any) {
     this.page = 1;
-    let sort = {
-      sort:{
-        field: value, // fieldName
-        order: "desc"  // asc or desc
-    }}
-
-    let sub6 = this.service.get(sort).subscribe({
-      next: (res: any) => { this.productList = res.data.productList; },
-      error: (err: any) => { console.log('err', err); },
-      complete: () => {this.cdr.markForCheck();},
-    });
-    this.subscription.push(sub6);
+    this.data = { sort:{ field: value,  order: "desc" } };
+    this.getProductsByFilter();
   };
 
   /**
