@@ -111,23 +111,38 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   };
 
   addToCart(item: any) {
-    this.selectedItem = item;
-    this.selectedItem['quantity'] = this.value;
-    let cartItems: any[] = [];
 
-    const getCartItem = JSON.parse(localStorage.getItem('addCartItem') || '{}');
-    if (getCartItem && getCartItem.length) {
-      cartItems = getCartItem;
-      cartItems.push(this.selectedItem);
-    } else {
-      cartItems.push(this.selectedItem);
-    }
+    this.service.InsertInCart({"productId":item._id, quantity:this.value}).subscribe({
+      next: (res:any) => {
+        if(res){
+          this.toastr.success(res.message);
+        }
+        // { res.type == 'success'? this.toastr.success(res.message):this.toastr.warning(res.message);}
+      },
+      error: (err:any) => {
+        console.log("add to cart error",err);
+      },
+      complete: () => {
+        this.cdr.markForCheck();
+      }
+    });
+    // this.selectedItem = item;
+    // this.selectedItem['quantity'] = this.value;
+    // let cartItems: any[] = [];
 
-    cartItems = [...new Map(cartItems.map((item: any) => [item['_id'], item])).values()];
+    // const getCartItem = JSON.parse(localStorage.getItem('addCartItem') || '{}');
+    // if (getCartItem && getCartItem.length) {
+    //   cartItems = getCartItem;
+    //   cartItems.push(this.selectedItem);
+    // } else {
+    //   cartItems.push(this.selectedItem);
+    // }
+
+    // cartItems = [...new Map(cartItems.map((item: any) => [item['_id'], item])).values()];
     
-    localStorage.setItem('addCartItem', JSON.stringify(cartItems));
+    // localStorage.setItem('addCartItem', JSON.stringify(cartItems));
     this.service.totalCartItems.next(true);
-    this.toastr.success('Item Added Successfully!');
+    // this.toastr.success('Item Added Successfully!');
   };
 
   rating(value: any) {

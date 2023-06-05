@@ -30,7 +30,7 @@
                              <div class="align-middle">{{item.quantity}}</div>
                          </td>
                          <td class="align-middle">{{((item.price * item.quantity)*currencyPrice) | currency:currency}}</td>
-                         <td class="align-middle"><button class="btn btn-sm btn-danger" (click)="removeRow(i)"><i class="fa fa-times"></i></button></td>
+                         <td class="align-middle"><button class="btn btn-sm btn-danger" (click)="removeRow(item?.productId)"><i class="fa fa-times"></i></button></td>
                      </tr>
                  </tbody>
                  <tbody *ngIf="!cartProduct.length">

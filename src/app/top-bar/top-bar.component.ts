@@ -8,6 +8,7 @@ import {
 import { ProductService } from '../services/product.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-top-bar',
@@ -19,11 +20,12 @@ export class TopBarComponent implements OnInit, OnDestroy {
   searchText!: string;
   value: any = '';
   currentLanguage: any;
-  user:string = 'My Account'
+  user:any = 'My Account'
   totalCartProduct: any = 0;
   totalFavoriteProduct: any = 0;
   subscription: Subscription[] = [];
   currencyName: any = 'USD';
+  helper:any = new JwtHelperService();
 
   DropDownMenu1: any[] = ['Sign in', 'Sign up', 'Logout'];
   DropDownMenu2: any[] = ['USD', 'EUR', 'GBP', 'CAD', 'INR'];
@@ -47,11 +49,17 @@ export class TopBarComponent implements OnInit, OnDestroy {
     private service: ProductService,
     private router: Router,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.service.currency.next(localStorage.getItem('currency'));
     this.service.totalCartItems.next(true);
+
+    this.service.isLoggedIn.subscribe((res:any) => {
+      if(res){
+        this.getUserName();
+      }
+    });
 
     let sub1 = this.service.totalCartItems.subscribe((res: any) => {
       if (res) {
@@ -68,19 +76,28 @@ export class TopBarComponent implements OnInit, OnDestroy {
     this.subscription.push(sub2);
   }
 
+  getUserName(){
+    if(localStorage.getItem('token')){
+      let name = localStorage.getItem('token');
+      this.user = this.helper.decodeToken(name);
+      this.user = this.user.firstName;
+      // console.log("user", this.user); 
+    };
+  };
+
   getTotalCartProduct() {
     if (localStorage.getItem('addCartItem')) {
       let total: any = localStorage.getItem('addCartItem');
       this.totalCartProduct = JSON.parse(total).length;
       this.cdr.markForCheck();
-    }
-  }
+    };
+  };
 
   currency(event: any) {
     this.currencyName = event;
     localStorage.setItem('currency', event);
     this.service.currency.next(localStorage.getItem('currency'));
-  }
+  };
 
   changeLanguage(lang: any) { 
     this.currentLanguage = lang;
@@ -99,8 +116,12 @@ export class TopBarComponent implements OnInit, OnDestroy {
     }
     else{
       console.log("logout",item);
+      // this.service.isLoggedIn.next(false);
+      // localStorage.clear();
+      // this.user = null;
+      // this.router.navigate(['/auth/login']);
     }
-  }
+  };
 
   Search(data: any) {
     let url = `Shop/shop/${data.value.data}`;
@@ -108,11 +129,11 @@ export class TopBarComponent implements OnInit, OnDestroy {
           this.router.navigate([url], {queryParams: {search:data.value.data}}); // navigate to shop component route
     }
     this.value = '';
-  }
+  };
 
   ngOnDestroy(): void {
     this.subscription.forEach((subscriptionRow: any) => {
       subscriptionRow.unsubscribe();
     });
-  }
+  };
 }

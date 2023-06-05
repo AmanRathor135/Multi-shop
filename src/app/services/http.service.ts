@@ -29,4 +29,15 @@ export class HttpService {
   postReq(url:string, data:any){
     return this.http.post(url, data)
   }
+
+  // Http DELETE request handler
+  /**
+   * 
+   * @param url api url name
+   * @param params pass request details
+   * @returns api response
+   */
+  deleteReq(url:string, params?:any) {
+    return this.http.delete(url,params)
+  }
 }

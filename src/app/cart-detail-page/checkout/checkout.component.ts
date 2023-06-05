@@ -88,6 +88,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void { 
+    this.getCartProductList();
     this.getFavoriteItems();
 
     /**
@@ -104,9 +105,8 @@ export class CheckoutComponent implements OnInit {
     /**
      * get cartProductList from Local Storage
      */
-    this.cartProductList = localStorage.getItem('addCartItem');
-    this.cartProductList = JSON.parse(this.cartProductList);
-    this.totalPrice();
+    // this.cartProductList = localStorage.getItem('addCartItem');
+    // this.cartProductList = JSON.parse(this.cartProductList);
   }
 
   /**
@@ -122,6 +122,21 @@ export class CheckoutComponent implements OnInit {
   get shippingForm(): { [key: string]: AbstractControl } {
     return this.shippingAddressForm.controls;
   }
+
+  getCartProductList(){
+    this.service.cartProductList().subscribe({
+      next: (res:any) => {
+        console.log("cart list res",res);
+        this.cartProductList = res.data;  
+        // this.cartProductList = [...new Map(this.cartProductList.map((item: any) => [item['title'], item])).values()];
+        this.totalPrice();
+      },
+      error: (err:any) => {
+        console.log("cart List error", err);
+      },
+      complete: () => { this.cdr.markForCheck();}
+    });
+  };
 
   /**
    * get Price of Selected Currency from Local Storage

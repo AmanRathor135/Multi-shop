@@ -13,11 +13,10 @@ export class ProductService {
       pageTitle: 'Home',
       url: '',
     },
-  ]);
+  ]);  
 
-  
-
-  totalCartItems = new BehaviorSubject<any>(false);
+  isLoggedIn = new BehaviorSubject<boolean>(false);
+  totalCartItems = new BehaviorSubject<any>(0);
   totalFavoriteItems = new BehaviorSubject<number>(0);
   currency = new BehaviorSubject<any>(localStorage.getItem('currency'));
   currencyValue = new BehaviorSubject<any>({ USD: 1 });
@@ -38,12 +37,6 @@ export class ProductService {
   getAllCategories(): Observable<any> {
     return this.service.getReq('http://192.168.1.175:5050/categories');
   };
-  
-  // getSpecificCategory(params?: any): Observable<any> {
-  //   return this.service.getReq(
-  //     `http://192.168.1.175:5050/products/categories/${params}`
-  //     );
-  // };
     
   getSingleProduct(params?: any): Observable<any> {
       return this.service.postReq(`http://192.168.1.175:5050/products/${params}`,{});
@@ -54,7 +47,26 @@ export class ProductService {
         `https://api.freecurrencyapi.com/v1/latest?apikey=sgiPfh4j3aXFR3l2CnjWqdKQzxpqGn9pX5b3CUsz&base_currency=USD`
         );
   };
-      
+
+  InsertInCart(data:any): Observable<any> {
+    return this.service.postReq('http://192.168.1.175:5050/products/add-to-cart',data);
+  };
+  
+  cartProductList(): Observable<any> {
+    return this.service.getReq('http://192.168.1.175:5050/products/cart-products')
+  }
+
+  removeCartProduct(params:any): Observable<any> {
+    return this.service.deleteReq(`http://192.168.1.175:5050/products/cart-product/${params}`)
+  }
+     
+  SignUp(data:any): Observable<any> {    
+    return this.service.postReq('http://192.168.1.175:5050/register',data);
+  };
+
+  SignIn(data:any): Observable<any> {
+    return this.service.postReq('http://192.168.1.175:5050/login',data)
+  }
       
   vendorSliderList(): Observable<any> {
     return this.service.getReq('http://192.168.1.175:5050/company');

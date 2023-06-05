@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -47,6 +47,7 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
     private service: ProductService,
     private activateRoute: ActivatedRoute,
     private cdr:ChangeDetectorRef,
+    private router:Router
   ) {
     this.service.totalFavoriteItems.next(this.total);
   }
@@ -83,6 +84,19 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
       this.productList = this.filterProductList; 
       this.totalItem = this.filterProductList?.length; 
   };
+
+  detailsPage(productId:any){
+    // console.log("productId", productId);
+    if(localStorage.getItem('token')){
+      this.router.navigate(['/Shop/Shop-details', productId])
+    }
+    else{
+      let result = confirm("Please login first");
+      if(result){
+        this.router.navigate(['auth/login']);
+      }
+    }
+  }
 
   getProductsByFilter(){
     let data = this.data;    

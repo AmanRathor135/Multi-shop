@@ -15,11 +15,21 @@ export class HeaderInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDc5YjE1MjZkMzAxZTI0MzI2MzI4ZTQiLCJlbWFpbCI6ImpheUBnbWFpbC5jb20iLCJpYXQiOjE2ODU3MDY1MjZ9.mtmK9rgHyACXYsETz9dnxnnBmVO1eGDpQ4S6MkqugJc`;
+    let token;
+    if(localStorage.getItem('token')){
+      token = localStorage.getItem('token');
+    }
+    else{
+      token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDc5YjE1MjZkMzAxZTI0MzI2MzI4ZTQiLCJpYXQiOjE2ODU5MzYyNzh9.9fMAYH80Vfjx-DuPYdRar5YaJ1LnMZ1Qfuj2j4nUWwk`;
+    }
+    
     if (token) {
       request = request.clone({
         headers: request.headers.set('token', token),
       });
+    }
+    else{
+      
     }
     return next.handle(request);
   }

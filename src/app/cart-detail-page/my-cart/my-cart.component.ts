@@ -40,6 +40,7 @@ export class MyCartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getCartProductList();
     this.getFavoriteItems();
     this.currencyValue();
     this.service.totalCartItems.next(true);
@@ -58,11 +59,26 @@ export class MyCartComponent implements OnInit {
     /**
      * get cartProduct from Local Storage
      */
-    const getSelectedItem: any = localStorage.getItem('addCartItem') || '[]';
-    this.cartProduct = JSON.parse(getSelectedItem);
-    this.service.totalCartItems.next(true);
-    this.totalPrice();
+    // const getSelectedItem: any = localStorage.getItem('addCartItem') || '[]';
+    // this.cartProduct = JSON.parse(getSelectedItem);
+    // this.totalPrice();
   }
+  
+  getCartProductList(){
+    this.service.cartProductList().subscribe({
+      next: (res:any) => {
+        // console.log("cart list res",res);
+        this.cartProduct = res.data;
+        // this.cartProduct = [...new Map(this.cartProduct.map((item: any) => [item['title'], item])).values()];
+        // this.service.totalCartItems.next(true);
+        this.totalPrice();
+      },
+      error: (err:any) => {
+        console.log("cart List error", err);
+      },
+      complete: () => { this.cdr.markForCheck();}
+    });
+  };
 
   /**
    * get Total Favorite Items from Local Storage
@@ -109,17 +125,38 @@ export class MyCartComponent implements OnInit {
    * @param index which needs to be deleted
    */
   removeRow(index: any) {
-      if (this.cartProduct.length) {
-        this.cartProduct.splice(index, 1);
-        localStorage.setItem('addCartItem', JSON.stringify(this.cartProduct));
-        this.service.totalCartItems.next(true);
-        this.toastr.error('Item Deleted Successfully!');
-
+    this.service.removeCartProduct(index).subscribe({
+      next: (res:any) => {
+        if(res){
+          this.toastr.success(res.message);
+          this.getCartProductList();
+        }
+      },
+      error: (err:any) => {
+        console.log("remove cart Item error", err);        
+      },
+      complete: () => { 
         this.router.navigateByUrl('/', { skipLocationChange: true })
           .then(() => {
             this.router.navigate(['cart-detail/my-cart']); // navigate to same route
           });
-        this.cdr.markForCheck();
-      };
+        this.cdr.markForCheck(); }
+    });
+    
+    // let result = confirm("Do you want to remove the Item");
+    // if(result){
+    //   if (this.cartProduct.length) {
+    //     this.cartProduct.splice(index, 1);
+    //     // localStorage.setItem('addCartItem', JSON.stringify(this.cartProduct));
+    //     this.service.totalCartItems.next(true);
+    //     this.toastr.error('Item Deleted Successfully!');
+
+    //     this.router.navigateByUrl('/', { skipLocationChange: true })
+    //       .then(() => {
+    //         this.router.navigate(['cart-detail/my-cart']); // navigate to same route
+    //       });
+    //     this.cdr.markForCheck();
+    //   };
+    // }
   };
 }

@@ -14,7 +14,7 @@
 
         <div ngbDropdown>
           <button type="button" class="btn btn-sm btn-light dropdown-toggle mr-3" ngbDropdownToggle>
-            {{user}}
+            {{user | titlecase}}
             <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
               <ng-container *ngFor="let list of DropDownMenu1">
                 <button class="dropdown-item" ngbDropdownItem type="button" (click)="accountHandler(list)">{{ list }}</button>
