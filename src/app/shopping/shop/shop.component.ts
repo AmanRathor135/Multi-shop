@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/services/product.service';
+import { __values } from 'tslib';
 
 @Component({
   selector: 'app-shop',
@@ -8,13 +9,12 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./shop.component.scss'],
   changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class ShopComponent {
+export class ShopComponent implements OnInit, OnDestroy {
 
   subscription:Subscription[] = [];
   currency: any;
   currencyPrice:any;
   filterData: any;
-  filterProductList:any;
   filterValue: any = {
     'filter': {
       'price': [],
@@ -25,26 +25,20 @@ export class ShopComponent {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private service: ProductService
+    private service: ProductService,
   ) {
-    service.Breadcrumb.next([
-      {
-        pageTitle: 'Home',
-        url: '',
-      },
-      {
-        pageTitle: 'Shop',
-        url: 'Shop/shop',
-      },
-      {
-        pageTitle: 'Shop List',
-        url: 'Shop/shop',
-      }
-    ]);
+    this.getBreadcrumb();
   }
 
   ngOnInit(): void {
     this.getFilterOptions();
+    this.service.isLoggedIn.next(true);
+    this.service.cartItemsCount();
+    this.service.favoriteItemsCount();
+    this.getCurrencyName();
+  }
+
+  getCurrencyName(){
     let sub1 = this.service.currency.subscribe((res: any) => {
       if (res) { 
         this.currency = res; 
@@ -55,9 +49,7 @@ export class ShopComponent {
     this.subscription.push(sub1);
   }
 
-  /**
-   * get Price of Selected Currency from Local Storage
-   */
+  // get Price of Selected Currency from Local Storage
   getPrice(){
     let value:any = localStorage.getItem('currencyPrice');
     value = JSON.parse(value);
@@ -65,21 +57,13 @@ export class ShopComponent {
   };
 
   getFilterOptions() {
-    this.service.filterOptions().subscribe({
+    let sub2 = this.service.filterOptions().subscribe({
       next: (res: any) => { this.filterData = res.data; },
       error: (err: any) => { console.log('Filter Error', err); },
       complete: () => { this.cdr.markForCheck(); },
     });
+    this.subscription.push(sub2);
   };
-
-  getFilterProduct(){
-    let data = this.filterValue;
-    this.service.getFilteredProducts(data).subscribe({
-      next: (res:any) => { this.filterProductList = res.data.productList; },
-      error: (err: any) => { console.log('Filter Product Error', err); },
-      complete: () => { this.cdr.markForCheck(); },
-    })
-  }
 
   filterDataValue(filterOption: any) {
     let price = this.filterValue.filter.price;
@@ -99,22 +83,39 @@ export class ShopComponent {
       } 
       else { price.push(value); }
     } 
-    else if (filterOption.color) {
-      if (color.includes(filterOption.color)) {
-        color.splice(color.indexOf(filterOption.color), 1);
-      } 
-      else {
-        color.push(filterOption.color);
-      }
+    else if (filterOption.color) 
+    {
+      if (color.includes(filterOption.color)) { color.splice(color.indexOf(filterOption.color), 1); } 
+      else { color.push(filterOption.color); }
     } 
-    else if (filterOption.size) {
-      if (size.includes(filterOption.size)) {
-        size.splice(size.indexOf(filterOption.size), 1);
-      } 
-      else {
-        size.push(filterOption.size);
-      }
+    else if (filterOption.size) 
+    {
+      if (size.includes(filterOption.size)) { size.splice(size.indexOf(filterOption.size), 1); } 
+      else { size.push(filterOption.size); }
     }
-    this.getFilterProduct();
+
+    this.filterValue = {
+      'filter': {
+        'price': price,
+        'color': color,
+        'size': size,
+      },
+    };
+  };
+
+  // getting the breadcrumb value using Product Service Behavior Subject
+  getBreadcrumb(){
+    this.service.Breadcrumb.next([
+      { pageTitle: 'Home', url: '', },
+      { pageTitle: 'Shop', url: 'Shop', },
+      { pageTitle: 'Shop List', url: 'Shop', }
+    ]);
+  };
+
+  ngOnDestroy(): void {
+    // Removes all the subscriptions to avoid memory leak issue
+    this.subscription.forEach((subscriptionRow:any) => {
+      subscriptionRow.unsubscribe();
+    });
   }
 }

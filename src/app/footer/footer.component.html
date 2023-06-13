@@ -37,16 +37,16 @@
               required
               style="width: 80%; border: 2px solid rgb(237, 193, 50);"
               />
-              <button type="submit" class="btn btn-warning btn-square" (click)="signUp(form)" style="width: 20%; height: 38px;">
+              <button type="submit" class="btn btn-warning btn-square" (click)="signUp(form)" style="width: 30%; height: 38px;">
                 SignUp
               </button>
             </span>
             <div *ngIf="!email?.valid && (form?.submitted || email?.touched)" class="error">
               <ul>
-                <li *ngIf="email.hasError('required')" style="color: orangered">
+                <li *ngIf="email.hasError('required')" style="color: red">
                   E-mail is required
                 </li>
-                <li *ngIf="email.hasError('pattern')" style="color: orangered">
+                <li *ngIf="email.hasError('pattern')" style="color: red">
                   Invalid E-mail Address
                 </li>
               </ul>
@@ -55,8 +55,8 @@
         </form>
           <h6 class="text-secondary text-uppercase mt-4 mb-3">{{ footerNewsletter.follow }}</h6>
           <div class="d-flex">
-            <a class="btn btn-primary btn-square mr-2" href="#" *ngFor="let list of footerNewsletter.data">
-              <i class="{{ list }}"></i>
+            <a class="btn btn-primary btn-square mr-2" href="#" *ngFor="let social of footerNewsletter.socials">
+              <i class="{{ social }}"></i>
             </a>
           </div>
         </div>
@@ -77,4 +77,7 @@
   </div>
 </div>
 <!-- Footer End -->
+
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 

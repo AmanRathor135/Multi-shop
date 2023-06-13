@@ -10,9 +10,9 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
+// import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ToastrModule } from 'ngx-toastr';
 import { HeaderInterceptor } from './services/header.interceptor';
@@ -33,20 +33,16 @@ import { HeaderInterceptor } from './services/header.interceptor';
     FormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    BsDropdownModule.forRoot(),
-    NgbDropdownModule,
+    NgbModule,
     ToastrModule.forRoot({
-      timeOut: 1000,
+      timeOut: 2000,
       closeButton: true,
       progressBar: true,
     }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true },
-    {
-      provide: BsDropdownConfig,
-      useValue: { isAnimated: true, autoClose: true },
-    },
+    
   ],
   bootstrap: [AppComponent],
 })

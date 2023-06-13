@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -11,7 +12,7 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() filterProductList:any;
+  @Input() filterValue:any;
 
   subscription:Subscription[] = [];
   total: number = 0;
@@ -43,23 +44,26 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
   ];
   filter:any;
 
-  constructor(
-    private service: ProductService,
-    private activateRoute: ActivatedRoute,
-    private cdr:ChangeDetectorRef,
-    private router:Router
-  ) {
+  constructor(private service: ProductService, private activateRoute: ActivatedRoute, private cdr:ChangeDetectorRef,
+    private router:Router, private toastr:ToastrService) {
     this.service.totalFavoriteItems.next(this.total);
+    this.getParamsFromActiveRoute();
   }
 
   ngOnInit(): void {
-    this.getAllProducts();
-    this.service.totalCartItems.next(true);
+    // this.getAllProducts();
+    this.getCurrencyName(); 
+    this.rating(5);
+  }
 
-    let list:any = localStorage.getItem('favoriteItemList');
-    list = JSON.parse(list).length;
-    this.service.totalFavoriteItems.next(list); 
+  ngOnChanges() {
+      this.page = 1;
+      this.data = {'filter':this.filterValue.filter, 'page':this.page, 'limit':this.itemsPerPage};
+      this.getProductsByFilter();
+  };
 
+  // get Selected Currency Name using Behavior Subject of Product Service
+  getCurrencyName(){
     let sub1 = this.service.currency.subscribe((res: any) => {
       if (res) { 
         this.currency = res; 
@@ -68,90 +72,93 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
     this.subscription.push(sub1);
+  };
 
-    let sub2 = this.activateRoute.queryParamMap.subscribe((res: any) => {      
-      this.data = res.params;
+  // getting values as a Query Params using ActivatedRoute
+  getParamsFromActiveRoute(){
+    let sub2 = this.activateRoute.queryParamMap.subscribe((res: any) => {
+      this.page = 1;
+      this.data = {...res.params,'page':this.page,'limit':this.itemsPerPage};
       this.getProductsByFilter();
       this.cdr.markForCheck();
     });
     this.subscription.push(sub2);
-
-    this.rating(5);
   }
 
-  ngOnChanges() {
-      this.page = 1;
-      this.productList = this.filterProductList; 
-      this.totalItem = this.filterProductList?.length; 
-  };
-
+  // Route to Products Detail Page
   detailsPage(productId:any){
-    // console.log("productId", productId);
-    if(localStorage.getItem('token')){
-      this.router.navigate(['/Shop/Shop-details', productId])
-    }
-    else{
-      let result = confirm("Please login first");
-      if(result){
-        this.router.navigate(['auth/login']);
-      }
-    }
-  }
+    this.router.navigate(['/Shop/Shop-details', productId]);
+  };
 
   getProductsByFilter(){
     let data = this.data;    
-    let sub5 = this.service.getFilteredProducts(data).subscribe({
+    let sub3 = this.service.getFilteredProducts(data).subscribe({
       next: (res: any) => {
-        this.productList = res.data?.productList;
-        // this.totalItem = this.productList.length;
-        this.productList?.map((product) => (product['isShow'] = false));
+        if(res.type == 'success') {
+          this.productList = res.data.productList;
+          this.totalItem = res.totalProduct;
+        }
+        else {
+          this.productList = [];
+        }
+        // this.productList?.map((product) => (product['isShow'] = false));
       },
       error: (err: any) => { console.log('err', err); },
       complete: () => {this.cdr.markForCheck();},
     });
-    this.subscription.push(sub5);
-  }
+    this.subscription.push(sub3);
+  };
 
-
-  /**
-   * get Price of Selected Currency from Local Storage
-   */
+  // get Price of Selected Currency from Local Storage
   getPrice(){
     let value:any = localStorage.getItem('currencyPrice');
     value = JSON.parse(value);
     this.currencyPrice = value[this.currency];
   };
 
+  addToCart(productId:any){
+    this.service.InsertInCart({"productId":productId, quantity:1}).subscribe({
+      next: (res:any) => {
+        if (res.type=='success'){
+          this.toastr.success(res.message)
+          this.service.cartItemsCount();
+        }
+        else{
+          this.toastr.info(res.message);
+          this.router.navigate(['/auth/login']);
+        }
+      },
+      error: (err:any) => { console.log("add to cart error",err); },
+      complete: () => { this.cdr.markForCheck(); }
+    });
+  };
+
   /**
    * Adding a product in a Wishlist component
-   * @param product to add product as a favorite
+   * @param productId is a product's Id
    * if product.isShow true then it is added in favoriteItemList Array and set in Local Storage
    * else remove from favoriteItemList Array and update and set the Local Storage
    */
-  doFavorites(product: any, index:any) {
-    product.isShow = !product.isShow;
-    this.total = product.isShow ? this.total + 1 : this.total - 1;
-    this.service.totalFavoriteItems.next(this.total);    
-  
-    if(product.isShow === true){
-      this.favoriteItemList.push(product);
-      localStorage.setItem('favoriteItemList', JSON.stringify(this.favoriteItemList));
-    }
-    else {
-      this.favoriteItemList.splice(index,1);
-      localStorage.setItem('favoriteItemList', JSON.stringify(this.favoriteItemList))
-    }
-    this.cdr.markForCheck();
+  doFavorites(productId: any) {
+    let sub4 = this.service.addProductInFavorites({"productId":productId}).subscribe({
+      next: (res:any) => {
+        res.type=='success'? this.toastr.success(res.message):this.toastr.info(res.message); 
+        this.service.favoriteItemsCount();
+      },
+      error: (err:any) => { console.log("Do Favorites Error", err);},
+      complete: () => { this.cdr.markForCheck();}
+    });
+    this.subscription.push(sub4);
   };
 
   /** 
-  * Pagination of product using ngx-pagination
-  * @param event for pagination
-  */
+   * Pagination of product using ngx-pagination
+   * @param event for pagination
+   */
   pageChangeEvent(event: number) {
-    this.totalItem = 20;
     this.page = event;
-    this.data = {page:this.page,limit:this.itemsPerPage};
+    this.data.page = this.page
+    this.data.limit = this.itemsPerPage;
     this.getProductsByFilter();
   };
 
@@ -166,21 +173,20 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
     this.getProductsByFilter();
   };
 
-  /**
-   * get Products in Row or Column using click show function
-   */
+
+  // get Products in Row or Column using click show function
   show() {
     this.isShow = !this.isShow;
   };
 
   /**
-   * get Products as per @param value using Product Service's POST Method
+   * Sort Products using Product Service's POST Method
    * @param value as a key of product
-   * where we get data in ascending order
    */
   sorting(value:any) {
     this.page = 1;
-    this.data = { sort:{ field: value,  order: "desc" } };
+    this.data.page = this.page;
+    this.data.sort = {field: value,  order: "desc"};
     this.getProductsByFilter();
   };
 

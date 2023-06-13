@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
-import { AsyncSubject, BehaviorSubject, Observable } from 'rxjs';
+import { AsyncSubject, BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,15 +9,12 @@ export class ProductService {
   constructor(private service: HttpService) {}
 
   Breadcrumb = new BehaviorSubject([
-    {
-      pageTitle: 'Home',
-      url: '',
-    },
+    { pageTitle: 'Home', url: '' },
   ]);  
 
-  isLoggedIn = new BehaviorSubject<boolean>(false);
-  totalCartItems = new BehaviorSubject<any>(0);
+  totalCartItems = new BehaviorSubject<number>(0);
   totalFavoriteItems = new BehaviorSubject<number>(0);
+  isLoggedIn = new BehaviorSubject<boolean>(false);
   currency = new BehaviorSubject<any>(localStorage.getItem('currency'));
   currencyValue = new BehaviorSubject<any>({ USD: 1 });
   filterItem = new BehaviorSubject<any>(localStorage.getItem('filter'));
@@ -26,6 +23,7 @@ export class ProductService {
     return this.service.getReq('http://192.168.1.175:5050/');
   };
 
+  // Common API
   getFilteredProducts(data:any): Observable<any> {    
     return this.service.postReq('http://192.168.1.175:5050/products',data);
   };
@@ -43,30 +41,36 @@ export class ProductService {
   };
      
   getCurrencyPrice(): Observable<any> {
-      return this.service.getReq(
-        `https://api.freecurrencyapi.com/v1/latest?apikey=sgiPfh4j3aXFR3l2CnjWqdKQzxpqGn9pX5b3CUsz&base_currency=USD`
-        );
+    return this.service.getReq(
+      `https://api.freecurrencyapi.com/v1/latest?apikey=sgiPfh4j3aXFR3l2CnjWqdKQzxpqGn9pX5b3CUsz&base_currency=USD`
+    );
+  };
+  
+  // favorite API
+  addProductInFavorites(data:any): Observable<any>{
+    return this.service.postReq('http://192.168.1.175:5050/products/favourite',data)
   };
 
+  getFavoriteProduct(): Observable<any> {
+    return this.service.getReq('http://192.168.1.175:5050/products/favourite')
+  };
+
+  removeFavoriteProduct(params:any): Observable<any> {
+    return this.service.deleteReq(`http://192.168.1.175:5050/products/favourite/remove/${params}`)
+  };
+
+  // cart API
   InsertInCart(data:any): Observable<any> {
-    return this.service.postReq('http://192.168.1.175:5050/products/add-to-cart',data);
+    return this.service.postReq('http://192.168.1.175:5050/products/cart',data);
   };
   
   cartProductList(): Observable<any> {
-    return this.service.getReq('http://192.168.1.175:5050/products/cart-products')
-  }
-
-  removeCartProduct(params:any): Observable<any> {
-    return this.service.deleteReq(`http://192.168.1.175:5050/products/cart-product/${params}`)
-  }
-     
-  SignUp(data:any): Observable<any> {    
-    return this.service.postReq('http://192.168.1.175:5050/register',data);
+    return this.service.getReq('http://192.168.1.175:5050/products/cart');
   };
 
-  SignIn(data:any): Observable<any> {
-    return this.service.postReq('http://192.168.1.175:5050/login',data)
-  }
+  removeCartProduct(params:any): Observable<any> {
+    return this.service.deleteReq(`http://192.168.1.175:5050/products/cart/remove/${params}`);
+  };
       
   vendorSliderList(): Observable<any> {
     return this.service.getReq('http://192.168.1.175:5050/company');
@@ -82,6 +86,22 @@ export class ProductService {
   
   billingAddressForm(data:any): Observable<any> {
     return this.service.postReq('http://192.168.1.175:5050/details/billing',data);
+  };
+
+  cartItemsCount(){
+    this.cartProductList().subscribe({
+      next: (res:any) => { this.totalCartItems.next(res.data?.length); },
+      error: (err:any) => { console.log("cart List error", err); },
+      complete: () => { }
+    });
+  };
+
+  favoriteItemsCount(){
+    this.getFavoriteProduct().subscribe({
+      next: (res:any) => { this.totalFavoriteItems.next(res.data?.length); },
+      error: (err:any) => { console.log("wishlist Error", err); },
+      complete: () => { }
+    });
   };
 }
 

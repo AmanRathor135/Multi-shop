@@ -15,10 +15,8 @@ export class BreadcrumbComponent implements OnDestroy {
   constructor(private service:ProductService,private cdr:ChangeDetectorRef) { 
      this.getBreadcrumb();
   }
-  
-  /**
-   * getting the breadcrumb value using Product Service Behavior Subject
-   */
+
+  // getting the breadcrumb value using Product Service Behavior Subject
   getBreadcrumb(){
     let sub1 = this.service.Breadcrumb.subscribe((res) => {
       this.Breadcrumb$ = res; 

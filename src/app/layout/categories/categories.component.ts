@@ -8,23 +8,19 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./categories.component.scss'],
   changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class CategoriesComponent implements OnInit, OnDestroy {
+export class CategoriesComponent implements OnDestroy {
   title: string ='Categories';
   categoryListPage:any[] = [];
   subscription:Subscription[] = [];
 
-  constructor(private service:ProductService, private cdr:ChangeDetectorRef){}
-
-  ngOnInit(): void {
+  constructor(private service:ProductService, private cdr:ChangeDetectorRef){
     this.getCategories();
-  };
+  }
 
-  /**
-   * get list of Categories using Product Service
-   */
+  // get list of Categories using Product Service
   getCategories(){
     let sub1 = this.service.getAllCategories().subscribe({
-      next: (res:any) => { this.categoryListPage = res.data.categories; },
+      next: (res:any) => { this.categoryListPage = res.data?.categories; },
       error: (err:any) => { console.log("Categories error", err) },
       complete: () => {this.cdr.markForCheck();}
     });

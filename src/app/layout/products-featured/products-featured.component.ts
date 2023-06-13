@@ -5,6 +5,8 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -23,25 +25,17 @@ export class ProductsFeaturedComponent implements OnInit, OnDestroy {
   currencyPrice: any;
   math = Math;
   totalRate: any;
-  icons: any[] = [
-    'fa fa-shopping-cart',
-    'far fa-heart',
-    'fa fa-sync-alt',
-    'fa fa-search',
-  ];
 
-  constructor(private service: ProductService, private cdr: ChangeDetectorRef) {}
+  constructor(private service: ProductService, private cdr: ChangeDetectorRef, private router:Router, private toastr:ToastrService) {}
 
   ngOnInit(): void {
-    this.getCurrency();
+    this.getCurrencyName();
     this.getProducts();
     this.rating(5);
   }
 
-  /**
-   * get Selected Currency Name using Behavior Subject of Product Service
-   */
-  getCurrency() {
+  // get Selected Currency Name using Behavior Subject of Product Service
+  getCurrencyName() {
     let sub1 = this.service.currency.subscribe((res: any) => {
       if (res) {
         this.currency = res;
@@ -50,7 +44,49 @@ export class ProductsFeaturedComponent implements OnInit, OnDestroy {
       }
     });
     this.subscription.push(sub1);
-  }
+  };
+
+  addToCart(productId:any){
+    this.service.InsertInCart({"productId":productId, quantity:1}).subscribe({
+      next: (res:any) => {
+        if (res.type=='success'){
+          this.toastr.success(res.message)
+          this.service.cartItemsCount();
+        }
+        else{
+          this.toastr.info(res.message);
+          this.router.navigate(['/auth/login']);
+        }
+      },
+      error: (err:any) => { console.log("add to cart error",err); },
+      complete: () => { this.cdr.markForCheck(); }
+    });
+  };
+
+  // Route to Products Detail Page
+  detailsPage(productId:any){
+    this.router.navigate(['/Shop/Shop-details', productId]);
+  };
+
+  /**
+   * Adding a product in a Wishlist component
+   * @param productId is a product's Id
+   * if product.isShow true then it is added in favoriteItemList Array and set in Local Storage
+   * else remove from favoriteItemList Array and update and set the Local Storage
+   */
+  doFavorites(productId: any) {
+    // product.isShow = !product.isShow; 
+    let sub3 = this.service.addProductInFavorites({"productId":productId}).subscribe({
+      next: (res:any) => {
+        res.type=='success'? this.toastr.success(res.message):this.toastr.info(res.message); 
+        this.service.favoriteItemsCount();
+      },
+      error: (err:any) => { console.log("Do Favorites Error", err);},
+      complete: () => { this.cdr.markForCheck();}
+    });
+    this.subscription.push(sub3);
+  };
+
 
   /**
    * get Limited Products using Product Service after passing the params
@@ -60,16 +96,14 @@ export class ProductsFeaturedComponent implements OnInit, OnDestroy {
   getProducts() {
     this.data = {'type':'featured'};
     let sub2 = this.service.getFilteredProducts(this.data).subscribe({
-      next: (res: any) => { this.productList = res.data.productList; },
-      error: (err: any) => { console.log('err', err);},
+      next: (res: any) => { this.productList = res.data?.productList; },
+      error: (err: any) => { console.log('Featured Product Error', err);},
       complete: () => { this.cdr.markForCheck();},
     });
     this.subscription.push(sub2);
   }
 
-  /**
-   * get Price of Selected Currency from Local Storage
-   */
+  // get Price of Selected Currency from Local Storage
   getPrice() {
     let value: any = localStorage.getItem('currencyPrice');
     value = JSON.parse(value);

@@ -7,94 +7,6 @@
     <div class="col-lg-7 mb-5">
       <div class="contact-form bg-light p-30">
         <div id="success"></div>
-        <!-- <form name="form" #form="ngForm" autocomplete="on" novalidate>
-          <div class="form-group mt-3">
-            <input
-              type="text"
-              name="name"
-              class="form-control"
-              id="name"
-              #name="ngModel"
-              [(ngModel)]="contactForm.name"
-              placeholder="Your Name"
-              required
-            />
-            <div *ngIf="!name?.valid && (form?.submitted || name?.touched)" class="error">
-              <ul>
-                <li *ngIf="name.hasError('required')" style="color: red">
-                  Name is required
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="form-group mt-3">
-            <input
-              type="text"
-              class="form-control"
-              name="email"
-              id="email"
-              #email="ngModel"
-              [(ngModel)]="contactForm.email"
-              placeholder="Your E-mail"
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-              required
-            />
-            <div *ngIf="!email?.valid && (form?.submitted || email?.touched)" class="error">
-              <ul>
-                <li *ngIf="email.hasError('required')" style="color: red">
-                  E-mail is required
-                </li>
-                <li *ngIf="email.hasError('pattern')" style="color: red">
-                  Invalid E-mail Address
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="form-group mt-3">
-            <input
-              type="text"
-              class="form-control"
-              name="subject"
-              id="subject"
-              #subject="ngModel"
-              [(ngModel)]="contactForm.subject"
-              placeholder="Subject"
-              required
-            />
-            <div *ngIf="!subject?.valid && (form?.submitted || subject?.touched)" class="error">
-              <ul>
-                <li *ngIf="subject.hasError('required')" style="color: red">
-                  Subject is required
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="form-group mt-3">
-            <textarea
-              class="form-control"
-              name="message"
-              #message="ngModel"
-              [(ngModel)]="contactForm.message"
-              rows="8"
-              placeholder="Message"
-              required
-            >
-            </textarea>
-            <div *ngIf="!message?.valid && (form?.submitted || message?.touched)" class="error">
-              <ul>
-                <li *ngIf="message.hasError('required')" style="color: red">
-                  Message is required
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="mt-4">
-            <button type="submit" class="btn btn-warning" (click)="sendMessage(form)"> Send Message </button>
-          </div>
-        </form> -->
           <form [formGroup]="contactFormData" autocomplete="on">
             <div class="form-group mt-3">
               <input
@@ -103,7 +15,7 @@
                 name="name"
                 formControlName="name"
                 class="form-control"
-                placeholder="Your Name"
+                placeholder="Enter Name"
               />
               <div *ngIf="(submitted || form['name'].touched) && form['name'].invalid" class="mt-1 error">
                 <span *ngIf="form['name'].hasError('required')" style="color: red">
@@ -119,7 +31,7 @@
                 name="email"
                 formControlName="email"
                 class="form-control"
-                placeholder="Your E-mail"
+                placeholder="Enter E-mail"
               />
               <div *ngIf="(submitted || form['email'].touched) && form['email'].invalid" class="mt-1 error">
                 <span *ngIf="form['email'].hasError('required')" style="color: red">
@@ -138,7 +50,7 @@
                 name="subject"
                 formControlName="subject"
                 class="form-control"
-                placeholder="Your Subject"
+                placeholder="Enter Subject"
               />
               <div *ngIf="(submitted || form['subject'].touched) && form['subject'].invalid" class="mt-1 error">
                 <span *ngIf="form['subject'].hasError('required')" style="color: red">
@@ -154,7 +66,7 @@
               name="message"
               formControlName="message"
               rows="7"
-              placeholder="Message"
+              placeholder="Enter Message"
               required
             >
             </textarea>
@@ -166,7 +78,7 @@
             </div>
 
             <div class="mt-4">
-              <button type="submit" class="btn btn-warning" (click)="sendMessage()"> Send Message </button>
+              <button type="submit" class="btn btn-warning" (click)="ContactUS()"> Contact US </button>
             </div>
           </form>
       </div>

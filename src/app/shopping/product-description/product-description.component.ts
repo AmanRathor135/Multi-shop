@@ -1,18 +1,32 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
+import { ReviewService } from 'src/app/services/review.service';
 
 @Component({
   selector: 'app-product-description',
   templateUrl: './product-description.component.html',
   styleUrls: ['./product-description.component.scss'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class ProductDescriptionComponent {
+export class ProductDescriptionComponent implements OnInit, OnDestroy {
+
+  submitted:boolean = false;
+  isShow:boolean = true;
+  productId:any='';
+  starRating:any = 0;
+  limit:number = 3;
   category: any;
-  Tabs: any[] = ['Description', 'Information', 'Reviews (0)'];
-  feedbackForm:any = {
-    review:'',
-    name:'',
-    email:'',
-  }
+  reviewsData:any[] = [];
+  subscription:Subscription[] = [];
+  Tabs: any[] = ['Description', 'Information', 'Reviews'];
+
+  feedbackFrom: FormGroup = new FormGroup({
+    rating: new FormControl(null, [Validators.required]),
+    review: new FormControl('', [Validators.required])
+  });
 
   tabList: any[] = [
     {
@@ -34,7 +48,7 @@ export class ProductDescriptionComponent {
       ],
     },
     {
-      tab: 'Reviews (0)',
+      tab: 'Reviews',
       title: '1 review for "Product Name"',
       imgSrc: 'assets/img/user.jpg',
       name: 'John Doe',
@@ -50,9 +64,75 @@ export class ProductDescriptionComponent {
     },
   ];
     
-  constructor() {}
+  constructor(
+    private activeRoute:ActivatedRoute,
+    private reviewService:ReviewService, 
+    private toastr:ToastrService, 
+    private cdr:ChangeDetectorRef
+    ) {}
 
-  sendMessage(){
-    
+  ngOnInit(): void {
+    this.getSpecificProductId();
+  }
+  
+  // Using form in HTML as a feedbackFrom.controls
+  get form(): { [key: string]: AbstractControl } {
+    return this.feedbackFrom.controls;
+  };
+
+  // getting Specific Product Id from ActivatedRoute using Params
+  getSpecificProductId(){
+    let sub1 = this.activeRoute.paramMap.subscribe((res:any) => {
+      this.productId = res.params.id;      
+      this.showReviewsOnPage()
+      this.cdr.markForCheck();
+    });
+    this.subscription.push(sub1);
+  }
+
+  // Sending the Review of Specific Product using Product Services POST method
+  sendReview() {
+    this.submitted = true;
+    if(this.feedbackFrom.valid){
+      this.feedbackFrom.value['productId'] = this.productId;
+      let sub2 = this.reviewService.addReviewOnSpecificProduct(this.feedbackFrom.value).subscribe({
+        next: (res:any) => { 
+          res.type == 'success'? this.toastr.success(res.message): this.toastr.warning(res.message); 
+          this.submitted = false;
+        }, 
+        error: (err:any) => { console.log("Error in Adding Review", err); },
+        complete: () => { 
+          this.feedbackFrom.reset();
+          this.showReviewsOnPage();
+          this.cdr.markForCheck(); 
+        }
+      });
+      this.subscription.push(sub2);
+    }
+  };
+
+  // Getting the Review of Specific Product using Product Service's GET method
+  showReviewsOnPage(){
+    let sub3 = this.reviewService.getReviewOfSpecificProduct(this.productId).subscribe({
+      next: (res:any) => { this.reviewsData = res.data;},
+      error: (err:any) => { console.log("showing review Error",err); },
+      complete: () => {this.cdr.markForCheck(); }
+    });
+    this.subscription.push(sub3);
+  };
+
+  // loading Review when the reviews length is greater than limit
+  loadMoreReviews(){
+    this.limit = this.limit + 3;
+    if(this.reviewsData.length <= this.limit){
+      this.isShow = false;
+    }
+  };
+
+  ngOnDestroy(): void {
+    // Removes all the subscriptions to avoid memory leak issue
+    this.subscription.forEach((subscriptionRow: any) => {
+      subscriptionRow.unsubscribe();
+    });
   }
 }

@@ -34,21 +34,21 @@
 <div class="col-lg-4 col-md-6 col-sm-6 pb-1" *ngFor="let product of productList 
      | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItem }; let i = index"
 >
-  <div class="product-item bg-light mb-4" *ngIf="isShow">
+  <div class="product-item bg-light mb-4" *ngIf="isShow && productList?.length">
     <div class="product-img position-relative overflow-hidden" style="cursor: pointer">
       <div style="width: 100%">
         <img class="img-fluid w-100 p-5" src="{{ product.image }}" alt="..." style="width: 100% !important; height: 400px"/>
       </div>
       <div class="product-action">
-        <a class="btn btn-outline-dark btn-square" (click)="detailsPage(product._id)" >
-          <i class="fa fa-shopping-cart" style="color: rgb(64, 241, 64);"></i>
+        <a class="btn btn-outline-dark btn-square" (click)="addToCart(product._id)">
+          <i class="fa fa-shopping-cart"></i>
         </a>
-        <a class="btn btn-outline-dark btn-square" (click)="doFavorites(product, i)">
+        <a class="btn btn-outline-dark btn-square" (click)="doFavorites(product._id)">
           <i [ngClass]="{ far: !product.isShow, fa: product.isShow }" class="fa-heart"></i>
         </a>
-        <a class="btn btn-outline-dark btn-square">
+        <!-- <a class="btn btn-outline-dark btn-square">
           <i class="fa fa-sync-alt"></i>
-        </a>
+        </a> -->
         <a class="btn btn-outline-dark btn-square" (click)="detailsPage(product._id)" >
           <i class="fa fa-search"></i>
         </a>
@@ -56,7 +56,7 @@
     </div>
     <div class="text-center py-4">
       <div style="min-height: 75px">
-        <a class="h6 text-decoration-none" (click)="detailsPage(product._id)" >{{ product.title }}</a>
+        <a class="h6 text-decoration-none" (click)="detailsPage(product._id)" style="cursor: pointer !important;">{{ product.title }}</a>
       </div>
       <div class="d-flex align-items-center justify-content-center mt-2">
         <h5>{{ product.price*currencyPrice | currency : currency }}</h5>
@@ -77,12 +77,15 @@
           </ng-container>
         </ng-container>
       </div>
-      <small>(The Rating is {{ product.rating.rate }} Out of {{ product.rating.count }} Reviews)</small>
+      <small>({{ product.rating.rate }} / {{ product.rating.count }} Reviews)</small>
     </div>
   </div>
 </div>
+<div *ngIf="!(productList.length)" class="not-found">
+  <p class="fs-3 text-dark fw-bold">Product Not Found</p>
+</div>
 
-<div class="row" *ngIf="!isShow">
+<div class="row" *ngIf="!isShow && productList?.length">
   <table class="table table-light table-borderless table-hover text-center text-dark mb-0">
     <thead class="thead-dark">
       <tr>
@@ -95,12 +98,12 @@
       </tr>
   </thead>
     <tbody class="align-middle">
-      <tr *ngFor="let product of productList | filter : category
-          | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItem};"
+      <tr *ngFor="let product of productList
+        | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItem};"
       >
         <td class="align-middle fs-5">{{ product.id }}</td>
         <td class="align-middle">
-          <img src="{{ product.image }}" alt="" style="width: 70px;" />
+          <img src="{{ product.image }}" alt="" style="width: 70px; height: 80px;"  />
         </td>
         <td class="align-middle">{{ product.title }}</td>
         <td class="align-middle">{{ product.price*currencyPrice | currency : currency }}</td>
@@ -124,8 +127,8 @@
           </div>
         </td>
         <td class="align-middle">
-          <a class="btn btn-outline-dark btn-square" style="margin-left: 30px;" [routerLink]="['/Shop/Shop-details', product._id]">
-            <i class="fa fa-shopping-cart" style="color: rgb(64, 241, 64);"></i>
+          <a class="btn btn-outline-dark btn-square" style="margin-left: 30px;" (click)="detailsPage(product._id)">
+            <i class="fa fa-shopping-cart"></i>
           </a>
         </td>
       </tr>
@@ -133,6 +136,10 @@
   </table>
 </div>
 
-<div class="d-flex justify-content-center mt-5">
+<div class="d-flex justify-content-center mt-5" *ngIf="productList?.length">
   <pagination-controls class="text-decoration-none" (pageChange)="pageChangeEvent($event)"></pagination-controls>
 </div>
+
+
+
+<!-- <div *ngIf="productList?.length == 0"> No Product Available </div> -->

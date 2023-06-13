@@ -19,7 +19,6 @@ export class MyCartComponent implements OnInit {
   totalAmount: number = 0;
   currency: any;
   currencyPrice: any;
-  favItemLength: any;
   taxAmount: any = 10;
   cartProduct: any[] = [];
 
@@ -29,69 +28,32 @@ export class MyCartComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private toastr: ToastrService
   ) {
-    /**
-     * Set the Breadcrumb using Product Service
-     */
-    service.Breadcrumb.next([
-      { pageTitle: 'Home', url: '' },
-      { pageTitle: 'Shop', url: 'Shop/shop' },
-      { pageTitle: 'Shopping Cart', url: 'cart-detail/my-cart' },
-    ]);
+    this.getBreadcrumb();
   }
 
   ngOnInit(): void {
     this.getCartProductList();
-    this.getFavoriteItems();
-    this.currencyValue();
-    this.service.totalCartItems.next(true);
-
-    /**
-     * get Selected Currency Name using Behavior Subject of Product Service
-     */
-    this.service.currency.subscribe((res: any) => {
-      if (res) {
-        this.currency = res;
-        this.getPrice();
-        this.cdr.markForCheck();
-      }
-    });  
-    
-    /**
-     * get cartProduct from Local Storage
-     */
-    // const getSelectedItem: any = localStorage.getItem('addCartItem') || '[]';
-    // this.cartProduct = JSON.parse(getSelectedItem);
-    // this.totalPrice();
+    // this.currencyValue();
+    this.service.isLoggedIn.next(true);
+    this.service.favoriteItemsCount();
+    this.getCurrencyName();
   }
   
   getCartProductList(){
+    this.service.isLoggedIn.next(true);
     this.service.cartProductList().subscribe({
       next: (res:any) => {
-        // console.log("cart list res",res);
         this.cartProduct = res.data;
-        // this.cartProduct = [...new Map(this.cartProduct.map((item: any) => [item['title'], item])).values()];
-        // this.service.totalCartItems.next(true);
+        this.service.totalCartItems.next(this.cartProduct?.length);
         this.totalPrice();
       },
-      error: (err:any) => {
-        console.log("cart List error", err);
-      },
+      error: (err:any) => { console.log("Cart List error", err); },
       complete: () => { this.cdr.markForCheck();}
     });
   };
 
-  /**
-   * get Total Favorite Items from Local Storage
-   */
-  getFavoriteItems(){
-    let list: any = localStorage.getItem('favoriteItemList');
-    this.favItemLength = JSON.parse(list);
-    this.service.totalFavoriteItems.next(this.favItemLength.length);
-  }
-
-  /**
-   * Set the Currency Price in Local Storage using Product Service
-   */
+  
+  // Set the Currency Price in Local Storage using Product Service
   currencyValue() {  
     this.service.getCurrencyPrice().subscribe({
       next: (res: any) => {
@@ -101,62 +63,80 @@ export class MyCartComponent implements OnInit {
     }); 
   };
 
-  /**
-   * get Price of Selected Currency from Local Storage
-   */
+  // get Selected Currency Name using Behavior Subject of Product Service
+  getCurrencyName(){
+    this.service.currency.subscribe((res: any) => {
+      if (res) {
+        this.currency = res;
+        this.getPrice();
+        this.cdr.markForCheck();
+      }
+    });  
+  }
+  
+  // get Price of Selected Currency from Local Storage
   getPrice(){
     let value:any = localStorage.getItem('currencyPrice');
     value = JSON.parse(value);
     this.currencyPrice = value[this.currency];
   };
 
-  /**
-   * get Total Amount of cartProductList
-   */
+ 
+  // get Total Amount of cartProductList
   totalPrice() {
-    for (let i = 0; i < this.cartProduct.length; i++) {
+    for (let i = 0; i < this.cartProduct?.length; i++) {
       this.totalAmount += (this.cartProduct[i].price * this.cartProduct[i].quantity);
       this.cdr.markForCheck();
     };
   };
 
+  // Decrease the Selected Product Quantity
+  decreaseQuantity(index:any){
+    if(this.cartProduct[index].quantity>1) { this.cartProduct[index].quantity--; }
+    else { this.cartProduct[index].quantity = 1; }
+  }
+
+  // Increase the Selected Product Quantity
+  increaseQuantity(index:any){
+    this.cartProduct[index].quantity++;
+  }
+
   /**
    * Delete the selected record and fetch new list
-   * @param index which needs to be deleted
+   * @param cartId which needs to be deleted
    */
-  removeRow(index: any) {
-    this.service.removeCartProduct(index).subscribe({
-      next: (res:any) => {
-        if(res){
-          this.toastr.success(res.message);
-          this.getCartProductList();
-        }
-      },
-      error: (err:any) => {
-        console.log("remove cart Item error", err);        
-      },
-      complete: () => { 
-        this.router.navigateByUrl('/', { skipLocationChange: true })
-          .then(() => {
-            this.router.navigate(['cart-detail/my-cart']); // navigate to same route
-          });
-        this.cdr.markForCheck(); }
-    });
-    
-    // let result = confirm("Do you want to remove the Item");
-    // if(result){
-    //   if (this.cartProduct.length) {
-    //     this.cartProduct.splice(index, 1);
-    //     // localStorage.setItem('addCartItem', JSON.stringify(this.cartProduct));
-    //     this.service.totalCartItems.next(true);
-    //     this.toastr.error('Item Deleted Successfully!');
+  removeRow(cartId: any) {
+    this.service.isLoggedIn.next(true);
 
-    //     this.router.navigateByUrl('/', { skipLocationChange: true })
-    //       .then(() => {
-    //         this.router.navigate(['cart-detail/my-cart']); // navigate to same route
-    //       });
-    //     this.cdr.markForCheck();
-    //   };
-    // }
+    let result = confirm("Do You want to Remove the Item from Cart?");
+    if(result){
+      if(this.cartProduct.length){
+        this.service.removeCartProduct(cartId).subscribe({
+          next: (res:any) => {
+            if(res.type == 'success'){
+              this.toastr.success(res.message);
+              this.getCartProductList();
+            }
+          },
+          error: (err:any) => { console.log("remove cart Item error", err); },
+          complete: () => { 
+            this.router.navigateByUrl('/', { skipLocationChange: true })
+              .then(() => {
+                this.router.navigate(['cart-detail/my-cart']); // navigate to same route
+            });
+            this.cdr.markForCheck(); 
+          }
+        });
+      } 
+    }
+  };
+
+  // Set the Breadcrumb using Product Service
+  getBreadcrumb(){
+    this.service.Breadcrumb.next([
+      { pageTitle: 'Home', url: '' },
+      { pageTitle: 'Shop', url: 'Shop' },
+      { pageTitle: 'Shopping Cart', url: 'cart-detail/my-cart' },
+    ]);
   };
 }

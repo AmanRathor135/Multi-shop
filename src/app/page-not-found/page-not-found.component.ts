@@ -9,9 +9,10 @@ import { ProductService } from '../services/product.service';
 })
 export class PageNotFoundComponent {
   constructor(private service:ProductService) {
-    /**
-     * Set Breadcrumb in Product Service
-     */
+    this.service.cartItemsCount();
+    this.service.favoriteItemsCount();
+
+    //  Set Breadcrumb in Product Service
     service.Breadcrumb.next([]);
   }
 }

@@ -19,9 +19,7 @@ export class OfferComponent implements OnInit, OnDestroy {
     this.getOfferPage();
   }
 
-  /**
-   * getting offerPage using Product Service
-   */
+  // getting offerPage using Product Service
   getOfferPage(){
     let sub1 = this.service.getBannerPoster().subscribe({
       next: (res:any) => { this.offers = res.data.special_offer; },

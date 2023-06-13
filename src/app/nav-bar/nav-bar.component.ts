@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { ProductService } from '../services/product.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
@@ -10,8 +11,9 @@ import { Subscription } from 'rxjs';
 })
 export class NavBarComponent implements OnInit, OnDestroy {
   category: any;
-  totalCartProduct: any = 0;
-  totalFavoriteProduct: any = 0;
+  totalCartProduct: any;
+  isShowNav:boolean = false;
+  totalFavoriteProduct: any;
   categoryList: any[] = [];
   subscription: Subscription[] = [];
 
@@ -24,28 +26,39 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   navbarList: any[] = [
     { category: 'Home', route: 'Home' },
-    { category: 'Shop', route: 'Shop/shop' },
+    { category: 'Shop', route: 'Shop' },
+    { category: 'Contact', route: 'contact' },
   ];
 
   constructor(
     private service: ProductService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private toastr:ToastrService
   ) { };
   
   ngOnInit(): void {
     this.filter('Home');
     this.getCategories();
-    this.service.totalCartItems.next(true);
+    this.calculateTotalCartItems();
+    this.calculateTotalFavoriteItems();
+  };
 
+  toggleNav(){
+    this.isShowNav = !this.isShowNav
+  }
+
+  // Counting the Cart Items which is Selected using Product Service's Behavior Subject
+  calculateTotalCartItems(){
     let sub1 = this.service.totalCartItems.subscribe((res: any) => {
-      if (res) {
-        this.getTotalCartProduct();
-        this.cdr.markForCheck();
-      }
+      this.totalCartProduct = res;
+      this.cdr.markForCheck();
     });
     this.subscription.push(sub1);
+  };
 
+  // Counting the Favorite Items which is Selected using Product Service's Behavior Subject
+  calculateTotalFavoriteItems(){
     let sub2 = this.service.totalFavoriteItems.subscribe((res: any) => {
       this.totalFavoriteProduct = res;
       this.cdr.markForCheck();
@@ -53,33 +66,59 @@ export class NavBarComponent implements OnInit, OnDestroy {
     this.subscription.push(sub2);
   };
 
-  categories(item: any) {
-    let url = `Shop/shop/${item}`;
-        this.router.navigate([url], {queryParams: {category:item}}); 
+  // Navigate to Wishlist Page if User is Logged In
+  goToWishlist(){
+    if(localStorage.getItem('token')){
+      this.router.navigate(['wishlist'])
+    }
+    else{
+      this.toastr.info("Login is required");
+      this.router.navigate(['/auth/login']);
+    }
   };
 
+  // Navigate to Cart Page if User is Logged In
+  goToCart(){
+    if(localStorage.getItem('token')){
+      this.router.navigate(['/cart-detail/my-cart'])
+    }
+    else{
+      this.toastr.info("Login is required");
+      this.router.navigate(['/auth/login']);
+    }
+  };
+  
+  // get categories using Products Service's API
   getCategories() {
-    let sub3 = this.service.getFilteredProducts({categoryList:true}).subscribe({
-      next: (res: any) => { this.categoryList = res.data.categoryList; },
+    let sub3 = this.service.getFilteredProducts({"categoryList":true}).subscribe({
+      next: (res: any) => { this.categoryList = res.data?.categoryList; },
       error: (err: any) => { console.log('err', err); },
       complete: () => { this.cdr.markForCheck(); },
     });
     this.subscription.push(sub3);
   };
 
-  getTotalCartProduct() {
-    if (localStorage.getItem('addCartItem')) {
-      let total: any = localStorage.getItem('addCartItem');
-      this.totalCartProduct = JSON.parse(total).length;
-      this.cdr.markForCheck();
-    }
+  // Toggle the NavBar on Menu Icon using Click method
+  showNavOnToggle(){
+    this.isShowNav = !this.isShowNav;
+  }
+  
+  /**
+   * Navigate to Shop page using selected Category
+   * @param item is a selected Category
+   */
+  categories(item: any) {
+    let url = `Shop`;
+    this.router.navigate([url], {queryParams: {category:item}}); 
   };
 
+  // checking which nev-item is active
   filter(name: any) {
     this.category = name;
   };
 
   ngOnDestroy(): void {
+    // Removes all the subscriptions to avoid memory leak issue
     this.subscription.forEach((subscriptionRow: any) => {
       subscriptionRow.unsubscribe();
     });

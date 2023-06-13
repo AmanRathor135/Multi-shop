@@ -9,7 +9,7 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./carousel-page.component.scss'],
   changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class CarouselPageComponent implements OnInit, OnDestroy {
+export class CarouselPageComponent implements OnDestroy {
 
   carousels:any[] =[];
   offers:any[] = [];
@@ -28,11 +28,9 @@ export class CarouselPageComponent implements OnInit, OnDestroy {
     },
   };
 
-  constructor(private service:ProductService, private cdr:ChangeDetectorRef){}
-
-  ngOnInit(): void {
+  constructor(private service:ProductService, private cdr:ChangeDetectorRef){
     this.getBannerPage();
-  };
+  }
 
   /**
    * getting Banner Page using Product Service

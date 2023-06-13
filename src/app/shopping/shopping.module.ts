@@ -10,9 +10,9 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 import { ProductDescriptionComponent } from './product-description/product-description.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { FilterPipe } from './product-list/filter.pipe';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -29,9 +29,10 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
     ShoppingRoutingModule,
     CarouselModule,
     TabsModule.forRoot(),
-    FormsModule,
+    ReactiveFormsModule,
     NgxPaginationModule,
-    NgbDropdownModule
+    NgbDropdownModule, 
+    NgbModule
   ],
   exports:[]
 })

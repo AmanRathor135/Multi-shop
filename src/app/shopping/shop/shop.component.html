@@ -11,9 +11,9 @@
   <form>
     <div class="custom-control custom-checkbox mb-3"  *ngFor="let item of filterData?.price; let i = index">
       <div class="d-flex align-items-center justify-content-between">
-        <input type="checkbox" class="custom-control-input" id="price-{{i+1}}" (click)="filterDataValue(item)"/>
-        <label class="custom-control-label" for="price-{{i+1}}"> 
-          {{ item.min*currencyPrice | currency: currency }} - {{ item.max*currencyPrice | currency: currency }} 
+        <input type="checkbox" style="cursor: pointer !important;" class="custom-control-input" id="price-{{i+1}}" (click)="filterDataValue(item)"/>
+        <label class="custom-control-label" style="cursor: pointer !important;" for="price-{{i+1}}"> 
+          {{ item.min *currencyPrice | currency: currency }} - {{ item.max*currencyPrice | currency: currency }} 
         </label>
           <span class="border" style="font-size: 12px; padding: 3px">{{ item.count }}</span>
       </div>
@@ -30,8 +30,8 @@
   <form>
     <div class="custom-control custom-checkbox mb-3" *ngFor="let item of filterData?.color; let i = index">
       <div class="d-flex align-items-center justify-content-between">
-        <input type="checkbox" class="custom-control-input" id="color-{{i+1}}" (click)="filterDataValue(item)"/>
-        <label class="custom-control-label" for="color-{{i+1}}"> {{ item.color | titlecase }} </label>
+        <input type="checkbox" style="cursor: pointer !important;" class="custom-control-input" id="color-{{i+1}}" (click)="filterDataValue(item)"/>
+        <label class="custom-control-label" style="cursor: pointer !important;" for="color-{{i+1}}"> {{ item.color | titlecase }} </label>
           <span class="border" style="font-size: 12px; padding: 3px">{{ item.count }}</span>
       </div>
     </div>
@@ -47,8 +47,8 @@
   <form>
     <div class="custom-control custom-checkbox mb-3" *ngFor="let item of filterData?.size; let i = index">
       <div class="d-flex align-items-center justify-content-between">
-        <input type="checkbox" class="custom-control-input" id="size-{{i+1}}" (click)="filterDataValue(item)"/>
-        <label class="custom-control-label" for="size-{{i+1}}"> {{ item.size | uppercase}} </label>
+        <input type="checkbox" style="cursor: pointer !important;" class="custom-control-input" id="size-{{i+1}}" (click)="filterDataValue(item)"/>
+        <label class="custom-control-label" style="cursor: pointer !important;" for="size-{{i+1}}"> {{ item.size | uppercase}} </label>
           <span class="border" style="font-size: 12px; padding: 3px">{{ item.count }}</span>
       </div>
     </div>
@@ -61,7 +61,7 @@
     <!-- Shop Product Start -->
     <div class="col-lg-9 col-md-8">
       <div class="row pb-3">
-        <app-product-list class="row" [filterProductList]="filterProductList"></app-product-list>
+        <app-product-list class="row" [filterValue]="filterValue"></app-product-list>
       </div>
     </div>  
     <!-- Shop Product End -->

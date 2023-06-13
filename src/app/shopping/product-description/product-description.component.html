@@ -1,156 +1,84 @@
 <div class="bg-light p-30">
-  <div class="nav nav-tabs mb-4">
-    <div>
-      <tabset>
-        <tab heading="{{ item }}" id="tab1" *ngFor="let item of Tabs">
-          <ng-container *ngFor="let list of tabList; let i = index">
-            <div *ngIf="list.tab == item">
-              <div class="mt-3" *ngIf="i !== tabList.length - 1">
-                <h4>{{ list.title }}</h4>
-                <p *ngFor="let item of list.desc">{{ item }}</p>
-                <div class="row">
-                  <div class="col-md-6">
-                    <ul class="list-group list-group-flush">
-                      <li
-                        class="list-group-item px-0"
-                        *ngFor="let list of list.lists"
-                      >
-                        {{ list }}
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="col-md-6">
-                    <ul class="list-group list-group-flush">
-                      <li
-                        class="list-group-item px-0"
-                        *ngFor="let list of list.lists"
-                      >
-                        {{ list }}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row mt-3" *ngIf="i == tabList.length - 1">
+  <div>
+    <tabset>
+      <tab heading="{{ item }}" id="tab1" *ngFor="let item of Tabs">
+      <ng-container *ngFor="let list of tabList; let i = index">
+        <div *ngIf="list.tab == item">
+          <div class="mt-3" *ngIf="i !== tabList.length - 1">
+            <h4>{{ list.title }}</h4>
+            <p *ngFor="let item of list.desc">{{ item }}</p>
+              <div class="row">
                 <div class="col-md-6">
-                  <h4 class="mb-4">{{ list.title }}</h4>
-                  <div class="media mb-4">
-                    <img
-                      src="{{ list.imgSrc }}"
-                      alt="Image"
-                      class="img-fluid mr-3 mt-1"
-                      style="width: 45px"
-                    />
-                    <div class="media-body">
-                      <h6>
-                        {{ list.name
-                        }}<small>
-                          - <i>{{ list.date }}</i></small
-                        >
-                      </h6>
-                      <div class="text-primary mb-2">
-                        <ng-container *ngFor="let icon of list.icons">
-                          <i class="{{ icon }}"></i>
-                        </ng-container>
-                      </div>
-                      <p>{{ list.desc }}</p>
-                    </div>
-                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item px-0" *ngFor="let list of list.lists"> {{ list }} </li>
+                  </ul>
                 </div>
                 <div class="col-md-6">
-                  <h4 class="mb-4">Leave a review</h4>
-                  <small
-                    >Your email address will not be published. Required fields
-                    are marked *</small
-                  >
-                  <div class="d-flex my-3">
-                    <p class="mb-0 mr-2">Your Rating * :</p>
-                    <div class="text-primary">
-                      <i class="far fa-star"></i>
-                      <i class="far fa-star"></i>
-                      <i class="far fa-star"></i>
-                      <i class="far fa-star"></i>
-                      <i class="far fa-star"></i>
-                    </div>
-                  </div>
-                  <form name="form" #form="ngForm" autocomplete="off" novalidate>
-                  <div class="form-group mt-3">
-                    <label for="review">Your Review *</label>
-                    <textarea
-                      class="form-control"
-                      name="review"
-                      #review="ngModel"
-                      [(ngModel)]="feedbackForm.review"
-                      rows="5"
-                      required
-                    >
-                    </textarea>
-                    <div *ngIf="!review?.valid && (form?.submitted || review?.touched)" class="error">
-                      <ul>
-                        <li *ngIf="review.hasError('required')" style="color: red">
-                          Review is required
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-
-                    <div class="form-group mt-3">
-                      <label for="name">Your Name *</label>
-                      <input
-                        type="text"
-                        name="name"
-                        class="form-control"
-                        id="name"
-                        #name="ngModel"
-                        [(ngModel)]="feedbackForm.name"
-                        required
-                      />
-                      <div *ngIf="!name?.valid && (form?.submitted || name?.touched)" class="error">
-                        <ul>
-                          <li *ngIf="name.hasError('required')" style="color: red">
-                            Name is required
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div class="form-group mt-3">
-                      <label for="email">Your Email *</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="email"
-                        id="email"
-                        #email="ngModel"
-                        [(ngModel)]="feedbackForm.email"
-                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                        required
-                      />
-                      <div *ngIf=" !email?.valid && (form?.submitted || email?.touched)" class="error">
-                        <ul>
-                          <li *ngIf="email.hasError('required')" style="color: red">
-                            E-mail is required
-                          </li>
-                          <li *ngIf="email.hasError('pattern')" style="color: red">
-                            Invalid E-mail Address
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div class="mt-4 mb-4">
-                      <button type="submit" class="btn btn-warning" (click)="sendMessage()">
-                        Leave Your Review
-                      </button>
-                    </div>
-                  </form>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item px-0" *ngFor="let list of list.lists"> {{ list }} </li>
+                  </ul>
                 </div>
               </div>
             </div>
-          </ng-container>
-        </tab>
-      </tabset>
-    </div>
+
+          <div *ngIf="i == tabList.length - 1">
+            <div class="row mt-3">
+              <h4 class="mb-4">Reviews</h4>
+              <div class="col-md-6 col-6" *ngIf="reviewsData">
+                <div class="row" *ngFor="let review of reviewsData|slice:0:limit">
+                  <div class="col-12">
+                  <div class="media mb-4">
+                    <img src="{{ list.imgSrc }}" alt="..." class="img-fluid mr-3 mt-1" style="width: 45px"/>
+                    <div class="media-body">
+                      <h6> {{ review.firstName | titlecase }} {{ review.lastName | titlecase }}<small> &nbsp; - &nbsp; <i>{{ review.date | date}}</i></small></h6>
+                      <div class="text-primary">
+                        <ngb-rating [max]="5" [(rate)]="review.rating" [readonly]="true" style="font-size: 22px"></ngb-rating>
+                      </div>
+                      <p>{{ review.review }}</p>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="!reviewsData?.length">
+                  <div class="fs-5"><i>This Product doesn't have any Reviews...</i></div>
+                </div>
+
+                <div *ngIf="isShow && reviewsData?.length && reviewsData.length > limit">
+                  <button class="btn btn-primary" (click)="loadMoreReviews()">Load More Reviews...</button>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <h4 class="mb-4">Leave a review</h4>
+                <small>Your email address will not be published. Required fields are marked *</small>
+                <form name="form" [formGroup]="feedbackFrom" autocomplete="off" novalidate>
+                  <div class="d-flex my-3">
+                  <p class="mb-0 mr-2" style=" margin-top: 12px;">Your Rating <span style="color:red">*</span> :</p>
+                    <ngb-rating name="rating" formControlName="rating" [max]="5" [(rate)]="starRating" 
+                    (rateChange)="starRating" style="color:orangered; font-size: 30px;">
+                    </ngb-rating>
+                  </div>
+
+                  <div class="form-group mt-3">
+                    <label for="review">Your Review <span style="color:red">*</span></label>
+                    <textarea class="form-control" id="review" name="review" formControlName="review" rows="7"></textarea>
+                    <div *ngIf="(submitted || form['review'].touched) && form['review'].invalid" class="mt-1 error">
+                      <span *ngIf="form['review'].hasError('required')" style="color: red">
+                        Review is required
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="mt-4 mb-4">
+                    <button type="submit" class="btn btn-primary" (click)="sendReview()">Leave Your Review</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      </tab>
+    </tabset>
   </div>
 </div>

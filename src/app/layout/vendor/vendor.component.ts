@@ -37,6 +37,7 @@ export class VendorComponent implements OnInit, OnDestroy {
     this.getVendorSliderList();
   }
 
+  // Getting Company's Images for slider using Product Service GET method
   getVendorSliderList(){
     let sub1 = this.service.vendorSliderList().subscribe({
       next: (res:any) => { this.vendorList = res.data.images; },

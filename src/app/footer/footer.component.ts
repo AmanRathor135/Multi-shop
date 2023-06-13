@@ -27,26 +27,12 @@ export class FooterComponent implements OnDestroy {
     {
       name: 'Quick Shop',
       icon: 'fa fa-angle-right',
-      list: [
-        'Home',
-        'Our Shop',
-        'Shop Detail',
-        'Shopping Cart',
-        'Checkout',
-        'Contact Us',
-      ],
+      list: ['Home', 'Our Shop', 'Shop Detail', 'Shopping Cart', 'Checkout', 'Contact Us'],
     },
     {
       name: 'My Account ',
       icon: 'fa fa-angle-right',
-      list: [
-        'Home',
-        'Our Shop',
-        'Shop Detail',
-        'Shopping Cart',
-        'Checkout',
-        'Contact Us',
-      ],
+      list: ['Home', 'Our Shop', 'Shop Detail', 'Shopping Cart', 'Checkout', 'Contact Us'],
     },
   ];
 
@@ -54,19 +40,14 @@ export class FooterComponent implements OnDestroy {
     title: 'Newsletter',
     desc: 'Duo stet tempor ipsum sit amet magna ipsum tempor est',
     follow: 'Follow Us',
-    data: [
-      'fab fa-twitter',
-      'fab fa-facebook-f',
-      'fab fa-linkedin-in',
-      'fab fa-instagram',
-    ],
+    socials: ['fab fa-twitter', 'fab fa-facebook-f', 'fab fa-linkedin-in', 'fab fa-instagram'],
   };
   
   newsletterForm:FormGroup = new FormGroup({
     email:new FormControl('', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')])
   })
 
-  newsletter: any = { email: '', };
+  newsletter: any = { email: '' };
 
   constructor(private service:ProductService, private toastr:ToastrService, private cdr:ChangeDetectorRef) {}
 

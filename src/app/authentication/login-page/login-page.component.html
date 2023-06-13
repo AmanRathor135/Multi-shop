@@ -1,10 +1,7 @@
 <section>
-  <a class="text-decoration-none text-center ml-4">
-    <span class="h1 text-uppercase text-primary bg-dark px-2">multi</span>
-    <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">shop</span>
-  </a>
   <form [formGroup]="loginForm" autocomplete="on">
     <h1 class="mt-3">Login</h1>
+
     <div class="inputbox form-group">
       <input
         type="text"
@@ -14,10 +11,7 @@
         class="form-control"
         placeholder="Enter E-mail"
       />
-      <div
-        *ngIf="(submitted || form['email'].touched) && form['email'].invalid"
-        class="mt-1 error"
-      >
+      <div *ngIf="(submitted || form['email'].touched) && form['email'].invalid" class="mt-1 error">
         <span *ngIf="form['email'].hasError('required')" style="color: red">
           E-mail is required
         </span>
@@ -26,6 +20,7 @@
         </span>
       </div>
     </div>
+    
     <div class="inputbox form-group">
       <input
         type="password"
@@ -35,12 +30,7 @@
         class="form-control"
         placeholder="Enter Password"
       />
-      <div
-        *ngIf="
-          (submitted || form['password'].touched) && form['password'].invalid
-        "
-        class="mt-1 error"
-      >
+      <div *ngIf="(submitted || form['password'].touched) && form['password'].invalid" class="mt-1 error">
         <span *ngIf="form['password'].hasError('required')" style="color: red">
           Password is required
         </span>
@@ -50,18 +40,10 @@
       </div>
     </div>
     <div style="text-align: center">
-      <input
-        type="submit"
-        class="btn btn-success px-3"
-        value="Create my account"
-        (click)="login()"
-      />
+      <input type="submit" class="btn btn-success px-3" value="Login" (click)="login()"/>
     </div>
     <div class="register">
-      <p>
-        Don't have a account
-        <a [routerLink]="['/auth/register']" class="fs-6">Register</a>
-      </p>
+      <p> Don't have a account <a [routerLink]="['/auth/register']" class="fs-6">Register</a> </p>
     </div>
   </form>
 </section>

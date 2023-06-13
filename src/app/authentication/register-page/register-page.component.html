@@ -1,16 +1,11 @@
 <div class="content">
   <section>
     <div>
-      <div class="register-block">
-        <a class="text-decoration-none" style="margin-left: 40%">
-          <span class="h1 text-uppercase text-primary bg-dark px-2">multi</span>
-          <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">shop</span
-          >
-        </a>
-        <h3 class="register-title text-center mb-4 mt-3">Create an Account</h3>
+      <div class="register-block text-white">
+        <h3 class="register-title text-center text-white mb-4 mt-3">Create an Account</h3>
         <form [formGroup]="registrationForm" autocomplete="on">
           <div class="row">
-            <div class="col-md-6 form-group">
+            <div class="col-md-6 inputbox form-group">
               <div class="form-group">
                 <label for="firstName">First Name</label>
                 <input
@@ -38,7 +33,7 @@
               </div>
             </div>
 
-            <div class="col-md-6 form-group">
+            <div class="col-md-6 inputbox form-group">
               <div class="form-group">
                 <label for="lastName">Last Name</label>
                 <input
@@ -68,7 +63,7 @@
           </div>
 
           <div class="row">
-            <div class="col-md-6 form-group">
+            <div class="col-md-6 inputbox form-group">
               <div class="form-group">
                 <label for="email">E - mail </label>
                 <input
@@ -102,7 +97,7 @@
               </div>
             </div>
 
-            <div class="col-md-6 form-group">
+            <div class="col-md-6 inputbox form-group">
               <div class="form-group">
                 <label for="password">Password</label>
                 <input
@@ -138,7 +133,7 @@
           </div>
 
           <div class="row">
-            <div class="col-md-6 form-group">
+            <div class="col-md-6 inputbox form-group">
               <div class="form-group">
                 <label for="mobile">Mobile No.</label>
                 <input
@@ -181,7 +176,7 @@
               </div>
             </div>
 
-            <div class="col-md-6 form-group">
+            <div class="col-md-6 inputbox form-group">
               <div class="form-group">
                 <label for="timeZone">Time Zone</label>
                 <input
@@ -211,77 +206,47 @@
           </div>
 
           <div class="row">
-            <div class="col-md-6 form-group">
-              <div class="form-group mt-3">
-                <div class="row">
-                  <div class="col-2">
-                    <label for="gender">Gender</label>
-                  </div>
-                  <div class="col-6 d-flex justify-content-between">
-                    <div>
-                      <input
-                        type="radio"
-                        formControlName="gender"
-                        value="Male"
-                      />
-                      &nbsp;
-                      <label class="form-check-label" for="genderMale">Male</label>
-                    </div>
-                    <div>
-                      <input
-                        type="radio"
-                        formControlName="gender"
-                        value="Female"
-                      />&nbsp;
-                      <label class="form-check-label" for="genderFeMale">Female</label>
-                    </div>
-                    <div>
-                      <input
-                        type="radio"
-                        formControlName="gender"
-                        value="Other"
-                      />&nbsp;
-                      <label class="form-check-label" for="genderFeMale">Other</label>
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  *ngIf="
-                    (submitted || form['gender'].touched) &&
-                    form['gender'].invalid
-                  "
-                  class="mt-1 error"
+            <div class="col-md-6 inputbox form-group">
+              <div class="form-group">
+                <label for="gender" style="margin: 10px 0px 0.5rem 0px;">Gender</label>
+                <ng-select
+                  [items]="gender"
+                  [searchable]="true"
+                  bindLabel="name"
+                  formControlName="gender"
+                  id="gender"
+                  style="padding: 0.375rem 0.75rem; color: white;"
                 >
-                  <span
-                    *ngIf="form['gender'].hasError('required')"
-                    style="color: red"
-                  >
+                </ng-select>
+                <div *ngIf="(submitted || form['gender'].touched) && form['gender'].invalid" class="mt-1 error">
+                  <span *ngIf="form['gender'].hasError('required')" style="color: red">
                     Gender is required
                   </span>
                 </div>
               </div>
             </div>
 
-            <div class="col-md-6 form-group">
-              <div class="form-group mt-2">
+            <div class="col-md-6 inputbox form-group">
+              <div class="form-group">
+                <label for="language" style="margin: 10px 0px 0.5rem 0px;">Select Language</label>
                 <ng-select
                   [items]="language"
                   [searchable]="true"
                   bindLabel="name"
                   formControlName="language"
                   id="language"
-                  style="
-                    border: 1px solid #ced4da;
-                    padding: 0.375rem 0.75rem;
-                    color: black;
-                  "
+                  style="padding: 0.375rem 0.75rem; color: white;"
                 >
                 </ng-select>
+                <div *ngIf="(submitted || form['language'].touched) && form['language'].invalid" class="mt-1 error">
+                  <span *ngIf="form['language'].hasError('required')" style="color: red">
+                    Language is required
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-          <span formGroupName="address">
+          <!-- <span formGroupName="address">
             <div class="row">
               <div class="col-md-6 form-group">
                 <div class="form-group">
@@ -431,20 +396,17 @@
                 </div>
               </div>
             </div>
-          </span>
+          </span> -->
 
           <div style="text-align: center">
-            <input
-              type="submit"
-              class="btn btn-success px-3"
-              value="Create my account"
-              (click)="createAccount()"
-            />
+            <button type="submit" class="btn btn-success fs-6 px-3 mt-4" (click)="createAccount()">
+              Create my account
+            </button>
           </div>
           <div class="register">
             <p>
               Already have a account,
-              <a [routerLink]="['/auth/login']" class="fs-6">Sign In</a>
+              <a [routerLink]="['/auth/login']" class="fs-6 text-white">Sign In</a>
             </p>
           </div>
         </form>

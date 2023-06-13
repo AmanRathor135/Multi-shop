@@ -12,22 +12,12 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class ContactDetailFormComponent implements OnInit, OnDestroy {
 
-  favItemLength:any;
   submitted:boolean = false;
   subscription:Subscription[] = [];
   contactDetails: any[] = [
-    {
-      icon: 'fa fa-map-marker-alt',
-      detail: '123 Street, New York, USA',
-    },
-    {
-      icon: 'fa fa-envelope',
-      detail: 'info@example.com',
-    },
-    {
-      icon: 'fa fa-phone-alt',
-      detail: '+012 345 67890',
-    },
+    { icon: 'fa fa-map-marker-alt', detail: '123 Street, New York, USA' },
+    { icon: 'fa fa-envelope', detail: 'info@example.com' },
+    { icon: 'fa fa-phone-alt', detail: '+012 345 67890' },
   ];
 
   contactFormData:FormGroup = new FormGroup({
@@ -37,58 +27,51 @@ export class ContactDetailFormComponent implements OnInit, OnDestroy {
     message: new FormControl('',[Validators.required])
   })
 
-  contactForm:any = {
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  };
-
   
   constructor(private service:ProductService, private toastr:ToastrService, private cdr:ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.getFavoriteItems();
-    /**
-     * Set Breadcrumb in Product Service
-     */
-    this.service.Breadcrumb.next([
-      { pageTitle: 'Home', url: '' },
-      { pageTitle: 'Contact', url: 'contact' },
-    ]);
-  }
+    this.service.isLoggedIn.next(true);
+    this.service.cartItemsCount();
+    this.service.favoriteItemsCount();
+    this.getBreadcrumb();
+  };
 
-  /**
-   * Using billingForm in HTML as a billingAddressForm.controls
-   */
+
+  // Using form in HTML as a contactFormData.controls
   get form(): { [key: string]: AbstractControl } {
     return this.contactFormData.controls;
-  }
-
-  /**
-   * get Total Favorite Items from Local Storage
-   */
-  getFavoriteItems(){
-    let list:any = localStorage.getItem('favoriteItemList');
-    this.favItemLength = JSON.parse(list);
-    this.service.totalFavoriteItems.next(this.favItemLength.length);
-  }
+  };
 
   /**
    * sendMessage form using Product Service POST API
    * @param form to check whether contactForm is valid or not
    * To Do List....
    */
-  sendMessage(){
+  ContactUS(){
     this.submitted = true;
     if(this.contactFormData.valid){
       let sub1 = this.service.contactUsForm(this.contactFormData.value).subscribe({
-        next: (res:any) => { res.type == 'success'?this.toastr.success(res.message):this.toastr.warning(res.message); },
+        next: (res:any) => { 
+          this.submitted = false;
+          res.type == 'success'?this.toastr.success(res.message):this.toastr.warning(res.message); 
+        },
         error: (err:any) => { console.log("Contact Form Error", err); },
-        complete: () => { this.cdr.markForCheck(); }
+        complete: () => { 
+          this.contactFormData.reset(); 
+          this.cdr.markForCheck(); 
+        }
       });
       this.subscription.push(sub1);
     }
+  };
+  
+  // Set Breadcrumb in Product Service
+  getBreadcrumb(){
+    this.service.Breadcrumb.next([
+      { pageTitle: 'Home', url: '' },
+      { pageTitle: 'Contact', url: 'contact' },
+    ]);
   };
 
   ngOnDestroy(): void {

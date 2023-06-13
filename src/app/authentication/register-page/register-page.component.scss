@@ -1,14 +1,14 @@
 .register-block {
+    background-image: url(https://user-images.githubusercontent.com/13468728/233847739-219cb494-c265-4554-820a-bd3424c59065.jpg);
      position: relative;
      display: block;
-     width: 70%;
+     width: 60%;
      margin: auto;
      padding: 30px;
      background-color: white;
      box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
-     border-radius: 5px;
-	
-   }
+     border-radius: 10px;	
+}
 
 .register-block:before, 
 .register-block:after {
@@ -29,7 +29,24 @@
              transform: scale(0.9) translate(0, 0);
      -webkit-transition: all 0.3s ease;
      transition: all 0.3s ease;
-   }
+}
+
+input{
+    width: 100%;
+    height: 40px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    // padding: 0 35px 0 5px;
+    color: #fff;
+}
+
+.inputbox {
+    .form-group{
+        border-bottom: 2px solid #fff;
+    }
+}
 
 .register {
     font-size: 0.9rem;
@@ -48,7 +65,6 @@
 }
 
 ng-select{
-    
     .ng-select-bottom{
         opacity: 1;
         background: white !important;
@@ -57,4 +73,15 @@ ng-select{
         // padding: 15px !important;
         left: 0 !important;
     }
+}
+
+.btn {
+    width: 40%;
+    height: 40px;
+    border-radius: 40px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
 }

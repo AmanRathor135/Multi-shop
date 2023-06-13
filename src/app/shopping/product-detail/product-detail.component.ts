@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -17,6 +11,7 @@ import { ProductService } from 'src/app/services/product.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
+  
   singleProduct: any;
   selectedItem: any;
   subscription:Subscription[] = [];
@@ -49,23 +44,18 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     ],
   };
 
-  socialLinks: any[] = [
-    'fab fa-facebook-f',
-    'fab fa-twitter',
-    'fab fa-linkedin-in',
-    'fab fa-pinterest',
-  ];
+  socialLinks: any[] = ['fab fa-facebook-f', 'fab fa-twitter', 'fab fa-linkedin-in', 'fab fa-pinterest'];
 
   constructor(
     private route: ActivatedRoute,
     private service: ProductService,
     private toastr: ToastrService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.getCurrencyName();
-    this.service.totalCartItems.next(true);
     this.getSingleProductById();
     this.rating(5);
   }
@@ -99,50 +89,29 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   getSingleProductData() {
     let sub3 = this.service.getSingleProduct(this.id).subscribe({
-      next: (res: any) => {
-        this.singleProduct = res.data.productList;
-      },
-      error: (err: any) => {
-        console.log('err', err);
-      },
+      next: (res: any) => { this.singleProduct = res.data?.productList; },
+      error: (err: any) => { console.log('err', err); },
       complete: () => { this.cdr.markForCheck(); },
     });
     this.subscription.push(sub3);
   };
 
   addToCart(item: any) {
-
-    this.service.InsertInCart({"productId":item._id, quantity:this.value}).subscribe({
-      next: (res:any) => {
-        if(res){
-          this.toastr.success(res.message);
-        }
-        // { res.type == 'success'? this.toastr.success(res.message):this.toastr.warning(res.message);}
-      },
-      error: (err:any) => {
-        console.log("add to cart error",err);
-      },
-      complete: () => {
-        this.cdr.markForCheck();
-      }
-    });
-    // this.selectedItem = item;
-    // this.selectedItem['quantity'] = this.value;
-    // let cartItems: any[] = [];
-
-    // const getCartItem = JSON.parse(localStorage.getItem('addCartItem') || '{}');
-    // if (getCartItem && getCartItem.length) {
-    //   cartItems = getCartItem;
-    //   cartItems.push(this.selectedItem);
-    // } else {
-    //   cartItems.push(this.selectedItem);
-    // }
-
-    // cartItems = [...new Map(cartItems.map((item: any) => [item['_id'], item])).values()];
-    
-    // localStorage.setItem('addCartItem', JSON.stringify(cartItems));
-    this.service.totalCartItems.next(true);
-    // this.toastr.success('Item Added Successfully!');
+      let sub4 = this.service.InsertInCart({"productId":item._id, quantity:this.value}).subscribe({
+        next: (res:any) => {
+          if (res.type=='success'){
+            this.toastr.success(res.message)
+            this.service.cartItemsCount();
+          }
+          else{
+            this.toastr.info(res.message);
+            this.router.navigate(['/auth/login']);
+          }
+        },
+        error: (err:any) => { console.log("add to cart error",err); },
+        complete: () => { this.cdr.markForCheck(); }
+      });
+      this.subscription.push(sub4);
   };
 
   rating(value: any) {
@@ -154,17 +123,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   };
 
   remove() {
-    if (this.value > 1) {
-      this.value = this.value - 1;
-    } 
-    else if (this.value <= 1) {
-      this.value = 1;
-    }
+    if (this.value > 1) { this.value = this.value - 1; } 
+    else if (this.value <= 1) { this.value = 1; }
   };
 
   ngOnDestroy(): void {
+    // Removes all the subscriptions to avoid memory leak issue
     this.subscription.forEach((subscriptionRow: any) => {
       subscriptionRow.unsubscribe();
     });
-  }
+  };
 }

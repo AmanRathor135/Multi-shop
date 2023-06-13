@@ -28,23 +28,22 @@
           <span class="h1 text-uppercase text-dark bg-light px-2">{{shopDetail.first}}</span>
           <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">{{shopDetail.last}}</span>
       </a>
-        <button type="button" class="navbar-toggler">
+        <button type="button" class="navbar-toggler" (click)="toggleNav()">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-between">
+        <div class="collapse navbar-collapse justify-content-between" [ngClass]="{show: isShowNav}">
           <div class="navbar-nav py-0" *ngFor="let item of navbarList; let i = index">
             <div>
-              <a routerLink="{{ item.route }}" class="nav-item nav-link" 
-              [ngClass]="{active: item.category == category}"
+              <a routerLink="{{ item.route }}" class="nav-item nav-link"  [ngClass]="{active: item.category == category}"
               (click)="filter(item.category)">{{ item.category }}</a>
             </div>
           </div>
           <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-            <a class="btn px-0 ml-3" [routerLink]="['wishlist']">
+            <a class="btn px-0 ml-3" (click)="goToWishlist()">
               <i class="text-primary fas fa-heart"></i>&nbsp;
               <span class="badge text-secondary border border-secondary rounded-circle">{{totalFavoriteProduct}}</span>
             </a>
-            <a class="btn px-0 ml-3" [routerLink]="['/cart-detail/my-cart']">
+            <a class="btn px-0 ml-3" (click)="goToCart()">
               <i class="text-primary fas fa-shopping-cart"></i>&nbsp;
               <span class="badge text-secondary border border-secondary rounded-circle">{{totalCartProduct}}</span>
             </a>

@@ -2,221 +2,252 @@
 <div class="container-fluid">
   <div class="row px-xl-5">
     <div class="col-lg-8">
-      <h5 class="section-title position-relative text-uppercase mb-3">
-        <span class="bg-secondary pr-3">Billing Address</span>
-      </h5>
-      <div class="bg-light p-30 mb-5">
-        <form [formGroup]="billingAddressForm" autocomplete="on">
-          <div class="row" formGroupName="name">
-            <div class="col-md-6 form-group">
-              <div class="form-group"><label for="firstName">First Name</label>
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  formControlName="firstName"
-                  placeholder="John"
-                  class="form-control"
-                />
-                <div *ngIf="(submitted || billingAddressForm.get('name.firstName')?.touched) && billingAddressForm.get('name.firstName')?.invalid" class="mt-1 error">
+    <h5 class="section-title position-relative text-uppercase mb-3">
+      <span class="bg-secondary pr-3">Billing Address</span>
+    </h5>
+    <div class="bg-light p-30 mb-5">
+      <form [formGroup]="billingAddressForm" autocomplete="on">
+        <div class="row">
+          <div class="col-md-6 form-group">
+            <div class="form-group"><label for="firstName">First Name</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                formControlName="firstName"
+                placeholder="John"
+                class="form-control"
+              />
+                <div *ngIf="(submitted ||  billingForm['firstName']?.touched) &&  billingForm['firstName']?.invalid" class="mt-1 error">
                     <span style="color: red">
                       First Name is required
                     </span>
                 </div>
-              </div>
             </div>
-
-          <div class="col-md-6 form-group">
-            <div class="form-group"><label for="lastName">Last Name </label>
-                <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                formControlName="lastName"
-                class="form-control"
-                placeholder="Doe"
-              />
-              <div *ngIf="(submitted || billingAddressForm.get('name.lastName')?.touched) && billingAddressForm.get('name.lastName')?.invalid" class="mt-1 error">
-                <span style="color: red">
-                  Last Name is required
-                </span>
-            </div>
-            </div>  
           </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 form-group">
-            <div class="form-group"><label for="email">E - mail </label>
-              <input
-                type="text"
-                id="email"
-                name="email"
-                formControlName="email"
-                class="form-control"
-                placeholder="example@gmail.com"
-              />
-              <div *ngIf="(submitted || billingForm['email'].touched) && billingForm['email'].invalid"class="mt-1 error">
-                  <span *ngIf="billingForm['email'].hasError('required')" style="color: red">
-                    E-mail is required
-                  </span>
-                  <span *ngIf="billingForm['email'].hasError('pattern')" style="color: red">
-                    Enter correct E-mail address
-                  </span>
-              </div>
-            </div>
-            </div>
-            
-            <div class="col-md-6 form-group">
-            <div class="form-group"><label for="phone">Mobile No.</label>
-              <input
-                type="text"
-                id="phone"
-                name="phone"
-                formControlName="phone"
-                class="form-control"
-                placeholder="+123 456 789"
-              />
-              <div *ngIf="(submitted || billingForm['phone'].touched) && billingForm['phone'].invalid" class="mt-1 error">
-                  <span *ngIf="billingForm['phone'].hasError('required')" style="color: red">
-                    Mobile number is required
-                  </span>
-                  <span *ngIf="billingForm['phone'].hasError('minlength')" style="color: red">
-                    Minimum length should be 9
-                  </span>
-                  <span *ngIf="billingForm['phone'].hasError('maxlength')" style="color: red">
-                    Maximum length should be 12
-                  </span>
-                  <span *ngIf="billingForm['phone'].hasError('pattern') && !billingForm['phone'].hasError('minlength')" style="color: red">
-                    Enter Number is only
-                  </span>
-              </div>
-            </div>
-            </div>
-        </div>
-
-        <div class="row" formGroupName="address">
-            <div class="col-md-6 form-group">
-            <div class="form-group"><label for="line1">Address Line 1</label>
-              <input
-                type="text"
-                id="line1"
-                name="line1"
-                formControlName="line1"
-                placeholder="123 Street"
-                class="form-control"
-              />
-              <div *ngIf="(submitted || billingAddressForm.get('address.line1')?.touched) && billingAddressForm.get('address.line1')?.invalid" class="mt-1 error">
-                  <span style="color: red">
-                    Address Line 1 is required
-                  </span>
-              </div>
-            </div>
-            </div>
 
         <div class="col-md-6 form-group">
-            <div class="form-group"><label for="line2">Address Line 2</label>
+          <div class="form-group"><label for="lastName">Last Name </label>
               <input
-                type="text"
-                id="line2"
-                name="line2"
-                formControlName="line2"
-                class="form-control"
-                placeholder="123 Street"
-              />
-              <div *ngIf="(submitted || billingAddressForm.get('address.line2')?.touched) && billingAddressForm.get('address.line2')?.invalid" class="mt-1 error">
-                <span style="color: red">
-                  Address Line 2 is required
-                </span>
-            </div>
-            </div>
+              type="text"
+              id="lastName"
+              name="lastName"
+              formControlName="lastName"
+              class="form-control"
+              placeholder="Doe"
+            />
+            <div *ngIf="(submitted || billingForm['lastName']?.touched) && billingForm['lastName']?.invalid" class="mt-1 error">
+              <span style="color: red">
+                Last Name is required
+              </span>
+          </div>
+          </div>  
         </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 form-group">
-            <div class="form-group"><label for="country">Country</label>
-              <input
-                type="text"
-                id="country"
-                name="country"
-                formControlName="country"
-                class="form-control"
-                placeholder="United States"
-              />
-              <div *ngIf="(submitted || billingForm['country'].touched) && billingForm['country'].invalid" class="mt-1 error">
-                  <span *ngIf="billingForm['country'].hasError('required')" style="color: red">
-                    Country is required
-                  </span>
-              </div>
-            </div>
-            </div>
-            
-            <div class="col-md-6 form-group">
-            <div class="form-group"><label for="city">City</label>
-              <input
-                type="text"
-                id="city"
-                name="city"
-                formControlName="city"
-                class="form-control"
-                placeholder="New York"
-              />
-              <div *ngIf="(submitted || billingForm['city'].touched) && billingForm['city'].invalid" class="mt-1 error">
-                <span *ngIf="billingForm['city'].hasError('required')" style="color: red">
-                  City name is required
-                </span>
-              </div>
-            </div>
-            </div>
-        </div>
-        <div class="row">        
-            <div class="col-md-6 form-group">
-            <div class="form-group">
-              <label for="state">State</label>
-              <input
-                type="text"
-                id="state"
-                name="state"
-                formControlName="state"
-                class="form-control"
-                placeholder="New York"
-              />
-              <div *ngIf="(submitted || billingForm['state'].touched) && billingForm['state'].invalid" class="mt-1 error">
-                  <span *ngIf="billingForm['state'].hasError('required')" style="color: red">
-                    State name is required
-                  </span>
-              </div>
-            </div>
-            </div>
-            <div class="col-md-6 form-group">
-                <div class="form-group"><label for="zipCode">ZIP Code</label>
-                  <input
-                    type="text"
-                    id="zipCode"
-                    name="zipCode"
-                    formControlName="zipCode"
-                    class="form-control"
-                    placeholder="123"
-                  />
-                  <div *ngIf="(submitted || billingForm['zipCode'].touched) && billingForm['zipCode'].invalid" class="mt-1 error">
-                      <span *ngIf="billingForm['zipCode'].hasError('required')" style="color: red">
-                        ZIP Code is required
-                      </span>
-                  </div>
-                </div>
-            </div>
-        </div>
-            <div class="custom-control custom-checkbox form-group">
-                <input type="checkbox" class="custom-control-input" id="newaccount">
-                <label class="custom-control-label" for="newaccount">Create an account</label>
-            </div>
-            <div class="custom-control custom-checkbox form-group">
-                <input type="checkbox" class="custom-control-input" (click)="check()" formControlName="shipToDifferAddress" id="shipto" />
-                <label class="custom-control-label" for="shipto" data-toggle="collapse">Ship to different address</label>
-            </div>
-        </form>  
       </div>
+
+      <div class="row">
+          <div class="col-md-6 form-group">
+          <div class="form-group"><label for="email">E - mail </label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              formControlName="email"
+              class="form-control"
+              placeholder="example@gmail.com"
+            />
+            <div *ngIf="(submitted || billingForm['email'].touched) && billingForm['email'].invalid"class="mt-1 error">
+                <span *ngIf="billingForm['email'].hasError('required')" style="color: red">
+                  E-mail is required
+                </span>
+                <span *ngIf="billingForm['email'].hasError('pattern')" style="color: red">
+                  Enter correct E-mail address
+                </span>
+            </div>
+          </div>
+          </div>
+          
+          <div class="col-md-6 form-group">
+          <div class="form-group"><label for="phone">Mobile No.</label>
+            <input
+              type="text"
+              id="phone"
+              name="phone"
+              formControlName="phone"
+              class="form-control"
+              placeholder="+123 456 789"
+            />
+            <div *ngIf="(submitted || billingForm['phone'].touched) && billingForm['phone'].invalid" class="mt-1 error">
+                <span *ngIf="billingForm['phone'].hasError('required')" style="color: red">
+                  Mobile number is required
+                </span>
+                <span *ngIf="billingForm['phone'].hasError('minlength')" style="color: red">
+                  Minimum length should be 9
+                </span>
+                <span *ngIf="billingForm['phone'].hasError('maxlength')" style="color: red">
+                  Maximum length should be 12
+                </span>
+                <span *ngIf="billingForm['phone'].hasError('pattern') && !billingForm['phone'].hasError('minlength')" style="color: red">
+                  Enter Number is only
+                </span>
+            </div>
+          </div>
+          </div>
+      </div>
+
+      <div class="row" formGroupName="address">
+          <div class="col-md-6 form-group">
+          <div class="form-group"><label for="line1">Address Line 1</label>
+            <input
+              type="text"
+              id="line1"
+              name="line1"
+              formControlName="line1"
+              placeholder="123 Street"
+              class="form-control"
+            />
+            <div *ngIf="(submitted || billingAddressForm.get('address.line1')?.touched) && billingAddressForm.get('address.line1')?.invalid" class="mt-1 error">
+                <span style="color: red">
+                  Address Line 1 is required
+                </span>
+            </div>
+          </div>
+          </div>
+
+      <div class="col-md-6 form-group">
+          <div class="form-group"><label for="line2">Address Line 2</label>
+            <input
+              type="text"
+              id="line2"
+              name="line2"
+              formControlName="line2"
+              class="form-control"
+              placeholder="123 Street"
+            />
+            <div *ngIf="(submitted || billingAddressForm.get('address.line2')?.touched) && billingAddressForm.get('address.line2')?.invalid" class="mt-1 error">
+              <span style="color: red">
+                Address Line 2 is required
+              </span>
+          </div>
+          </div>
+      </div>
+      </div>
+
+      <div class="row" formGroupName="address">
+          <div class="col-md-6 form-group">
+          <div class="form-group"><label for="country">Country</label>
+            <input
+              type="text"
+              id="country"
+              name="country"
+              formControlName="country"
+              class="form-control"
+              placeholder="United States"
+            />
+            <div *ngIf="(submitted || billingAddressForm.get('address.country')?.touched) && billingAddressForm.get('address.country')?.invalid" class="mt-1 error">
+                <span style="color: red">
+                  Country is required
+                </span>
+            </div>
+          </div>
+          </div>
+          
+          <div class="col-md-6 form-group"> 
+          <div class="form-group"><label for="city">City</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              formControlName="city"
+              class="form-control"
+              placeholder="New York"
+            />
+            <div *ngIf="(submitted || billingAddressForm.get('address.city')?.touched) && billingAddressForm.get('address.city')?.invalid" class="mt-1 error">
+              <span style="color: red">
+                City name is required
+              </span>
+            </div>
+          </div>
+          </div>
+      </div>
+      <div class="row" formGroupName="address">        
+          <div class="col-md-6 form-group">
+          <div class="form-group">
+            <label for="state">State</label>
+            <input
+              type="text"
+              id="state"
+              name="state"
+              formControlName="state"
+              class="form-control"
+              placeholder="New York"
+            />
+            <div *ngIf="(submitted || billingAddressForm.get('address.state')?.touched) && billingAddressForm.get('address.state')?.invalid" class="mt-1 error">
+                <span style="color: red">
+                  State name is required
+                </span>
+            </div>
+          </div>
+          </div>
+          <div class="col-md-6 form-group">
+              <div class="form-group"><label for="zipCode">ZIP Code</label>
+                <input
+                  type="text"
+                  id="zipCode"
+                  name="zipCode"
+                  formControlName="zipCode"
+                  class="form-control"
+                  placeholder="123"
+                />
+                <div *ngIf="(submitted || billingAddressForm.get('address.zipCode')?.touched) && billingAddressForm.get('address.zipCode')?.invalid" class="mt-1 error">
+                    <span style="color: red">
+                      ZIP Code is required
+                    </span>
+                </div>
+              </div>
+          </div>
+      </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="custom-control custom-checkbox form-group">
+          <input type="checkbox" class="custom-control-input" (click)="check()" formControlName="shipToDifferAddress" id="shipto" />
+          <label class="custom-control-label" for="shipto">Ship to different address</label>
+        </div>
+        <div class="form-group">
+          
+        </div>
+      </div>
+      </form>  
+    </div>
+    <div class="bg-light p-30 mb-5">
+      <div class="row">
+        <div class="col-6">
+            <div class="card">
+              <!-- <img class="card-img-top" src="https://via.placeholder.com/200x150.png" alt="Card image cap"> -->
+              <div class="card-body">
+                <h5 class="card-title">Address 1</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <!-- <div><a class="btn btn-warning pull-right">Go somewhere</a></div> -->
+              </div>
+            </div>
+        </div>
+        <div class="col-6">
+          <div class="card">
+            <!-- <img class="card-img-top" src="https://via.placeholder.com/200x150.png" alt="Card image cap"> -->
+            <div class="card-body">
+              <h5 class="card-title">Address 2</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <!-- <div><a class="btn btn-warning pull-right">Go somewhere</a></div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <button type="button" class="btn btn-warning mt-3" style="width: 29%; margin-left: 70%;">
+          <i class='fas fa-map-marker-alt'></i>
+          Add New Address
+        </button>
+      </div>
+    </div>
 
 
       <div class="collapse mb-5" [ngClass]="{'show': isChecked}">
@@ -225,7 +256,7 @@
         </h5>
         <div class="bg-light p-30">
             <form [formGroup]="shippingAddressForm" autocomplete="on">
-                <div class="row" formGroupName="name">
+                <div class="row">
                 <div class="col-md-6 form-group">
                 <div class="form-group"><label for="firstName">First Name</label>
                   <input
@@ -236,10 +267,10 @@
                     placeholder="Aman"
                     class="form-control"
                   />
-                  <div *ngIf="(submitted || shippingAddressForm.get('name.firstName')?.touched) && shippingAddressForm.get('name.firstName')?.invalid" class="mt-1 error">
-                      <span style="color: red">
-                        First Name is required
-                      </span>
+                  <div *ngIf="(submitted || shippingForm['firstName']?.touched) && shippingForm['firstName']?.invalid" class="mt-1 error">
+                    <span style="color: red">
+                      First Name is required
+                    </span>
                   </div>
                 </div>
                 </div>
@@ -254,7 +285,7 @@
                     class="form-control"
                     placeholder="Rathor"
                   />
-                  <div *ngIf="(submitted || shippingAddressForm.get('name.lastName')?.touched) && shippingAddressForm.get('name.lastName')?.invalid" class="mt-1 error">
+                  <div *ngIf="(submitted || shippingForm['lastName']?.touched) && shippingForm['lastName']?.invalid" class="mt-1 error">
                       <span style="color: red">
                         Last Name is required
                       </span>
@@ -351,8 +382,8 @@
             </div>
             </div>
     
-            <div class="row">
-                <div class="col-md-6 form-group">
+            <div class="row" formGroupName="address">
+              <div class="col-md-6 form-group">
                 <div class="form-group"><label for="country">Country</label>
                   <input
                     type="text"
@@ -362,15 +393,15 @@
                     class="form-control"
                     placeholder="India"
                   />
-                  <div *ngIf="(submitted || shippingForm['country'].touched) && shippingForm['country'].invalid" class="mt-1 error">
-                      <span *ngIf="shippingForm['country'].hasError('required')" style="color: red">
-                        Country is required
-                      </span>
+                  <div *ngIf="(submitted || shippingAddressForm.get('address.country')?.touched) && shippingAddressForm.get('address.country')?.invalid" class="mt-1 error">
+                    <span style="color: red">
+                      Country is required
+                    </span>
                   </div>
                 </div>
-                </div>
+              </div>
                 
-                <div class="col-md-6 form-group">
+              <div class="col-md-6 form-group">
                 <div class="form-group"><label for="city">City</label>
                   <input
                     type="text"
@@ -380,16 +411,16 @@
                     class="form-control"
                     placeholder="Ahmedabad"
                   />
-                  <div *ngIf="(submitted || shippingForm['city'].touched) && shippingForm['city'].invalid" class="mt-1 error">
-                      <span *ngIf="shippingForm['city'].hasError('required')" style="color: red">
-                        City name is required
-                      </span>
+                  <div *ngIf="(submitted || shippingAddressForm.get('address.city')?.touched) && shippingAddressForm.get('address.city')?.invalid" class="mt-1 error">
+                    <span style="color: red">
+                      City name is required
+                    </span>
                   </div>
                 </div>
-                </div>
+              </div>
             </div>
-            <div class="row">        
-                <div class="col-md-6 form-group">
+            <div class="row" formGroupName="address">        
+              <div class="col-md-6 form-group">
                 <div class="form-group"><label for="state">State</label>
                   <input
                     type="text"
@@ -399,32 +430,32 @@
                     class="form-control"
                     placeholder="Gujarat"
                   />
-                  <div *ngIf="(submitted || shippingForm['state'].touched) && shippingForm['state'].invalid" class="mt-1 error">
-                      <span *ngIf="shippingForm['state'].hasError('required')" style="color: red">
-                        State name is required
-                      </span>
+                  <div *ngIf="(submitted || shippingAddressForm.get('address.state')?.touched) && shippingAddressForm.get('address.state')?.invalid" class="mt-1 error">
+                    <span style="color: red">
+                      State name is required
+                    </span>
                   </div>
                 </div>
+              </div>
+              <div class="col-md-6 form-group">
+                <div class="form-group"><label for="zipCode">ZIP Code</label>
+                  <input
+                    type="text"
+                    id="zipCode"
+                    name="zipCode"
+                    formControlName="zipCode"
+                    class="form-control"
+                    placeholder="382415"
+                  />
+                  <div *ngIf="(submitted || shippingAddressForm.get('address.zipCode')?.touched) && shippingAddressForm.get('address.zipCode')?.invalid" class="mt-1 error">
+                    <span style="color: red">
+                      ZIP Code is required
+                    </span>
+                  </div>
                 </div>
-                <div class="col-md-6 form-group">
-                    <div class="form-group"><label for="zipCode">ZIP Code</label>
-                      <input
-                        type="text"
-                        id="zipCode"
-                        name="zipCode"
-                        formControlName="zipCode"
-                        class="form-control"
-                        placeholder="382415"
-                      />
-                      <div *ngIf="(submitted || shippingForm['zipCode'].touched) && shippingForm['zipCode'].invalid" class="mt-1 error">
-                          <span *ngIf="shippingForm['zipCode'].hasError('required')" style="color: red">
-                            ZIP Code is required
-                          </span>
-                      </div>
-                    </div>
-                </div>
+              </div>
             </div>
-            </form>
+          </form>
         </div>
       </div>
     </div>
@@ -469,38 +500,20 @@
         <div class="bg-light p-30">
           <div class="form-group">
             <div class="custom-control custom-radio">
-              <input
-                type="radio"
-                class="custom-control-input"
-                name="payment"
-                id="paypal"
-              />
+              <input type="radio" class="custom-control-input" name="payment" id="paypal"/>
               <label class="custom-control-label" for="paypal">Paypal</label>
             </div>
           </div>
           <div class="form-group">
             <div class="custom-control custom-radio">
-              <input
-                type="radio"
-                class="custom-control-input"
-                name="payment"
-                id="directcheck"
-              />
-              <label class="custom-control-label" for="directcheck"
-                >Direct Check</label
-              >
+              <input type="radio" class="custom-control-input" name="payment" id="directcheck"/>
+              <label class="custom-control-label" for="directcheck">Direct Check</label>
             </div>
           </div>
           <div class="form-group mb-4">
             <div class="custom-control custom-radio">
-              <input
-                type="radio"
-                class="custom-control-input"
-                name="payment"
-                id="banktransfer"
-              />
-              <label class="custom-control-label" for="banktransfer">Bank Transfer</label
-              >
+              <input type="radio" class="custom-control-input" name="payment" id="banktransfer"/>
+              <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
             </div>
           </div>
           <button type="submit" class="btn btn-block btn-primary font-weight-bold py-3" (click)="placeOrder()">

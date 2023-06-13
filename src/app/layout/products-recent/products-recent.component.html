@@ -7,19 +7,20 @@
                 <img class="img-fluid w-100 p-5" src="{{product.image}}" alt="..."  style="width: 100% !important; height: 400px;">
                </div>
                 <div class="product-action">
-                    <a class="btn btn-outline-dark btn-square" *ngFor="let icon of icons; let last=last">
-                        <span *ngIf="!last">
-                            <i class={{icon}}></i>
-                        </span>
-                        <span *ngIf="last">
-                            <i class={{icon}}  [routerLink]="['/Shop/Shop-details', product.id]"></i>
-                        </span>
-                    </a>
+                    <a class="btn btn-outline-dark btn-square" (click)="addToCart(product._id)">
+                        <i class="fa fa-shopping-cart"></i>
+                      </a>
+                      <a class="btn btn-outline-dark btn-square" (click)="doFavorites(product._id)">
+                        <i [ngClass]="{ far: !product.isShow, fa: product.isShow }" class="fa-heart"></i>
+                      </a>
+                      <a class="btn btn-outline-dark btn-square" (click)="detailsPage(product._id)" >
+                        <i class="fa fa-search"></i>
+                      </a>
                 </div>
             </div>
             <div class="text-center py-4">
                 <div  style="min-height: 60px;">
-                    <a class="h6 text-decoration-none" [routerLink]="['/Shop/Shop-details', product.id]">{{product.title}}</a>
+                    <a class="h6 text-decoration-none" (click)="detailsPage(product._id)">{{product.title}}</a>
                 </div>
                 <div class="d-flex align-items-center justify-content-center mt-2">
                     <h5>{{product.price*currencyPrice | currency:currency}}</h5>

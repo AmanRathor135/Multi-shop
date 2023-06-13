@@ -1,14 +1,14 @@
 <div class="container-fluid" *ngIf="Breadcrumb$.length">
-     <div class="row px-xl-5">
-         <div class="col-12">
-             <nav class="breadcrumb bg-light mb-30">
-               <span *ngFor="let item of Breadcrumb$; let i = index">
-                    <a [routerLink]="[item.url]" style="text-decoration: none" class="text-dark">
-                       {{ item.pageTitle }}
-                      <span *ngIf="i !== Breadcrumb$.length - 1"> / &nbsp;</span>
-                    </a>
-                  </span>
-             </nav>
-         </div>
-     </div>
- </div>
+  <div class="row px-xl-5">
+    <div class="col-12">
+      <nav class="breadcrumb bg-light mb-30">
+        <span *ngFor="let item of Breadcrumb$; let i = index">
+          <a [routerLink]="[item.url]" style="text-decoration: none" class="text-dark">
+            {{ item.pageTitle }}
+            <span *ngIf="i !== Breadcrumb$.length - 1"> / &nbsp;</span>
+          </a>
+        </span>
+      </nav>
+    </div>
+  </div>
+</div>

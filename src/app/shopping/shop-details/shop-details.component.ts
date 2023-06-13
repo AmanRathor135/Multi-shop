@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -17,12 +19,6 @@ export class ShopDetailsComponent implements OnInit, OnDestroy {
   currencyPrice:any;
   totalRate: any;
   subscription: Subscription[] = [];
-  icons: any[] = [
-    'fa fa-shopping-cart',
-    'far fa-heart',
-    'fa fa-sync-alt',
-    'fa fa-search',
-  ];
 
   customOptions: OwlOptions = {
     loop: true,
@@ -40,26 +36,40 @@ export class ShopDetailsComponent implements OnInit, OnDestroy {
     },
   };
 
-  constructor(private service: ProductService, private cdr:ChangeDetectorRef) {
-    this.getFavoriteItems();
-    
-    service.Breadcrumb.next([
-      {
-        pageTitle: 'Home',
-        url: '',
-      },
-      {
-        pageTitle: 'Shop',
-        url: 'Shop/shop',
-      },
-      {
-        pageTitle: 'Shop Details',
-        url: 'Shop/Shop-details',
-      }
-    ]);
-  }
+  constructor(private service: ProductService, private cdr:ChangeDetectorRef, private router:Router, private toastr:ToastrService) {}
 
   ngOnInit(): void {
+    this.service.isLoggedIn.next(true);
+    this.service.cartItemsCount();
+    this.service.favoriteItemsCount();
+    this.getCurrencyName();
+    this.getProductsForCarousel();
+    this.rating(5);
+  }
+
+  // Route to Products Detail Page
+  detailsPage(productId:any){
+    this.router.navigate(['/Shop/Shop-details', productId]);
+  }
+
+  /**
+   * Adding a product for a Wishlist using Product Services POST method
+   * @param productId is a product's Id
+   */
+  doFavorites(productId: any) {
+    let sub3 = this.service.addProductInFavorites({"productId":productId}).subscribe({
+      next: (res:any) => {
+        res.type=='success'? this.toastr.success(res.message):this.toastr.info(res.message); 
+        this.service.favoriteItemsCount();
+      },
+      error: (err:any) => { console.log("Do Favorites Error", err);},
+      complete: () => { this.cdr.markForCheck();}
+    });
+    this.subscription.push(sub3);
+  };
+
+  // get currency name using behavior subject of products service and calling @getPrice() function
+  getCurrencyName(){
     let sub1 = this.service.currency.subscribe((res: any) => {
       if (res) {
         this.currency = res;
@@ -68,17 +78,9 @@ export class ShopDetailsComponent implements OnInit, OnDestroy {
       }
     });
     this.subscription.push(sub1);
-
-    this.getProductsForCarousel();
-    this.rating(5);
   }
 
-  getFavoriteItems(){
-    let list:any = localStorage.getItem('favoriteItemList');
-    this.favItemLength = JSON.parse(list);
-    this.service.totalFavoriteItems.next(this.favItemLength.length);
-  };
-
+  // get Price of Selected Currency from Local Storage
   getPrice(){
     let value:any = localStorage.getItem('currencyPrice');
     value = JSON.parse(value);
@@ -88,7 +90,7 @@ export class ShopDetailsComponent implements OnInit, OnDestroy {
   getProductsForCarousel() {
     let limit = {limit:8};
     let sub2 = this.service.getFilteredProducts(limit).subscribe({
-      next: (res: any) => { this.carouselList = res.data.productList; },
+      next: (res: any) => { this.carouselList = res.data?.productList; },
       error: (err: any) => { console.log('err', err); },
       complete: () => { this.cdr.markForCheck(); },
     });
@@ -100,7 +102,17 @@ export class ShopDetailsComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   };
 
+  // getting the breadcrumb value using Product Service Behavior Subject
+  getBreadcrumb(){
+    this.service.Breadcrumb.next([
+      { pageTitle: 'Home', url: ''},
+      { pageTitle: 'Shop', url: 'Shop'},
+      { pageTitle: 'Shop Details', url: 'Shop/Shop-details'}
+    ]);
+  };
+
   ngOnDestroy(): void {
+    // Removes all the subscriptions to avoid memory leak issue
     this.subscription.forEach((subscriptionRow: any) => {
       subscriptionRow.unsubscribe();
     });
