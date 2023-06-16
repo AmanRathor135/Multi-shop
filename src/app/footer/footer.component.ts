@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from
 import { ProductService } from '../services/product.service';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-footer',
@@ -12,6 +12,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class FooterComponent implements OnDestroy {
 
+  submitted:boolean = false;
   subscription:Subscription[] = [];
   footerData: any = {
     title: 'Get In Touch',
@@ -27,12 +28,12 @@ export class FooterComponent implements OnDestroy {
     {
       name: 'Quick Shop',
       icon: 'fa fa-angle-right',
-      list: ['Home', 'Our Shop', 'Shop Detail', 'Shopping Cart', 'Checkout', 'Contact Us'],
+      lists: ['Home', 'Our Shop', 'Shop Detail', 'Shopping Cart', 'Checkout', 'Contact Us'],
     },
     {
       name: 'My Account ',
       icon: 'fa fa-angle-right',
-      list: ['Home', 'Our Shop', 'Shop Detail', 'Shopping Cart', 'Checkout', 'Contact Us'],
+      lists: ['Home', 'Our Shop', 'Shop Detail', 'Shopping Cart', 'Checkout', 'Contact Us'],
     },
   ];
 
@@ -45,11 +46,16 @@ export class FooterComponent implements OnDestroy {
   
   newsletterForm:FormGroup = new FormGroup({
     email:new FormControl('', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')])
-  })
+  });
 
-  newsletter: any = { email: '' };
+  // newsletter: any = { email: '' };
 
   constructor(private service:ProductService, private toastr:ToastrService, private cdr:ChangeDetectorRef) {}
+
+  // Using billingForm in HTML as a billingAddressForm.controls
+  get form(): { [key: string]: AbstractControl } {
+    return this.newsletterForm.controls;
+  }
 
   /**
    * signUp form using Product Service POST API
@@ -57,10 +63,11 @@ export class FooterComponent implements OnDestroy {
    * If it is Valid then we pass the form value in Product Service
    * else it will gives an error
    */
-  signUp(form:any){
-    if(form.valid){
-      let sub1 = this.service.newsletterSignUpEmail(this.newsletter).subscribe({
-        next: (res:any) => { res.type == 'success'?this.toastr.success(res.message):this.toastr.warning(res.message); },
+  signUp(){
+    this.submitted = true;
+    if(this.newsletterForm.valid){
+      let sub1 = this.service.newsletterSignUpEmail(this.newsletterForm.value).subscribe({
+        next: (res:any) => { res.type == 'success' ? this.toastr.success(res.message) : this.toastr.warning(res.message);},
         error: (err:any) => { console.log("Footer Error", err) },
         complete: () => { this.cdr.markForCheck(); }
       });

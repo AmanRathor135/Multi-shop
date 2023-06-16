@@ -33,8 +33,12 @@ export class AppComponent implements OnInit {
         this.decodeToken = this.helper.decodeToken(this.token);
         this.expirationTimeHours = (new Date(this.decodeToken?.exp*1000).getHours() - new Date().getHours())*3600*1000;
         this.expirationTimeMinutes = (new Date(this.decodeToken?.exp*1000).getMinutes() - new Date().getMinutes()) - 1;
-        console.log("Expiration Time",this.expirationTimeMinutes, "Minutes Remain");
-      
+        console.log("Expiration Time Minutes ==>",this.expirationTimeMinutes, "Minutes Remain");
+        console.log("Expiration Time Hours ==>",this.expirationTimeHours, "Hours Remain");
+        console.log("==================================================================>")
+        console.log("Expire ==>",new Date(this.decodeToken?.exp*1000));
+        console.log("Current ==>",new Date());
+        
         setTimeout(() => {
           this.checkTimeToRefreshToken();
         }, this.expirationTimeHours + this.expirationTimeMinutes*60*1000);
@@ -47,7 +51,7 @@ export class AppComponent implements OnInit {
     checkTimeToRefreshToken(){
       this.authService.refreshToken().subscribe({
         next: (res:any) => {
-          localStorage.setItem('token',res.data.token);
+          localStorage.setItem('token',res.data?.token);
         },
         error: (err:any) => { console.log('Refreshing Token Error', err); },
         complete: () => { console.log("Token Generated Successfully!"); }

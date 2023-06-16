@@ -40,27 +40,23 @@ export class ProductsRecentComponent implements OnInit, OnDestroy {
     this.subscription.push(sub1);
   };
 
-  addToCart(productId:any){
-    this.service.InsertInCart({"productId":productId, quantity:1}).subscribe({
-      next: (res:any) => {
-        if (res.type=='success'){
-          this.toastr.success(res.message)
-          this.service.cartItemsCount();
-        }
-        else{
-          this.toastr.info(res.message);
-          this.router.navigate(['/auth/login']);
-        }
-      },
-      error: (err:any) => { console.log("add to cart error",err); },
-      complete: () => { this.cdr.markForCheck(); }
-    });
-  };
-
   // Route to Products Detail Page
   detailsPage(productId:any){
     this.router.navigate(['/Shop/Shop-details', productId]);
   };
+
+
+  // get Recent Products using Product Service API after passing the body
+  getProducts() {
+    this.data = {type:'recent'};
+    let sub2 = this.service.getFilteredProducts(this.data).subscribe({
+      next: (res: any) => {this.productList = res.data?.productList;},
+      error: (err: any) => { console.log('Recent Product Error', err);},
+      complete: () => { this.cdr.markForCheck();},
+    });
+    this.subscription.push(sub2);
+  };
+
 
   /**
    * Adding a product in a Wishlist component
@@ -81,21 +77,28 @@ export class ProductsRecentComponent implements OnInit, OnDestroy {
     this.subscription.push(sub3);
   };
 
-
-  /**
-   * get Limited Products using Product Service after passing the params
-   * If it give success then we get the products as a Response which we store in productList and go to complete 
-   * If it gives error then it will show error
-   */
-  getProducts() {
-    this.data = {type:'recent'};
-    let sub2 = this.service.getFilteredProducts(this.data).subscribe({
-      next: (res: any) => {this.productList = res.data?.productList;},
-      error: (err: any) => { console.log('Recent Product Error', err);},
-      complete: () => { this.cdr.markForCheck();},
-    });
-    this.subscription.push(sub2);
-  }
+  // Adding in Cart using ProductId
+  addToCart(productId:any){
+    if(localStorage.getItem('token')){
+      let sub4 = this.service.InsertInCart({"productId":productId, quantity:1}).subscribe({
+        next: (res:any) => {
+          if (res.type=='success'){
+            this.toastr.success(res.message)
+            this.service.cartItemsCount();
+          }
+        },
+        error: (err:any) => { console.log("add to cart error",err); },
+        complete: () => { this.cdr.markForCheck(); }
+      });
+      this.subscription.push(sub4);
+    }
+    else {
+      let result = confirm("You have to LoggedIn First");
+      if(result){
+        this.router.navigate(['/auth/login']);
+      }
+    }
+  };
 
   // get Price of Selected Currency from Local Storage
   getPrice() {

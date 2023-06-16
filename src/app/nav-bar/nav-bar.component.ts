@@ -28,6 +28,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     { category: 'Home', route: 'Home' },
     { category: 'Shop', route: 'Shop' },
     { category: 'Contact', route: 'contact' },
+    { category: 'Order History', route: 'cart-detail/order-history' },
   ];
 
   constructor(

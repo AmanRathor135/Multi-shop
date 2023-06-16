@@ -28,14 +28,11 @@
                 />
               </div>
               <div class="product-action">
-                <a class="btn btn-outline-dark btn-square" (click)="detailsPage(product._id)">
+                <a class="btn btn-outline-dark btn-square" (click)="addToCart(product._id)">
                   <i class="fa fa-shopping-cart"></i>
                 </a>
                 <a class="btn btn-outline-dark btn-square" (click)="doFavorites(product._id)">
                   <i [ngClass]="{ far: !product.isShow, fa: product.isShow }" class="fa-heart"></i>
-                </a>
-                <a class="btn btn-outline-dark btn-square">
-                  <i class="fa fa-sync-alt"></i>
                 </a>
                 <a class="btn btn-outline-dark btn-square" (click)="detailsPage(product._id)" >
                   <i class="fa fa-search"></i>

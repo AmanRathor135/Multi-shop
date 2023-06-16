@@ -27,7 +27,6 @@ export class ContactDetailFormComponent implements OnInit, OnDestroy {
     message: new FormControl('',[Validators.required])
   })
 
-  
   constructor(private service:ProductService, private toastr:ToastrService, private cdr:ChangeDetectorRef) {}
 
   ngOnInit(): void {
@@ -53,8 +52,8 @@ export class ContactDetailFormComponent implements OnInit, OnDestroy {
     if(this.contactFormData.valid){
       let sub1 = this.service.contactUsForm(this.contactFormData.value).subscribe({
         next: (res:any) => { 
+          res.type == 'success'? this.toastr.success(res.message):this.toastr.warning(res.message); 
           this.submitted = false;
-          res.type == 'success'?this.toastr.success(res.message):this.toastr.warning(res.message); 
         },
         error: (err:any) => { console.log("Contact Form Error", err); },
         complete: () => { 

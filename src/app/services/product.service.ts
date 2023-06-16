@@ -77,16 +77,36 @@ export class ProductService {
   };
       
   newsletterSignUpEmail(data: any): Observable<any> {
-    return this.service.postReq('http://192.168.1.175:5050/details/newsletter',data);
+    return this.service.postReq('http://192.168.1.175:5050/newsletter',data);
   };
     
-  contactUsForm(data:any): Observable<any> {
-    return this.service.postReq('http://192.168.1.175:5050/details/contactUs',data);
+  contactUsForm(data:any): Observable<any> {  
+    return this.service.postReq('http://192.168.1.175:5050/contact-us',data);
   };
   
-  billingAddressForm(data:any): Observable<any> {
-    return this.service.postReq('http://192.168.1.175:5050/details/billing',data);
+  addAddress(data:any): Observable<any> {
+    return this.service.postReq('http://192.168.1.175:5050/users/address',data);
   };
+
+  getAddress(): Observable<any> {
+    return this.service.getReq('http://192.168.1.175:5050/users/address');
+  };
+
+  updateAddress(data:any,params:any): Observable<any> {
+    return this.service.putReq(`http://192.168.1.175:5050/users/address/${params}`,data);
+  };
+
+  removeAddress(params:any): Observable<any> {
+    return this.service.deleteReq(`http://192.168.1.175:5050/users/address/remove/${params}`);
+  };
+
+  addOrder(data:any): Observable<any> {
+    return this.service.postReq('http://192.168.1.175:5050/products/order',data)
+  };
+
+  getOrderList(): Observable<any> {
+    return this.service.getReq('http://192.168.1.175:5050/products/order')
+  }
 
   cartItemsCount(){
     this.cartProductList().subscribe({

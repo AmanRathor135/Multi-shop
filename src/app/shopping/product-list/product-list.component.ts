@@ -116,23 +116,6 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
     this.currencyPrice = value[this.currency];
   };
 
-  addToCart(productId:any){
-    this.service.InsertInCart({"productId":productId, quantity:1}).subscribe({
-      next: (res:any) => {
-        if (res.type=='success'){
-          this.toastr.success(res.message)
-          this.service.cartItemsCount();
-        }
-        else{
-          this.toastr.info(res.message);
-          this.router.navigate(['/auth/login']);
-        }
-      },
-      error: (err:any) => { console.log("add to cart error",err); },
-      complete: () => { this.cdr.markForCheck(); }
-    });
-  };
-
   /**
    * Adding a product in a Wishlist component
    * @param productId is a product's Id
@@ -149,6 +132,29 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
       complete: () => { this.cdr.markForCheck();}
     });
     this.subscription.push(sub4);
+  };
+
+  // Adding in Cart using ProductId
+  addToCart(productId:any){
+    if(localStorage.getItem('token')){
+      let sub5 = this.service.InsertInCart({"productId":productId, quantity:1}).subscribe({
+        next: (res:any) => {
+          if (res.type=='success'){
+            this.toastr.success(res.message)
+            this.service.cartItemsCount();
+          }
+        },
+        error: (err:any) => { console.log("add to cart error",err); },
+        complete: () => { this.cdr.markForCheck(); }
+      });
+      this.subscription.push(sub5);
+    }
+    else {
+      let result = confirm("You have to LoggedIn First");
+      if(result){
+        this.router.navigate(['/auth/login']);
+      }
+    }
   };
 
   /** 

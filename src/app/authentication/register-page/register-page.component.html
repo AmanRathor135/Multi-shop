@@ -16,17 +16,8 @@
                   class="form-control"
                   placeholder="Enter First Name"
                 />
-                <div
-                  *ngIf="
-                    (submitted || form['firstName'].touched) &&
-                    form['firstName'].invalid
-                  "
-                  class="mt-1 error"
-                >
-                  <span
-                    *ngIf="form['firstName'].hasError('required')"
-                    style="color: red"
-                  >
+                <div *ngIf="(submitted || form['firstName'].touched) && form['firstName'].invalid" class="mt-1 error">
+                  <span *ngIf="form['firstName'].hasError('required')" style="color: red">
                     First Name is required
                   </span>
                 </div>
@@ -44,17 +35,8 @@
                   class="form-control"
                   placeholder="Enter Last Name"
                 />
-                <div
-                  *ngIf="
-                    (submitted || form['lastName'].touched) &&
-                    form['lastName'].invalid
-                  "
-                  class="mt-1 error"
-                >
-                  <span
-                    *ngIf="form['lastName'].hasError('required')"
-                    style="color: red"
-                  >
+                <div *ngIf="(submitted || form['lastName'].touched) && form['lastName'].invalid" class="mt-1 error">
+                  <span *ngIf="form['lastName'].hasError('required')" style="color: red">
                     Last Name is required
                   </span>
                 </div>
@@ -74,23 +56,11 @@
                   class="form-control"
                   placeholder="Enter E-mail"
                 />
-                <div
-                  *ngIf="
-                    (submitted || form['email'].touched) &&
-                    form['email'].invalid
-                  "
-                  class="mt-1 error"
-                >
-                  <span
-                    *ngIf="form['email'].hasError('required')"
-                    style="color: red"
-                  >
+                <div *ngIf="(submitted || form['email'].touched) && form['email'].invalid" class="mt-1 error">
+                  <span *ngIf="form['email'].hasError('required')" style="color: red">
                     E-mail is required
                   </span>
-                  <span
-                    *ngIf="form['email'].hasError('pattern')"
-                    style="color: red"
-                  >
+                  <span *ngIf="form['email'].hasError('pattern')" style="color: red">
                     Enter correct E-mail address
                   </span>
                 </div>
@@ -108,23 +78,11 @@
                   class="form-control"
                   placeholder="Enter password"
                 />
-                <div
-                  *ngIf="
-                    (submitted || form['password'].touched) &&
-                    form['password'].invalid
-                  "
-                  class="mt-1 error"
-                >
-                  <span
-                    *ngIf="form['password'].hasError('required')"
-                    style="color: red"
-                  >
+                <div *ngIf="(submitted || form['password'].touched) && form['password'].invalid" class="mt-1 error">
+                  <span *ngIf="form['password'].hasError('required')" style="color: red">
                     Password is required
                   </span>
-                  <span
-                    *ngIf="form['password'].hasError('pattern')"
-                    style="color: red"
-                  >
+                  <span *ngIf="form['password'].hasError('pattern')" style="color: red">
                     Enter strong Password
                   </span>
                 </div>
@@ -144,34 +102,19 @@
                   class="form-control"
                   placeholder="Enter Mobile No."
                 />
-                <div
-                  *ngIf="
-                    (submitted || form['mobile'].touched) &&
-                    form['mobile'].invalid
-                  "
-                  class="mt-1 error"
-                >
-                  <span
-                    *ngIf="form['mobile'].hasError('required')"
-                    style="color: red"
-                  >
+                <div *ngIf="(submitted || form['mobile'].touched) && form['mobile'].invalid" class="mt-1 error">
+                  <span *ngIf="form['mobile'].hasError('required')" style="color: red">
                     Mobile number is required
                   </span>
-                  <span
-                    *ngIf="form['mobile'].hasError('minlength')"
-                    style="color: red"
-                  >
+                  <span *ngIf="form['mobile'].hasError('minlength')" style="color: red">
                     Minimum length should be 9
                   </span>
-                  <span
-                    *ngIf="form['mobile'].hasError('maxlength')"
-                    style="color: red"
-                  >
-                    Maximum length should be 12
+                  <span *ngIf="form['mobile'].hasError('maxlength')" style="color: red">
+                    Maximum length should be 14
                   </span>
                   <!-- <span *ngIf="form['mobile'].hasError('pattern') && !form['mobile'].hasError('minlength')" style="color: red">
-                           Enter Number is only
-                         </span> -->
+                    Enter Number is only
+                  </span> -->
                 </div>
               </div>
             </div>
@@ -187,17 +130,8 @@
                   class="form-control"
                   placeholder="Enter Last Name"
                 />
-                <div
-                  *ngIf="
-                    (submitted || form['timeZone'].touched) &&
-                    form['timeZone'].invalid
-                  "
-                  class="mt-1 error"
-                >
-                  <span
-                    *ngIf="form['timeZone'].hasError('required')"
-                    style="color: red"
-                  >
+                <div *ngIf="(submitted || form['timeZone'].touched) && form['timeZone'].invalid" class="mt-1 error">
+                  <span *ngIf="form['timeZone'].hasError('required')" style="color: red">
                     Time Zone is required
                   </span>
                 </div>
@@ -404,8 +338,7 @@
             </button>
           </div>
           <div class="register">
-            <p>
-              Already have a account,
+            <p> Already have a account,
               <a [routerLink]="['/auth/login']" class="fs-6 text-white">Sign In</a>
             </p>
           </div>

@@ -2,10 +2,12 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -14,7 +16,9 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./my-cart.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MyCartComponent implements OnInit {
+export class MyCartComponent implements OnInit, OnDestroy {
+
+  subscription:Subscription[] = [];
   selectedIndex: any;
   totalAmount: number = 0;
   currency: any;
@@ -41,7 +45,7 @@ export class MyCartComponent implements OnInit {
   
   getCartProductList(){
     this.service.isLoggedIn.next(true);
-    this.service.cartProductList().subscribe({
+    let sub1 = this.service.cartProductList().subscribe({
       next: (res:any) => {
         this.cartProduct = res.data;
         this.service.totalCartItems.next(this.cartProduct?.length);
@@ -50,29 +54,31 @@ export class MyCartComponent implements OnInit {
       error: (err:any) => { console.log("Cart List error", err); },
       complete: () => { this.cdr.markForCheck();}
     });
+    this.subscription.push(sub1);
   };
-
   
   // Set the Currency Price in Local Storage using Product Service
   currencyValue() {  
-    this.service.getCurrencyPrice().subscribe({
+    let sub2 = this.service.getCurrencyPrice().subscribe({
       next: (res: any) => {
         localStorage.setItem('currencyPrice', JSON.stringify(res.data));
         this.cdr.markForCheck();
       },
     }); 
+    this.subscription.push(sub2);
   };
 
   // get Selected Currency Name using Behavior Subject of Product Service
   getCurrencyName(){
-    this.service.currency.subscribe((res: any) => {
+    let sub3 = this.service.currency.subscribe((res: any) => {
       if (res) {
         this.currency = res;
         this.getPrice();
         this.cdr.markForCheck();
       }
-    });  
-  }
+    }); 
+    this.subscription.push(sub3); 
+  };
   
   // get Price of Selected Currency from Local Storage
   getPrice(){
@@ -80,7 +86,6 @@ export class MyCartComponent implements OnInit {
     value = JSON.parse(value);
     this.currencyPrice = value[this.currency];
   };
-
  
   // get Total Amount of cartProductList
   totalPrice() {
@@ -94,12 +99,12 @@ export class MyCartComponent implements OnInit {
   decreaseQuantity(index:any){
     if(this.cartProduct[index].quantity>1) { this.cartProduct[index].quantity--; }
     else { this.cartProduct[index].quantity = 1; }
-  }
+  };
 
   // Increase the Selected Product Quantity
   increaseQuantity(index:any){
     this.cartProduct[index].quantity++;
-  }
+  };
 
   /**
    * Delete the selected record and fetch new list
@@ -107,11 +112,10 @@ export class MyCartComponent implements OnInit {
    */
   removeRow(cartId: any) {
     this.service.isLoggedIn.next(true);
-
     let result = confirm("Do You want to Remove the Item from Cart?");
     if(result){
       if(this.cartProduct.length){
-        this.service.removeCartProduct(cartId).subscribe({
+        let sub4 = this.service.removeCartProduct(cartId).subscribe({
           next: (res:any) => {
             if(res.type == 'success'){
               this.toastr.success(res.message);
@@ -120,13 +124,13 @@ export class MyCartComponent implements OnInit {
           },
           error: (err:any) => { console.log("remove cart Item error", err); },
           complete: () => { 
-            this.router.navigateByUrl('/', { skipLocationChange: true })
-              .then(() => {
-                this.router.navigate(['cart-detail/my-cart']); // navigate to same route
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {     // navigate to same route
+              this.router.navigate(['cart-detail/my-cart']);                              
             });
             this.cdr.markForCheck(); 
           }
         });
+        this.subscription.push(sub4);
       } 
     }
   };
@@ -139,4 +143,11 @@ export class MyCartComponent implements OnInit {
       { pageTitle: 'Shopping Cart', url: 'cart-detail/my-cart' },
     ]);
   };
+
+  ngOnDestroy(): void {
+    // Removes all the subscriptions to avoid memory leak issue
+    this.subscription.forEach((subscriptionRow:any) => {
+      subscriptionRow.unsubscribe();
+    });
+  }
 }

@@ -91,9 +91,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
       this.DropDownMenu1 = ['My Profile', 'Logout'];
       let name = localStorage.getItem('token');
       this.user = this.helper.decodeToken(name);
-      // this.user = this.user.firstName;
-      this.user = 'User';
-      // console.log("user",new Date(this.user.exp / 1000));
+      this.user = this.user.name;
     };
   };
 

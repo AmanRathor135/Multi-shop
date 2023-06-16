@@ -97,21 +97,25 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   };
 
   addToCart(item: any) {
+    if(localStorage.getItem('token')){
       let sub4 = this.service.InsertInCart({"productId":item._id, quantity:this.value}).subscribe({
         next: (res:any) => {
           if (res.type=='success'){
             this.toastr.success(res.message)
             this.service.cartItemsCount();
           }
-          else{
-            this.toastr.info(res.message);
-            this.router.navigate(['/auth/login']);
-          }
         },
         error: (err:any) => { console.log("add to cart error",err); },
         complete: () => { this.cdr.markForCheck(); }
       });
       this.subscription.push(sub4);
+    }
+    else{
+    let result = confirm("You have to LoggedIn First");
+      if(result){
+        this.router.navigate(['/auth/login']);
+      }
+    }
   };
 
   rating(value: any) {

@@ -42,6 +42,7 @@ export class ShopDetailsComponent implements OnInit, OnDestroy {
     this.service.isLoggedIn.next(true);
     this.service.cartItemsCount();
     this.service.favoriteItemsCount();
+    this.getBreadcrumb();
     this.getCurrencyName();
     this.getProductsForCarousel();
     this.rating(5);
@@ -51,6 +52,29 @@ export class ShopDetailsComponent implements OnInit, OnDestroy {
   detailsPage(productId:any){
     this.router.navigate(['/Shop/Shop-details', productId]);
   }
+
+  // get currency name using behavior subject of products service and calling @getPrice() function
+  getCurrencyName(){
+    let sub1 = this.service.currency.subscribe((res: any) => {
+      if (res) {
+        this.currency = res;
+        this.getPrice();
+        this.cdr.markForCheck();
+      }
+    });
+    this.subscription.push(sub1);
+  }
+
+  // get Limited Product for Carousel using Product Service API
+  getProductsForCarousel() {
+    let limit = {limit:8};
+    let sub2 = this.service.getFilteredProducts(limit).subscribe({
+      next: (res: any) => { this.carouselList = res.data?.productList; },
+      error: (err: any) => { console.log('err', err); },
+      complete: () => { this.cdr.markForCheck(); },
+    });
+    this.subscription.push(sub2);
+  };
 
   /**
    * Adding a product for a Wishlist using Product Services POST method
@@ -68,18 +92,6 @@ export class ShopDetailsComponent implements OnInit, OnDestroy {
     this.subscription.push(sub3);
   };
 
-  // get currency name using behavior subject of products service and calling @getPrice() function
-  getCurrencyName(){
-    let sub1 = this.service.currency.subscribe((res: any) => {
-      if (res) {
-        this.currency = res;
-        this.getPrice();
-        this.cdr.markForCheck();
-      }
-    });
-    this.subscription.push(sub1);
-  }
-
   // get Price of Selected Currency from Local Storage
   getPrice(){
     let value:any = localStorage.getItem('currencyPrice');
@@ -87,14 +99,27 @@ export class ShopDetailsComponent implements OnInit, OnDestroy {
     this.currencyPrice = value[this.currency];
   };
 
-  getProductsForCarousel() {
-    let limit = {limit:8};
-    let sub2 = this.service.getFilteredProducts(limit).subscribe({
-      next: (res: any) => { this.carouselList = res.data?.productList; },
-      error: (err: any) => { console.log('err', err); },
-      complete: () => { this.cdr.markForCheck(); },
-    });
-    this.subscription.push(sub2);
+  // Adding in Cart using ProductId
+  addToCart(productId:any){
+    if(localStorage.getItem('token')){
+      let sub4 = this.service.InsertInCart({"productId":productId, quantity:1}).subscribe({
+        next: (res:any) => {
+          if (res.type=='success'){
+            this.toastr.success(res.message)
+            this.service.cartItemsCount();
+          }
+        },
+        error: (err:any) => { console.log("add to cart error",err); },
+        complete: () => { this.cdr.markForCheck(); }
+      });
+      this.subscription.push(sub4);
+    }
+    else {
+      let result = confirm("You have to LoggedIn First");
+      if(result){
+        this.router.navigate(['/auth/login']);
+      }
+    }
   };
     
   rating(value: any) {
