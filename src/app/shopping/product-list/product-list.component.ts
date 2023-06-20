@@ -53,7 +53,6 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     // this.getAllProducts();
     this.getCurrencyName(); 
-    this.rating(5);
   }
 
   ngOnChanges() {
@@ -194,14 +193,6 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
     this.data.page = this.page;
     this.data.sort = {field: value,  order: "desc"};
     this.getProductsByFilter();
-  };
-
-  /**
-   * for getting star value using product.rating.rate out of @param value
-   * @param value is 5 given in ngOnInit 
-   */
-  rating(value: any) {
-    this.totalRate = Array(value);
   };
 
   ngOnDestroy(): void {

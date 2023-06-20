@@ -3515,11 +3515,11 @@ input[type="button"].btn-block {
   border-color: #ffefb3;
 } */
 
-.custom-control-input:not(:disabled):active ~ .custom-control-label::before {
+/* .custom-control-input:not(:disabled):active ~ .custom-control-label::before {
   color: #fff;
   background-color: #fffae6;
   border-color: #fffae6;
-}
+} */
 
 .custom-control-input[disabled] ~ .custom-control-label, .custom-control-input:disabled ~ .custom-control-label {
   color: #6c757d;

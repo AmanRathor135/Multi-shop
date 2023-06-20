@@ -26,20 +26,15 @@
                         <h5>{{product.price*currencyPrice | currency:currency}}</h5>
                         <h6 class="text-muted ml-2"><del>{{product.checkedPrice*currencyPrice | currency:currency}}</del></h6>
                     </div>
-                    <div class="d-flex align-items-center justify-content-center mb-1">
-                        <ng-container *ngFor="let rate of totalRate; let i=index">
-                            <ng-container *ngIf="i<math.floor(product.rating.rate)">
-                                <small class="fa fa-star text-primary mr-1"></small>
-                            </ng-container>
-                            <ng-container *ngIf="(i==math.floor(product.rating.rate))">
-                                <small class="fa fa-star-half-alt text-primary mr-1"></small>
-                            </ng-container>
-                            <ng-container *ngIf="i>product.rating.rate">
-                                <small class="far fa-star text-primary mr-1"></small>
-                            </ng-container>
-                        </ng-container>
+                    <div class="d-flex align-items-center justify-content-center mb-1" *ngIf="product?.rating">
+                        <ng-template #t let-fill="fill">
+                            <span class="star" [class.full]="fill === 100">
+                              <span class="half" [style.width.%]="fill">&bigstar;</span>&bigstar;
+                            </span>
+                          </ng-template>
+                          <ngb-rating [rate]="product?.rating" [starTemplate]="t" [readonly]="true" [max]="5"></ngb-rating>
                     </div>
-                    <small>(The Rating is {{product.rating.rate}} Out of {{product.rating.count}} Reviews)</small>
+                    <small *ngIf="product?.rating">({{product?.rating}} / {{ product?.reviewCount }} Reviews)</small>
                 </div>
             </div>
         </div>

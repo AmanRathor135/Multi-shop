@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
-import { AsyncSubject, BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
   constructor(private service: HttpService) {}
-
-  Breadcrumb = new BehaviorSubject([
-    { pageTitle: 'Home', url: '' },
-  ]);  
+  Breadcrumb = new BehaviorSubject([ { pageTitle: 'Home', url: '' }, ]);  
 
   totalCartItems = new BehaviorSubject<number>(0);
   totalFavoriteItems = new BehaviorSubject<number>(0);
@@ -106,7 +103,11 @@ export class ProductService {
 
   getOrderList(): Observable<any> {
     return this.service.getReq('http://192.168.1.175:5050/products/order')
-  }
+  };
+
+  getSingleOrder(params:any): Observable<any> {
+    return this.service.getReq(`http://192.168.1.175:5050/products/order/${params}`)
+  };
 
   cartItemsCount(){
     this.cartProductList().subscribe({

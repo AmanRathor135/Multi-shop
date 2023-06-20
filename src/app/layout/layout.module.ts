@@ -15,6 +15,7 @@ import { FilterPipe } from '../shopping/product-list/filter.pipe';
 import { FaqComponent } from './faq/faq.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
 import { ProductService } from '../services/product.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { ProductService } from '../services/product.service';
   imports: [
     CommonModule,
     LayoutRoutingModule,
-    CarouselModule
+    CarouselModule,
+    NgbModule
   ],
   exports: [ProductsFeaturedComponent]
 })

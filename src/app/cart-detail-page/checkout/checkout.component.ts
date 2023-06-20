@@ -25,16 +25,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   addressList:any[] = [];
   orderData:any = {};
   isShippingAddressActive:boolean = false;
-  isChecked: boolean = false;
   submitted: boolean = false;
   hidden:boolean = true;
   paymentOptions:any[] = [
-    { value:'Cash on Delivery', name:'Cash on Delivery',},
-    { value:'Google Pay', name:'Google Pay',},
-    { value:'Paytm', name:'Paytm',},
-    { value:'Paypal', name:'Paypal', icon:'fa fa-paypal'},
-    { value:'Direct Check', name:'Direct Check',},
-    { value:'Bank Transfer', name:'Bank Transfer',},
+    { value:'select', name:'Select Payment Method',}, { value:'Cash on Delivery', name:'Cash on Delivery',},
+    { value:'Google Pay', name:'Google Pay',}, { value:'Paytm', name:'Paytm',}, { value:'Paypal', name:'Paypal'},
+    { value:'Direct Check', name:'Direct Check',}, { value:'Bank Transfer', name:'Bank Transfer',},
     { value:'PhonePe', name:'PhonePe',},
   ];
 
@@ -56,22 +52,22 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     shipToDifferAddress: new FormControl(false),
   });
 
-  shippingAddressForm: FormGroup = new FormGroup({
-    firstName: new FormControl('', [Validators.required]),
-    lastName: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'),]),
-    mobile: new FormControl('', [Validators.required, Validators.minLength(9), Validators.maxLength(12),
-      Validators.pattern('^[0-9]+$'),
-    ]),
-    address: new FormGroup({
-      line1: new FormControl('', [Validators.required]),
-      line2: new FormControl('', [Validators.required]),
-      country: new FormControl('', [Validators.required]),
-      city: new FormControl('', [Validators.required]),
-      state: new FormControl('', [Validators.required]),
-      zipCode: new FormControl('', [Validators.required]),
-    }),
-  });
+  // shippingAddressForm: FormGroup = new FormGroup({
+  //   firstName: new FormControl('', [Validators.required]),
+  //   lastName: new FormControl('', [Validators.required]),
+  //   email: new FormControl('', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'),]),
+  //   mobile: new FormControl('', [Validators.required, Validators.minLength(9), Validators.maxLength(12),
+  //     Validators.pattern('^[0-9]+$'),
+  //   ]),
+  //   address: new FormGroup({
+  //     line1: new FormControl('', [Validators.required]),
+  //     line2: new FormControl('', [Validators.required]),
+  //     country: new FormControl('', [Validators.required]),
+  //     city: new FormControl('', [Validators.required]),
+  //     state: new FormControl('', [Validators.required]),
+  //     zipCode: new FormControl('', [Validators.required]),
+  //   }),
+  // });
 
   constructor(private service: ProductService,private router:Router, private cdr:ChangeDetectorRef, private toastr:ToastrService) {
     this.getBreadcrumb();
@@ -105,9 +101,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   };
   
   // Using shippingForm in HTML as a shippingAddressForm.controls
-  get shippingForm(): { [key: string]: AbstractControl } {
-    return this.shippingAddressForm.controls;
-  };
+  // get shippingForm(): { [key: string]: AbstractControl } {
+  //   return this.shippingAddressForm.controls;
+  // };
 
   // Getting Cart Items using Product Service's API
   getCartProductList(){
@@ -152,96 +148,16 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   // Adding and Updating the address using Product Service POST and PUT method 
   saveAddress(){
     this.submitted = true;
-    let data;
     let apiCall:any;
 
     if(this.addressList[this.selectedIndex]?._id){
-      console.log("selected address",this.addressList[this.selectedIndex]);
-      if(this.billingAddressForm.valid && !(this.shippingAddressForm.valid)){
-          data = { "billing": this.billingAddressForm.value,"shipping": {} };
-          apiCall = this.service.updateAddress(data,this.addressList[this.selectedIndex]._id);
-          // this.service.updateAddress(data,this.addressList[this.selectedIndex]._id).subscribe({
-          //   next: (res:any) => {
-          //     console.log("For Updating",res);
-          //     this.submitted = false;
-          //     this.hidden = true;
-          //     if(res.type == 'success'){
-          //       this.toastr.success(res.message);
-          //     }
-          //     this.getAddressList();
-          //   },
-          //   error: (err:any) => { console.log("error in adding an address",err);},
-          //   complete: () => { 
-          //     this.billingAddressForm.reset();
-          //     this.shippingAddressForm.reset();
-          //     this.cdr.markForCheck();
-          //   }
-          // });
+      if(this.billingAddressForm.valid){
+        apiCall = this.service.updateAddress(this.billingAddressForm.value,this.addressList[this.selectedIndex]?._id);
       }
     }
     else{
-      if (this.billingAddressForm.valid && this.shippingAddressForm.valid) {
-        data = { "billing": this.billingAddressForm.value, "shipping": this.shippingAddressForm.value};
-        apiCall = this.service.addAddress(data);
-        // this.service.addAddress(data).subscribe({
-        //   next: (res:any) => {
-        //     console.log("For Adding when both is valid",res);
-        //     this.submitted = false;
-        //     this.hidden = true;
-        //     if(res.type == 'success'){
-        //       this.toastr.success(res.message);
-        //     }
-        //     this.getAddressList();
-        //   },
-        //   error: (err:any) => { console.log("error in adding an address",err);},
-        //   complete: () => { 
-        //     this.billingAddressForm.reset();
-        //     this.shippingAddressForm.reset();
-        //     this.cdr.markForCheck();
-        //   }
-        // });
-      }
-      else if(this.billingAddressForm.valid && !(this.shippingAddressForm.valid)){
-        data = { "billing": this.billingAddressForm.value, "shipping": {} };
-        apiCall = this.service.addAddress(data);
-        // this.service.addAddress(data).subscribe({
-        //   next: (res:any) => {
-        //     console.log("For Adding when billing is valid",res);
-        //     this.submitted = false;
-        //     this.hidden = true;
-        //     if(res.type == 'success'){
-        //       this.toastr.success(res.message);
-        //     }
-        //     this.getAddressList();
-        //   },
-        //   error: (err:any) => { console.log("error in adding an address",err);},
-        //   complete: () => { 
-        //     this.billingAddressForm.reset();
-        //     this.shippingAddressForm.reset();
-        //     this.cdr.markForCheck();
-        //   }
-        // });
-      }
-      else if(!(this.billingAddressForm.valid) && this.shippingAddressForm.valid){
-        data = { "billing": {}, "shipping": this.shippingAddressForm.value };
-        apiCall = this.service.addAddress(data);
-        // this.service.addAddress(data).subscribe({
-        //   next: (res:any) => {
-        //     console.log("For Adding when billing is valid",res);
-        //     this.submitted = false;
-        //     this.hidden = true;
-        //     if(res.type == 'success'){
-        //       this.toastr.success(res.message);
-        //     }
-        //     this.getAddressList();
-        //   },
-        //   error: (err:any) => { console.log("error in adding an address",err);},
-        //   complete: () => { 
-        //     this.billingAddressForm.reset();
-        //     this.shippingAddressForm.reset();
-        //     this.cdr.markForCheck();
-        //   }
-        // });
+      if (this.billingAddressForm.valid) {
+        apiCall = this.service.addAddress(this.billingAddressForm.value);
       }
     }
 
@@ -249,15 +165,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       next: (res:any) => {
         this.submitted = false;
         this.hidden = true;
-        if(res.type == 'success'){
-          this.toastr.success(res.message);
-        }
+        if(res.type == 'success'){ this.toastr.success(res.message); }
         this.getAddressList();
       },
       error: (err:any) => { console.log("error in adding an address",err);},
       complete: () => { 
         this.billingAddressForm.reset();
-        this.shippingAddressForm.reset();
         this.cdr.markForCheck();
       }
     });
@@ -267,7 +180,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   // Get address list form Product service GET method
   getAddressList(){
     this.service.getAddress().subscribe({
-      next: (res:any) => {  this.addressList = res.data; },
+      next: (res:any) => {  
+        console.log("Address List",res.data);
+        this.addressList = res.data; 
+        this.getBillingAddressId(this.addressList[0])
+        this.getShippingAddressId(this.addressList[0])
+      },
       error: (err:any) => { console.log("Error in getting address", err); },
       complete: () => { this.cdr.markForCheck(); }
     });
@@ -288,7 +206,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             this.getAddressList();
           }
         },
-        error: (err:any) => { console.log("Error in removing address",err)},
+        error: (err:any) => { console.log("Error in removing address",err); },
         complete: () => { this.cdr.markForCheck(); }
         });
       }
@@ -298,32 +216,21 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   // updating address
   updateAddress(address:any, index:any){
     this.selectedIndex = index;
-    this.isChecked = true;
-    
-    console.log("address",address)
-    console.log("try to patch",address[this.selectedIndex]);
-
-    if(address[this.selectedIndex].type=='billing'){
-      this.isChecked = false;
-      this.hidden = false;
-      this.billingAddressForm.patchValue(address[this.selectedIndex]);
-    }
-    else{
-      this.hidden = true;
-      this.isChecked = true;
-      // this.hidden = false;
-      this.shippingAddressForm.patchValue(address[this.selectedIndex]);
-    }
+    this.hidden = false;
+    this.billingAddressForm.patchValue(address[this.selectedIndex]);
   };
 
-  openShippingForm() {
-    this.isChecked = true
-  }
+  // Selecting BillingId
+  getBillingAddressId(addressData:any){  
+      this.orderData.billingId = addressData?._id;
+      this.orderData.isDifferentShipping = false;
+  };
 
-  // Selecting Id
-  getBillingAddressId(addressData:any){
-    this.isShippingAddressActive = true;
-    this.orderData.billingId = addressData._id;
+  // Selecting ShippingId
+  getShippingAddressId(addressData:any){
+    this.orderData.shippingId = addressData?._id
+    this.orderData.isDifferentShipping = true;
+    console.log("shippingId ==>",this.orderData);
   };
 
   // Selecting Payment Method
@@ -333,18 +240,18 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     console.log("Payment method ==>",this.orderData);
   };
 
-  // To Do .....
+  // Place Order using Product Service POST method
   placeOrder() {
     let data = this.orderData;
     this.service.addOrder(data).subscribe({
-      next: (res:any) => { res.type == 'success'? this.toastr.success(res.message): this.toastr.error(res.message); },
+      next: (res:any) => { 
+        if(res.type == 'success'){
+          this.toastr.success(res.message);
+          this.router.navigate(['cart-detail/order-history']);
+        } else { this.toastr.error(res.message); }
+       },
       error: (err:any) => { console.log("place order error",err); }, 
-      complete: () => { 
-        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {     // navigate to same route
-          this.router.navigate(['cart-detail/checkout']);                              
-        });
-        this.cdr.markForCheck();
-       }
+      complete: () => { this.cdr.markForCheck(); }
     });
   };
 

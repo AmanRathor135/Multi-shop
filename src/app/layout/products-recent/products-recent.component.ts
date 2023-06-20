@@ -25,7 +25,6 @@ export class ProductsRecentComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getCurrencyName();
     this.getProducts();
-    this.rating(5);
   }
 
   // get Selected Currency Name using Behavior Subject of Product Service
@@ -65,7 +64,6 @@ export class ProductsRecentComponent implements OnInit, OnDestroy {
    * else remove from favoriteItemList Array and update and set the Local Storage
    */
   doFavorites(productId: any) {
-    // product.isShow = !product.isShow; 
     let sub3 = this.service.addProductInFavorites({"productId":productId}).subscribe({
       next: (res:any) => {
         res.type=='success'? this.toastr.success(res.message):this.toastr.info(res.message); 
@@ -94,9 +92,7 @@ export class ProductsRecentComponent implements OnInit, OnDestroy {
     }
     else {
       let result = confirm("You have to LoggedIn First");
-      if(result){
-        this.router.navigate(['/auth/login']);
-      }
+      if(result){ this.router.navigate(['/auth/login']); }
     }
   };
 
@@ -105,15 +101,7 @@ export class ProductsRecentComponent implements OnInit, OnDestroy {
     let value: any = localStorage.getItem('currencyPrice');
     value = JSON.parse(value);
     this.currencyPrice = value[this.currency];
-  }
-
-  /**
-   * for getting star value using product.rating.rate out of @param value
-   * @param value is 5 given in ngOnInit 
-   */
-  rating(value: any) {
-    this.totalRate = Array(value);
-  }
+  };
 
   ngOnDestroy(): void {
     // Removes all the subscriptions to avoid memory leak issue

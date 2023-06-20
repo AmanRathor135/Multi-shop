@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ReviewService } from 'src/app/services/review.service';
@@ -67,6 +67,7 @@ export class ProductDescriptionComponent implements OnInit, OnDestroy {
   constructor(
     private activeRoute:ActivatedRoute,
     private reviewService:ReviewService, 
+    private router:Router,
     private toastr:ToastrService, 
     private cdr:ChangeDetectorRef
     ) {}
@@ -102,8 +103,11 @@ export class ProductDescriptionComponent implements OnInit, OnDestroy {
         }, 
         error: (err:any) => { console.log("Error in Adding Review", err); },
         complete: () => { 
-          this.feedbackFrom.reset();
-          this.showReviewsOnPage();
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {     // navigate to same route
+            this.router.navigate(['Shop/Shop-details', this.productId]);                              
+            this.feedbackFrom.reset();
+            this.showReviewsOnPage();
+          });
           this.cdr.markForCheck(); 
         }
       });

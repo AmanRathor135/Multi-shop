@@ -41,3 +41,19 @@ ng-dropdown-panel{
 ngb-modal-backdrop{
   z-index: 1 !important;
 }
+
+.star {
+  position: relative;
+  display: inline-block;
+  font-size: 30px;
+  color: #d3d3d3;
+}
+.full {
+  color: #FFD333;
+}
+.half {
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  color: #FFD333;
+}

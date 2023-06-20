@@ -16,7 +16,7 @@ const routes: Routes = [
     path:'order-history', component:OrderHistoryComponent
   },
   {
-    path:'order-detail', component:SpecificOrderDetailComponent
+    path:'order-detail/:id', component:SpecificOrderDetailComponent
   }
 ];
 

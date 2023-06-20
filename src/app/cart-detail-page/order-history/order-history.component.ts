@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -14,8 +15,9 @@ export class OrderHistoryComponent implements OnInit, OnDestroy {
   subscription:Subscription[] = [];
   currency: any;
   currencyPrice: any;
+  isDropDownOpen:boolean = false;
 
-  constructor(private service:ProductService, private cdr:ChangeDetectorRef) {}
+  constructor(private service:ProductService, private cdr:ChangeDetectorRef, private router:Router) {}
 
   ngOnInit(): void {
     this.getOrderList();
@@ -33,7 +35,8 @@ export class OrderHistoryComponent implements OnInit, OnDestroy {
       }, 
       error: (err:any) => { console.log("order list error", err); },
       complete: () => { this.cdr.markForCheck(); }
-    })
+    });
+    this.subscription.push(sub1);
   };
 
   // get Selected Currency Name using Behavior Subject of Product Service
@@ -47,6 +50,16 @@ export class OrderHistoryComponent implements OnInit, OnDestroy {
     });
     this.subscription.push(sub2);
   };
+
+  // Navigate to Specific order details page using orderId in Product Service GET method
+  goToOrderDetailPage(orderId:any){
+    console.log(orderId);
+    this.router.navigate([`/cart-detail/order-detail/${orderId}`]);
+  };
+
+  openDropDown(){
+    this.isDropDownOpen = !this.isDropDownOpen;
+  }
 
   // get Price of Selected Currency from Local Storage
   getPrice() {

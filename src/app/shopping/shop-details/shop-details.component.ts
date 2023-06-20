@@ -45,7 +45,6 @@ export class ShopDetailsComponent implements OnInit, OnDestroy {
     this.getBreadcrumb();
     this.getCurrencyName();
     this.getProductsForCarousel();
-    this.rating(5);
   }
 
   // Route to Products Detail Page
@@ -120,11 +119,6 @@ export class ShopDetailsComponent implements OnInit, OnDestroy {
         this.router.navigate(['/auth/login']);
       }
     }
-  };
-    
-  rating(value: any) {
-    this.totalRate = Array(value);
-    this.cdr.markForCheck();
   };
 
   // getting the breadcrumb value using Product Service Behavior Subject

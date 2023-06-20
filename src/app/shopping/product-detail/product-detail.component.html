@@ -8,21 +8,27 @@
 <div class="col-lg-7 h-auto mb-30" style="margin-left: 10px;">
   <div class="h-100 bg-light p-30">
     <h3>{{ singleProduct?.title }}</h3>
-    <div class="d-flex align-items-center mb-1">
-      <ng-container *ngFor="let rate of totalRate; let i = index">
-        <ng-container *ngIf="i < math.floor(singleProduct?.rating?.rate)">
+    <div class="d-flex align-items-center mb-1" *ngIf="singleProduct?.rating">
+      <!-- <ng-container *ngFor="let rate of totalRate; let i = index">
+        <ng-container *ngIf="i < math.floor(singleProduct?.rating)">
           <small class="fa fa-star text-primary mr-1"></small>
         </ng-container>
-        <ng-container *ngIf="i == math.floor(singleProduct?.rating?.rate)">
+        <ng-container *ngIf="i == math.floor(singleProduct?.rating)">
           <small class="fa fa-star-half-alt text-primary mr-1"></small>
         </ng-container>
-        <ng-container *ngIf="i > singleProduct?.rating?.rate">
+        <ng-container *ngIf="i > singleProduct?.rating">
           <small class="far fa-star text-primary mr-1"></small>
         </ng-container>
-      </ng-container>
-      <small>(The Rating is {{ singleProduct?.rating?.rate }} Out of {{ singleProduct?.rating?.count }} Reviews)</small>
+      </ng-container> -->
+      <ng-template #t let-fill="fill">
+        <span class="star" [class.full]="fill === 100">
+          <span class="half" [style.width.%]="fill">&bigstar;</span>&bigstar;
+        </span>
+      </ng-template>
+      <ngb-rating [rate]="singleProduct?.rating" [starTemplate]="t" [readonly]="true" [max]="5"></ngb-rating>
+      <small *ngIf="singleProduct?.rating">({{singleProduct?.rating}} / {{ singleProduct?.reviewCount }} Reviews)</small>
     </div>
-    <h3 class="font-weight-semi-bold mb-4"> {{ (singleProduct?.price *currencyPrice) | currency:currency }}</h3>
+    <h3 class="font-weight-semi-bold mb-4"> {{(singleProduct?.price*currencyPrice) | currency:currency }}</h3>
     <p class="mb-4">{{ singleProduct?.description }}</p>
   
     <div class="d-flex mb-3">

@@ -56,17 +56,6 @@ export class MyCartComponent implements OnInit, OnDestroy {
     });
     this.subscription.push(sub1);
   };
-  
-  // Set the Currency Price in Local Storage using Product Service
-  currencyValue() {  
-    let sub2 = this.service.getCurrencyPrice().subscribe({
-      next: (res: any) => {
-        localStorage.setItem('currencyPrice', JSON.stringify(res.data));
-        this.cdr.markForCheck();
-      },
-    }); 
-    this.subscription.push(sub2);
-  };
 
   // get Selected Currency Name using Behavior Subject of Product Service
   getCurrencyName(){

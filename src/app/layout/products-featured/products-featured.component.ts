@@ -31,7 +31,6 @@ export class ProductsFeaturedComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getCurrencyName();
     this.getProducts();
-    this.rating(5);
   }
 
   // get Selected Currency Name using Behavior Subject of Product Service
@@ -109,14 +108,6 @@ export class ProductsFeaturedComponent implements OnInit, OnDestroy {
     let value: any = localStorage.getItem('currencyPrice');
     value = JSON.parse(value);
     this.currencyPrice = value[this.currency];
-  };
-
-  /**
-   * for getting star value using product.rating.rate out of @param value
-   * @param value is 5 given in ngOnInit 
-   */
-  rating(value: any) {
-    this.totalRate = Array(value);
   };
 
   ngOnDestroy(): void {

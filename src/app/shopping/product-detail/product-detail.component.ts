@@ -57,7 +57,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getCurrencyName();
     this.getSingleProductById();
-    this.rating(5);
+    // this.rating(5);
   }
   
   getCurrencyName(){
@@ -118,9 +118,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
   };
 
-  rating(value: any) {
-    this.totalRate = Array(value);
-  };
+  // rating(value: any) {
+  //   this.totalRate = Array(value);
+  // };
 
   add() {
     this.value = this.value + 1;

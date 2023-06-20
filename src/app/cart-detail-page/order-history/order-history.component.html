@@ -4,23 +4,33 @@
           <table class="table table-light table-borderless table-hover text-center mb-0">
                <thead class="thead-light">
                <tr>
-                    <th class="align-middle">#    Order Id</th>
+                    <th class="align-middle">#Order Id</th>
                     <th class="align-middle">Total Items</th>
-                    <th class="align-middle">Order Placed</th>
+                    <th class="align-middle">Date of Order</th>
                     <th class="align-middle">Payment Type</th>
                     <th class="align-middle">Total Amount</th>
+                    <th class="align-middle">Status</th>
                     <th class="align-middle">View Details</th>
                </tr>
                </thead>
                <tbody class="align-middle" *ngIf="orderList?.length">
                <tr *ngFor="let orderData of orderList">
-                    <td>{{orderData.orderId}}</td>   
+                    <td>{{orderData._id}}</td>   
                     <td>{{orderData.products?.length}}</td>   
-                    <td>{{orderData.createdAt | date}}</td>   
+                    <td>{{orderData.createdAt | date:'longDate'}}</td>   
                     <td>{{orderData.payment}}</td>   
-                    <td>{{orderData.total* currencyPrice | currency: currency}}</td>   
+                    <td>{{(orderData.total * currencyPrice) | currency: currency}}</td> 
+                    <td>
+                         <span class="badge rounded-pill bg-success p-2" 
+                         [ngClass]="{success: orderData.status == 'success', pending: orderData.status == 'pending'}">
+                         {{orderData.status}}
+                         </span>
+                    </td>  
                     <td class="align-middle">
-                    <a style="color: rgb(43, 158, 235); background: transparent !important;" [routerLink]="['/cart-detail/order-detail']"><span>view details</span></a>
+                         <a class="viewDetail" (click)="goToOrderDetailPage(orderData._id)">
+                              <!-- <i class="fa fa-ellipsis-v" (click)="openDropDown()"></i> -->
+                              <span>View Details</span>
+                         </a>
                     </td>
                </tr>   
                </tbody>
