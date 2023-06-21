@@ -2,12 +2,12 @@
      <div class="row px-xl-5" style="margin: 0px 0px;">
           <div class="col-md-12 col-lg-12">
           <div>
-               <div class="d-flex justify-content-between align-items-center py-3">
+               <div class="d-flex justify-content-between align-items-center py-2">
                <h2 class="h5 mb-0">Order Id #{{orderDetail?._id}}</h2>
                <div class="d-flex justify-content-end">
-                    <p>CSV</p>
-                    <p type="button" (click)="downloadAsPDF('pdf')">PDF</p>
-                    <p type="button" (click)="downloadAsPDF('print')">PRINT</p>
+                    <!-- <p type="button" class="button" (click)="downloadAsPDF('csv')">CSV</p> -->
+                    <p type="button" class="button" (click)="downloadAsPDF('pdf')">PDF</p>
+                    <p type="button" class="button" (click)="downloadAsPDF('print')">PRINT</p>
                </div>
                </div>
                
@@ -16,7 +16,7 @@
                <div class="col-lg-8">
                     <!-- Details -->
                     <div class="card mb-4">
-                    <div class="card-body">
+                    <div class="card-body mt-3 ml-3">
                          <div class="mb-3 d-flex justify-content-between">
                               <div>
                               <span class="me-3">{{orderDetail?.createdAt | date:'dd-MM-YYYY'}}</span>
@@ -28,11 +28,11 @@
 
                          <table class="table table-borderless mt-5">
                          <tbody *ngIf="orderDetail?.products?.length">
-                         <tr *ngFor="let item of orderDetail?.products" style="border-bottom: none !important;">
+                         <tr *ngFor="let item of orderDetail?.products; let i = index;" class="border-bottom">
                               <td>
                                    <div class="d-flex mb-2">
                                         <div class="flex-shrink-0">
-                                        <img src="{{item?.products?.image}}" alt="..." width="40" class="img-fluid">
+                                        <img src="{{item?.products?.image}}" alt="..." style="width: 54px; height: 60px" class="img-fluid">
                                         </div>
                                         <div class="flex-lg-grow-1 ml-3">
                                         <h6 class="mb-1">{{item?.products?.title}}</h6>
@@ -41,7 +41,7 @@
                                    </div>
                               </td>
                               <td class="mt-3">{{item?.quantity}}</td>
-                              <td class="text-end mt-3">{{(item?.products?.price*currencyPrice) | currency:currency }}</td>
+                              <td class="text-end mt-3">{{((item?.products?.price*item?.quantity)*currencyPrice) | currency:currency }}</td>
                          </tr>
                          </tbody>
                          <tfoot>
@@ -66,7 +66,7 @@
                     </div>
                     </div>
                     <!-- Payment -->
-                    <div class="card mb-4">
+                    <!-- <div class="card mb-4">
                     <div class="card-body">
                          <div class="row">
                          <div class="col-lg-6 mb-5">
@@ -97,30 +97,60 @@
                          </div>
                          </div>
                     </div>
-                    </div>
+                    </div> -->
                </div>
                <div class="col-lg-4">
-                    <!-- Customer Notes -->
+
                     <div class="card mb-4">
                     <div class="card-body">
-                         <h3 class="h6">Customer Notes :</h3>
-                         <div>Sed enim, faucibus litora velit vestibulum habitasse. Cras lobortis cum sem aliquet mauris rutrum. Sollicitudin. Morbi, sem tellus vestibulum porttitor.</div>
+                         <div class="row">
+                         <div class="col-lg-12 mb-2">
+                         <h3 class="fs-5 mb-4">Payment Method</h3>
+                         <div>
+                              <div class="mb-1"><strong>Payment Type :</strong> {{orderDetail?.payment}} <br></div>
+                              <div><strong>Total Payable Amount :</strong> {{(orderDetail?.total + orderDetail?.shippingAmount) | currency:currency}} 
+                                  &nbsp; <span class="badge bg-success rounded-pill p-2" *ngIf="orderDetail?.payment != 'Cash on Delivery'">PAID</span>
+                                  &nbsp; <span class="badge bg-success rounded-pill p-2" *ngIf="orderDetail?.payment == 'Cash on Delivery'">UNPAID</span>
+                              </div>
+                         </div>
+                         </div>   
+                         </div>
                     </div>
                     </div>
+
+                    <div class="card mb-4">
+                    <!-- Billing information -->
+                    <div class="card-body">
+                         <div class="row">
+                         <div class="col-lg-12">
+                         <h3 class="fs-5 mb-3">Billing Address</h3><h3 class="h6">Address</h3>
+                         <address>
+                              <strong>{{orderDetail?.billingAddress?.firstName|titlecase}} {{orderDetail?.billingAddress?.lastName|titlecase}}</strong><br>
+                              {{orderDetail?.billingAddress?.address?.line1|titlecase}}, 
+                              {{orderDetail?.billingAddress?.address?.line2|titlecase}},<br>
+                              {{orderDetail?.billingAddress?.address?.city|titlecase}}, 
+                              {{orderDetail?.billingAddress?.address?.state|titlecase}},
+                              {{orderDetail?.billingAddress?.address?.country|titlecase}} -
+                              {{orderDetail?.billingAddress?.address?.zipCode}}<br>
+                              <abbr title="Phone">Mobile No.</abbr> : {{orderDetail?.billingAddress?.mobile|titlecase}}
+                         </address>
+                         </div>
+                         </div>
+                    </div>
+                    </div>
+
                     <div class="card mb-4">
                     <!-- Shipping information -->
                     <div class="card-body">
-                         <h3 class="h6">Shipping Information</h3>
-                         <strong>Shipping ID</strong>
-                         <span>
-                              <a> #{{orderDetail?.shippingAddress?._id}}</a> 
-                         </span>
-                         <hr>
+                         <h3 class="fs-5">Shipping Information</h3>
+                         <div class="mb-3">
+                              <strong >Shipping ID </strong><span>#{{orderDetail?.shippingAddress?._id}}</span>
+                         </div>
                          <h3 class="h6">Address</h3>
                          <address>
                               <strong>{{orderDetail?.shippingAddress?.firstName|titlecase}} {{orderDetail?.shippingAddress?.lastName|titlecase}}</strong><br>
                               {{orderDetail?.shippingAddress?.address?.line1|titlecase}}, 
-                              {{orderDetail?.shippingAddress?.address?.line2|titlecase}}<br>
+                              {{orderDetail?.shippingAddress?.address?.line2|titlecase}},<br>
                               {{orderDetail?.shippingAddress?.address?.city|titlecase}}, 
                               {{orderDetail?.shippingAddress?.address?.state|titlecase}},
                               {{orderDetail?.shippingAddress?.address?.country|titlecase}} -

@@ -184,7 +184,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         console.log("Address List",res.data);
         this.addressList = res.data; 
         this.getBillingAddressId(this.addressList[0])
-        this.getShippingAddressId(this.addressList[0])
       },
       error: (err:any) => { console.log("Error in getting address", err); },
       complete: () => { this.cdr.markForCheck(); }

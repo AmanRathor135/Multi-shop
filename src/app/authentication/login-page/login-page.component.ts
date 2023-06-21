@@ -17,10 +17,7 @@ export class LoginPageComponent implements OnDestroy {
   submitted: boolean = false;
 
   loginForm: FormGroup = new FormGroup({
-    email: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'),
-    ]),
+    email: new FormControl('', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'),]),
     password: new FormControl('', [Validators.required]),
   });
 
@@ -41,8 +38,8 @@ export class LoginPageComponent implements OnDestroy {
     return this.loginForm.controls;
   }
 
+  // Login Credentials
   // E-mail:aman@gmail.com  ||  Password:Am@123456
-
   login() {
     this.submitted = true;
     if (this.loginForm.valid) {
@@ -54,7 +51,7 @@ export class LoginPageComponent implements OnDestroy {
         },
         error: (err: any) => {
           this.toastr.error(err.error.message);
-          console.log('Login Error', err);
+          console.log('Login Error', err);  
         },
         complete: () => {
           this.router.navigate(['/']).then(() => { window.location.reload(); });
@@ -63,7 +60,7 @@ export class LoginPageComponent implements OnDestroy {
       });
       this.subscription.push(sub1);
     }
-  }
+  };
 
   ngOnDestroy(): void {
     // Removes all the subscriptions to avoid memory leak issue

@@ -23,5 +23,9 @@ export class AuthService {
 
   refreshToken(): Observable<any> {
     return this.http.postReq('http://192.168.1.175:5050/token-generate',{})
+  };
+
+  forgotPassword(data:any): Observable<any> {
+    return this.http.postReq('http://192.168.1.175:5050/forgot-password', data)
   }
 }

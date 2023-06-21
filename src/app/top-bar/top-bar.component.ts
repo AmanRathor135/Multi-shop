@@ -78,9 +78,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
   // Getting the User's Name which is Logged in recently
   getLoggedInUserName(){
     let sub3 = this.service.isLoggedIn.subscribe((res:any) => {
-      if(res){ 
-        this.decodeUserName();
-      }
+      if(res){  this.decodeUserName(); }
     });
     this.subscription.push(sub3);
   };
@@ -88,10 +86,10 @@ export class TopBarComponent implements OnInit, OnDestroy {
   // Decoding the UserName from local storage
   decodeUserName(){
     if(localStorage.getItem('token')){
-      this.DropDownMenu1 = ['My Profile', 'Logout'];
       let name = localStorage.getItem('token');
       this.user = this.helper.decodeToken(name);
       this.user = this.user.name;
+      this.DropDownMenu1 = ['My Profile', 'Logout'];
     };
   };
 
