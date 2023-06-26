@@ -20,7 +20,7 @@ const routes: Routes = [
     path:'forgot-password', component:ForgotPasswordComponent
   },
   {
-    path:'reset-password', component:ResetPasswordComponent
+    path:'resetPassword/:uuid', component:ResetPasswordComponent
   }
 ];
 

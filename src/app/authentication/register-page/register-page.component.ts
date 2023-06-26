@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
@@ -40,30 +41,17 @@ export class RegisterPageComponent implements OnDestroy {
     timeZone: new FormControl('', [Validators.required]),
     mobile: new FormControl('', [
       Validators.required,
-      // Validators.pattern('^[0-9]+$'),
       Validators.minLength(9),
       Validators.maxLength(14),
     ]),
     gender: new FormControl('Male', [Validators.required]),
     language: new FormControl('English', [Validators.required]),
-    // address: new FormGroup({
-    //   line1: new FormControl('', [Validators.required]),
-    //   line2: new FormControl('', [Validators.required]),
-    //   country: new FormControl('', [Validators.required]),
-    //   state: new FormControl('', [Validators.required]),
-    //   city: new FormControl('', [Validators.required]),
-    //   zipCode: new FormControl(null, [
-    //     Validators.required,
-    //     Validators.pattern('^[0-9]+$'),
-    //     Validators.minLength(4),
-    //     Validators.maxLength(8),
-    //   ]),
-    // }),
   });
 
   constructor(
     private service: ProductService,
     private authService: AuthService,
+    private router:Router,
     private toastr: ToastrService,
     private cdr: ChangeDetectorRef
   ) {
@@ -85,7 +73,9 @@ export class RegisterPageComponent implements OnDestroy {
             { res.type == 'success' ? this.toastr.success(res.message) : this.toastr.warning(res.message); }
           },
           error: (err: any) => { console.log('Registration Form Error', err); },
-          complete: () => { this.cdr.markForCheck(); },
+          complete: () => { 
+            this.router.navigate(['/auth/login'])
+            this.cdr.markForCheck(); },
         });
       this.subscription.push(sub1);
     }

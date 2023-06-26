@@ -15,11 +15,11 @@ export class AuthService {
 
   SignIn(data:any): Observable<any> {
     return this.http.postReq('http://192.168.1.175:5050/login',data)
-  }
+  };
 
   loggedOut(): Observable<any> {
     return this.http.postReq('http://192.168.1.175:5050/logout',{})
-  }
+  };
 
   refreshToken(): Observable<any> {
     return this.http.postReq('http://192.168.1.175:5050/token-generate',{})
@@ -27,5 +27,9 @@ export class AuthService {
 
   forgotPassword(data:any): Observable<any> {
     return this.http.postReq('http://192.168.1.175:5050/forgot-password', data)
+  };
+
+  resetPassword(data:any): Observable<any> {
+    return this.http.postReq('http://192.168.1.175:5050/reset-password', data)
   }
 }

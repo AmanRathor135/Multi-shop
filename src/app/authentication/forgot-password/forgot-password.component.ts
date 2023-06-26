@@ -38,7 +38,6 @@ export class ForgotPasswordComponent implements OnDestroy {
           next: (res: any) => {
             if (res.type == 'success') {
               this.toastr.success(res.message);
-              this.router.navigate(['/auth/login']);
             }
           },
           error: (err: any) => { console.log('Reset Password Error', err); },
@@ -46,7 +45,7 @@ export class ForgotPasswordComponent implements OnDestroy {
         });
       this.subscription.push(sub1);
     }
-  }
+  };
 
   ngOnDestroy(): void {
     // Removes all the subscriptions to avoid memory leak issue
